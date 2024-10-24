@@ -1,5 +1,5 @@
 import java.util.List;
-public interface Grid<C extends Card> {
+public interface GameGrid<C extends Card> {
 
 
   /**
@@ -21,13 +21,14 @@ public interface Grid<C extends Card> {
    * @param cards desired cards if
    * @param cols desired number of columns in the game.
    * @param rows desired number of rows in the game.
-   * @param rowConfig configuration of the rows.
+   * @param rowConf configuration of the rows.
+   * @param handSize number of cards in hand.
    * @throws IllegalStateException if game has already been started.
    * @throws IllegalArgumentException if cols or rows < 0
    * @throws IllegalArgumentException if given cards has null values.
    * @throws IllegalArgumentException if given cards is less than (num of spaces + 1)/2
    */
-  void startGame(List<C> cards, int cols, int rows, String... rowConfig);
+  void startGame(List<C> cards, int cols, int rows, String[] rowConf, int handSize, boolean shuf);
 
   /**
    * Returns a copy of the hand in the game. This means modifying the returned list
