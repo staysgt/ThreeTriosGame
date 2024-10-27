@@ -1,3 +1,5 @@
+package model;
+
 /**
  * An enum class to represent the state of a cell.
  */

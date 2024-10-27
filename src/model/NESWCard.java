@@ -1,3 +1,7 @@
+package model;
+
+import model.Card;
+
 public class NESWCard implements Card {
 
   private final String cardName;
@@ -34,6 +38,11 @@ public class NESWCard implements Card {
     public int getValue() {
       return this.value;
     }
+  }
+
+  @Override
+  public String getName() {
+    return this.cardName;
   }
 
   @Override

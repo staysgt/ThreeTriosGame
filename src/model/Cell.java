@@ -1,6 +1,8 @@
-public class Cell {
-  Player owner;
-  Card card;
+package model;
+
+public class Cell<C extends Card> {
+  Player owner = null;
+  C card;
   final CellState cellstate;
 
   private boolean cardPlayed = false;
@@ -12,9 +14,9 @@ public class Cell {
     }
   }
 
-  public void setCard(Card card) {
+  public void setCard(C card) {
     if(cellstate == CellState.HOLE) {
-      throw new IllegalArgumentException("Card cannot be placed in hole");
+      throw new IllegalArgumentException("model.Card cannot be placed in hole");
     }
     if(cardPlayed) {
       throw new IllegalArgumentException("Space has already been played to");
@@ -26,7 +28,7 @@ public class Cell {
 
   public void setOwner(Player player) {
     if(cellstate == CellState.HOLE) {
-      throw new IllegalArgumentException("Card cannot be placed in hole");
+      throw new IllegalArgumentException("model.Card cannot be placed in hole");
     }
     owner = player;
   }
@@ -37,5 +39,17 @@ public class Cell {
     } else {
       return false;
     }
+  }
+
+  public Player getOwner() {
+    return owner;
+  }
+
+  public CellState getCellstate() {
+    return cellstate;
+  }
+
+  public C getCard() {
+    return card;
   }
 }

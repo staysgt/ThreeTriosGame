@@ -1,4 +1,7 @@
+package model;
+
 import java.util.List;
+
 public interface GameGrid<C extends Card> {
 
 
@@ -28,7 +31,7 @@ public interface GameGrid<C extends Card> {
    * @throws IllegalArgumentException if given cards has null values.
    * @throws IllegalArgumentException if given cards is less than (num of spaces + 1)/2
    */
-  void startGame(List<C> cards, int cols, int rows, String[] rowConf, int handSize, boolean shuf);
+  void startGame(List<C> cards, int cols, int rows, String[] rowConf, int handSize);
 
   /**
    * Returns a copy of the hand in the game. This means modifying the returned list
@@ -48,12 +51,6 @@ public interface GameGrid<C extends Card> {
    */
   boolean isGameOver();
 
-  /**
-   * Returns if the game is won by the player as specified by the implementation.
-   * @return true if the game has been won or false if the game has not
-   * @throws IllegalStateException if the game has not started or the game is not over
-   */
-  boolean isGameWon();
 
   /**
    * This is used to see if the cell on the grid is empty or not.
@@ -63,7 +60,7 @@ public interface GameGrid<C extends Card> {
    * @throws IllegalStateException if game has not started or game is over
    * @throws IllegalArgumentException if x or y < 0, or x > num of col, y > num of rows
    */
-  boolean isCellEmpty(int x, int y);
+  boolean isCellPlayable(int x, int y);
 
   /**
    * This is used to see if the cell is a hole or not.
@@ -76,14 +73,14 @@ public interface GameGrid<C extends Card> {
   boolean isCellHole(int x, int y);
 
   /**
-   * This is what values are in a single cell.
+   * This is the card that is in a cell.
    * @param x coordinate of grid
    * @param y coordinate of grid
    * @return the values of the cell
    * @throws IllegalStateException if game has not started
    * @throws IllegalArgumentException if x or y < 0, or x > num of col, y > num of rows
    */
-  C getCellValue(int x, int y);
+  C getCellCard(int x, int y);
 
   /**
    * Determines whose turn it is.
