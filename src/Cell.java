@@ -7,6 +7,9 @@ public class Cell {
 
   public Cell (CellState state) {
     this.cellstate = state;
+    if(cellstate == CellState.HOLE) {
+      card = null;
+    }
   }
 
   public void setCard(Card card) {
@@ -26,5 +29,13 @@ public class Cell {
       throw new IllegalArgumentException("Card cannot be placed in hole");
     }
     owner = player;
+  }
+
+  public boolean isHole() {
+    if (this.cellstate == CellState.HOLE) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

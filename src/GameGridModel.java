@@ -56,36 +56,35 @@ public class GameGridModel<C extends Card> implements GameGrid {
   }
 
   @Override
-  public void startGame(List cards, int cols, int rows, String[] rowConfig, int handSize) {
+  public void startGame(List cards, int cols, int rows, String[] rowConf, int handSize, boolean shuf) {
+    if(cards == null || rowConf == null) {
+      throw new IllegalArgumentException("Given arguments cannot be null");
+    }
+
     if(gameStarted) {
       throw new IllegalStateException("Game has already been started.");
     }
-    if(cards == null || cards.contains(null)) {
-      throw new IllegalArgumentException("Given cards cannot be null or contain null values.");
+    if(cards.contains(null)) {
+      throw new IllegalArgumentException("Given cards cannot contain null values.");
     }
     if(cols <= 0 || rows <= 0) {
       throw new IllegalArgumentException("Number of columns and rows must be greater than 0");
     }
-    if(Math.ceil(countEmptySpaces(rowConfig) + handSize*2) > cards.size()) {
+    if(Math.ceil(countEmptySpaces(rowConf) + handSize*2) > cards.size()) {
       throw new IllegalArgumentException("List of cards is too short.");
     }
 
-    grid = new Card[cols][rows];
+
+    grid = new Cell[cols][rows];
 
 
     for (int col = 0; col < cols; col++) {
       for (int row = 0; row < rows; row++) {
-        boolean isHole;
-        if(rowConfig[col].charAt(row) == 'X') {
-          isHole = true;
-        }
-
-        if(isHole) {
-          grid[col][row] = ;
+        if(rowConf[col].charAt(row) == 'X') {
+          grid[col][row] = new Cell(CellState.HOLE);
         } else {
-          grid[col][row] = null;
+          grid[col][row] = new Cell(CellState.CARD_SPACE);
         }
-
       }
 
     }
@@ -125,40 +124,46 @@ public class GameGridModel<C extends Card> implements GameGrid {
 
   @Override
   public boolean isGameWon() {
+    return true;
   }
 
   @Override
   public boolean isCellEmpty(int x, int y) {
+    // fiona
     return false;
   }
 
   @Override
   public boolean isCellHole(int x, int y) {
+    // fiona
     return false;
   }
 
   @Override
   public Card getCellValue(int x, int y) {
+    // fiona
     return null;
   }
 
   @Override
   public Player getTurn() {
+    // fiona
     return null;
   }
 
   @Override
   public Player getWinner() {
-    
+    // Fiona
 
     return null;
   }
 
   @Override
-  public List<List<C>> getBoard() {
+  public Cell[][] getBoard() {
+    // Fiona needs to fix
     checkGameStarted();
 
-    return List.copyOf(grid, grid.length);
+    return grid;
 
   }
 

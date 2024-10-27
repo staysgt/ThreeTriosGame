@@ -108,7 +108,7 @@ public interface GameGrid<C extends Card> {
    * @return the current state of the board.
    * @throws IllegalStateException if game has not started or game is over
    */
-  List<List<C>> getBoard();
+  Cell[][] getBoard();
 
 
 
