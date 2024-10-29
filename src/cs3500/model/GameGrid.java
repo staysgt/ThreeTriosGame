@@ -71,15 +71,6 @@ public interface GameGrid<C extends Card> {
    */
   boolean isCellHole(int x, int y);
 
-  /**
-   * This is the card that is in a cell.
-   * @param x coordinate of grid
-   * @param y coordinate of grid
-   * @return the values of the cell
-   * @throws IllegalStateException if game has not started
-   * @throws IllegalArgumentException if x or y < 0, or x > num of col, y > num of rows
-   */
-  C getCellCard(int x, int y);
 
   /**
    * Determines whose turn it is.

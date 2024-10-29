@@ -8,6 +8,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import static org.junit.Assert.assertEquals;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 
 public class GameGridModelTests {
   private GameGrid model = new GameGridModel();
@@ -44,9 +49,50 @@ public class GameGridModelTests {
 
 
   @Test(expected = IllegalStateException.class)
-  public void testCellIsntEmpty() {
+  public void testGetBoardGameNotStarted() {
     GameGridModel model = new GameGridModel();
-    Card cell = model.getCellCard(5, 0);
-    assertEquals(0, cell);
+    model.getBoard();
+    assertEquals(model, 0);
   }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testGetBoardStartGameNotInBounds() {
+    GameGridModel model = new GameGridModel();
+    model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(), conFigFile.getRowConfig());
+    Cell[][] cells = model.getBoard();
+    assertEquals(model, cells);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testGetBoardStartGameEmpty() {
+    GameGridModel model = new GameGridModel();
+    model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(), conFigFile.getRowConfig());
+    Cell[][] cells = model.getBoard();
+    assertNull("Empty List", cells);
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void testIsCellHoleGameNotStarted() {
+    GameGridModel model = new GameGridModel();
+    model.isCellHole(0,0);
+    assertEquals(model, 0);
+  }
+
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testIsCellHoleStartGameEmpty() {
+    GameGridModel model = new GameGridModel();
+    model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(), conFigFile.getRowConfig());
+    boolean cells = model.isCellHole(0,0);
+    assertNull("Empty List", cells);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testIsCellHoleStartGameNotInBounds() {
+    GameGridModel model = new GameGridModel();
+    model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(), conFigFile.getRowConfig());
+    boolean cells = model.isCellHole(5,10);
+    assertEquals(model, cells);
+  }
+
 }

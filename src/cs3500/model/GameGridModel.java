@@ -234,11 +234,6 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     }
   }
 
-  @Override
-  public C getCellCard(int x, int y) {
-    return null;
-  }
-
   private Player redPlayer = Player.RED;
   private Player bluePlayer = Player.BLUE;
 
@@ -251,22 +246,39 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
 
   }
 
-  /**
-   * Return the winner of the game, or {@code null} if there is no winner. If the game is not
-   * over, returns {@code null}.
-   *
-   * @return the winner, or null if there is no winner
-   * @throws IllegalStateException if game has not started
-   */
+  @Override
+  public Player getTurn() {
+    checkGameStarted();
+    if (getCurrPlayersCard(redPlayer).compareTo(bluePlayer) > 0) {
+      return redPlayer;
+    } else if (getCurrPlayersCard(bluePlayer).compareTo(redPlayer) > 0) {
+      return bluePlayer;
+    }
+    return null;
+  }
+
+  private List<C> getTotalCard(Player player) {
+    if (player == Player.RED) {
+      return redHand;
+    } else {
+      return blueHand;
+    }
+  }
+
+
   @Override
   public Player getWinner() {
     checkGameStarted();
+
+    int redHandSize = getTotalCard(redPlayer).size();
+    int blueHandSize = getTotalCard(bluePlayer).size();
+
     while (isGameOver() == true) {
-      if (getCurrPlayer(redPlayer).compareTo(getCurrPlayer(bluePlayer)) > 0) {
-        return redPlayer;
-      } else if (getCurrPlayer(bluePlayer).compareTo(getCurrPlayer(redPlayer)) > 0) {
-        return bluePlayer;
-      } else if (redPlayer == bluePlayer) {
+      if (redHandSize > blueHandSize) {
+        return Player.RED;
+      } else if (blueHandSize > redHandSize) {
+        return Player.BLUE;
+      } else {
         return null;
       }
     }
