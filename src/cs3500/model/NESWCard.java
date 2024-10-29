@@ -1,5 +1,7 @@
 package cs3500.model;
 
+import java.util.Objects;
+
 public class NESWCard implements Card {
 
   private final String cardName;
@@ -66,6 +68,15 @@ public class NESWCard implements Card {
 
   @Override
   public boolean equals(Object obj) {
-    return false;
+    if (this == obj) {
+      return true;
+    }
+
+    if (!(obj instanceof NESWCard)) {
+      return false;
+    }
+
+    NESWCard cm = (NESWCard) obj;
+    return Objects.equals(cm.getName(), this.cardName);
   }
 }

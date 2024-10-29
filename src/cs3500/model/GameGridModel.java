@@ -12,8 +12,8 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   private List<Card> cardsLeft;
   private Card[][] cards;
   private Cell[][] grid;
-  private List<C> blueHand;
-  private List<C> redHand;
+  private List<C> blueHand = new ArrayList<>();
+  private List<C> redHand = new ArrayList<>();
   private boolean gameStarted = false;
 
   /**
@@ -133,16 +133,14 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     // assigns the cells that are supposed to be holes vs card spaces
     rowConfigToGrid(cols, rows, rowConf);
     // converts given list of cards into a mutable list, just in case an immutable list was given
-    ArrayList<C> mutableCards = new ArrayList<>(cards);
+//    ArrayList<C> mutableCards = new ArrayList<>(cards);
     // gives the first half of the deck to the red player's hand
     for (int handIdx = 0; handIdx < (emptySpaces + 1)/2; handIdx++) {
-      this.redHand.set(handIdx, mutableCards.get(handIdx));
-      mutableCards.remove(handIdx);
+      this.redHand.add(handIdx, cards.get(handIdx));
     }
     // gives the second half of the deck to the blue player's hand
     for (int handIdx = (emptySpaces + 1)/2; handIdx < emptySpaces + 1; handIdx++) {
-      this.blueHand.set(handIdx, mutableCards.get(handIdx));
-      mutableCards.remove(handIdx);
+      this.blueHand.add(handIdx, cards.get(handIdx));
     }
 
     gameStarted = true;
@@ -159,9 +157,9 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   }
 
   private void rowConfigToGrid(int cols, int rows, List<String> rowConf) {
-    for (int col = 0; col < cols; col++) {
-      for (int row = 0; row < rows; row++) {
-        if(rowConf.get(col).charAt(row) == 'X') {
+    for (int row = 0; row < rows; row++) {
+      for (int col = 0; col < cols; col++) {
+        if(rowConf.get(row).charAt(col) == 'X') {
           grid[col][row] = new Cell(CellState.HOLE);
         } else {
           grid[col][row] = new Cell(CellState.CARD_SPACE);
@@ -187,9 +185,9 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   public List<C> getHand(Player player) {
     checkGameStarted();
     if(player == Player.RED) {
-      return redHand;
+      return this.redHand;
     } else {
-      return blueHand;
+      return this.blueHand;
     }
   }
 
@@ -215,15 +213,11 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   @Override
   public boolean isCellPlayable(int x, int y) {
     checkGameStarted();
-    if (x < 0 || y < 0 || x < grid.length || y < grid[0].length) {
+    if (x < 0 || y < 0 || x > grid.length || y > grid[0].length) {
       throw new IllegalArgumentException("Invalid x or y.");
     }
 
-    if (grid[x][y].equals(CellState.EMPTY)) {
-      return true;
-    } else {
-      return false;
-    }
+    return grid[x][y].getCellstate().equals(CellState.EMPTY);
   }
 
   @Override
