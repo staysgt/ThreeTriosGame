@@ -1,4 +1,4 @@
-package model;
+package cs3500.model;
 
 import java.util.List;
 
@@ -7,8 +7,8 @@ public interface GameGrid<C extends Card> {
 
   /**
    * Plays a card to the grid.
-   * @param x x coordinate of grid.
-   * @param y y coordinate of grid.
+   * @param row x coordinate of grid.
+   * @param col y coordinate of grid.
    * @param handIdx index of the card in the grid.
    * @throws IllegalStateException if game has not started or is over
    * @throws IllegalArgumentException if x or y < 0, or x > num of col, y > num of rows
@@ -16,7 +16,7 @@ public interface GameGrid<C extends Card> {
    * @throws IllegalArgumentException if handIdx is <0 or greater than the number of cards in hand
    *
    */
-  void playToGrid(int x, int y, int handIdx);
+  void playToGrid(int row, int col, int handIdx);
 
 
   /**
@@ -25,13 +25,12 @@ public interface GameGrid<C extends Card> {
    * @param cols desired number of columns in the game.
    * @param rows desired number of rows in the game.
    * @param rowConf configuration of the rows.
-   * @param handSize number of cards in hand.
    * @throws IllegalStateException if game has already been started.
    * @throws IllegalArgumentException if cols or rows < 0
    * @throws IllegalArgumentException if given cards has null values.
    * @throws IllegalArgumentException if given cards is less than (num of spaces + 1)/2
    */
-  void startGame(List<C> cards, int cols, int rows, String[] rowConf, int handSize);
+  void startGame(List<C> cards, int cols, int rows, List<String> rowConf);
 
   /**
    * Returns a copy of the hand in the game. This means modifying the returned list

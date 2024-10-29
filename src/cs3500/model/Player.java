@@ -1,4 +1,4 @@
-package model;
+package cs3500.model;
 
 public enum Player {
     RED,

@@ -1,16 +1,14 @@
-package model;
-
-import model.Card;
+package cs3500.model;
 
 public class NESWCard implements Card {
 
   private final String cardName;
-  private final AttackValue north;
-  private final AttackValue east;
-  private final AttackValue west;
-  private final AttackValue south;
+  private final AttVal north;
+  private final AttVal east;
+  private final AttVal west;
+  private final AttVal south;
 
-  public NESWCard(String cardName, AttackValue north, AttackValue south, AttackValue east, AttackValue west) {
+  public NESWCard(String cardName, AttVal north, AttVal south, AttVal east, AttVal west) {
     this.cardName = cardName;
     this.north = north;
     this.east = east;
@@ -18,7 +16,7 @@ public class NESWCard implements Card {
     this.south = south;
   }
 
-  public enum AttackValue {
+  public enum AttVal {
     ONE(1),
     TWO(2),
     THREE(3),
@@ -31,7 +29,7 @@ public class NESWCard implements Card {
     A(10);
 
     private final int value;
-    AttackValue(int i) {
+    AttVal(int i) {
       this.value = i;
     }
 
@@ -48,6 +46,22 @@ public class NESWCard implements Card {
   @Override
   public String toString() {
     return null;
+  }
+
+  public AttVal getEast() {
+    return east;
+  }
+
+  public AttVal getNorth() {
+    return north;
+  }
+
+  public AttVal getWest() {
+    return west;
+  }
+
+  public AttVal getSouth() {
+    return south;
   }
 
   @Override

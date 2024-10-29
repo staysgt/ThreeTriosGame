@@ -1,4 +1,4 @@
-package model;
+package cs3500.model;
 
 public class Cell<C extends Card> {
   Player owner = null;

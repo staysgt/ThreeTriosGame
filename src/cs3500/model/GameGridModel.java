@@ -1,4 +1,4 @@
-package model;
+package cs3500.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,11 +8,13 @@ import java.util.List;
  * @param <C> card type.
  */
 public class GameGridModel<C extends Card> implements GameGrid<C> {
+
+  private List<Card> cardsLeft;
+  private Card[][] cards;
   private Cell[][] grid;
   private List<C> blueHand;
   private List<C> redHand;
   private boolean gameStarted = false;
-
 
   /**
    * Constructor for a model.GameGridModel.
@@ -21,12 +23,12 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   }
 
   @Override
-  public void playToGrid(int x, int y, int handIdx) {
+  public void playToGrid(int row, int col, int handIdx) {
     int gridLink = grid.length;
-    if (x < 0 || x > grid.length) {
+    if (row < 0 || row > grid.length) {
       throw new IllegalArgumentException("Too little or too many cards.");
     }
-    if (y < 0 || y > grid[x].length) {
+    if (col < 0 || col > grid[row].length) {
       throw new IllegalArgumentException("Too little or too many cards.");
     }
     checkGameStarted();
@@ -36,11 +38,59 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     if (isGameOver()) {
       throw new IllegalStateException("Game is over.");
     }
+    if(grid[row][col].getCellstate() == CellState.HOLE) {
+      throw new IllegalArgumentException("Card cannot be played in a hole");
+    }
 
-
-    grid[x][y].setCard(getCurrPlayersHand().get(handIdx));
+    // sets the card at the desired position
+    grid[row][col].setCard(getCurrPlayersHand().get(handIdx));
+    // performs the battle stage
+    battle(col,row,true,true,true,true);
     this.getCurrPlayersHand().remove(handIdx);
 
+  }
+
+  // Performs the battle stage.
+  private void battle(int col, int row, boolean battleN, boolean battleE, boolean battleS, boolean battleW) {
+    // battles to the north & sets ownership
+    if(battleN && col + 1 < grid[0].length && grid[col + 1][row].getCard() != null) {
+      NESWCard currCard = (NESWCard)grid[col][row].getCard();
+      NESWCard adjCard = (NESWCard)grid[col + 1][row].getCard();
+      if(currCard.getNorth().getValue() > adjCard.getSouth().getValue()) {
+        grid[col+1][row].setOwner(getTurn());
+        battle(col + 1, row, true,true,false,true);
+      }
+    }
+
+    //battles card to the south & sets ownership
+    if(battleS && col - 1 >= 0 && grid[col - 1][row].getCard() != null) {
+      NESWCard currCard = (NESWCard)grid[col][row].getCard();
+      NESWCard adjCard = (NESWCard)grid[col - 1][row].getCard();
+      if(currCard.getSouth().getValue() > adjCard.getNorth().getValue()) {
+        grid[col-1][row].setOwner(getTurn());
+        battle(col - 1, row, false,true,true,true);
+      }
+    }
+
+    // battles card to the east & sets ownership
+    if(battleE && row + 1 < grid.length && grid[col][row + 1].getCard() != null) {
+      NESWCard currCard = (NESWCard)grid[col][row].getCard();
+      NESWCard adjCard = (NESWCard)grid[col][row + 1].getCard();
+      if(currCard.getEast().getValue() > adjCard.getWest().getValue()) {
+        grid[col][row+1].setOwner(getTurn());
+        battle(col, row +1, true,true,true,false);
+      }
+    }
+
+    // battles card to the west & sets ownership
+    if(battleW && row - 1 >= 0 && grid[col][row - 1].getCard() != null) {
+      NESWCard currCard = (NESWCard)grid[col][row].getCard();
+      NESWCard adjCard = (NESWCard)grid[col][row - 1].getCard();
+      if(currCard.getWest().getValue() > adjCard.getEast().getValue()) {
+        grid[col][row-1].setOwner(getTurn());
+        battle(col, row -1, true,false,true,true);
+      }
+    }
   }
 
   private void checkGameStarted() {
@@ -59,7 +109,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   }
 
   @Override
-  public void startGame(List<C> cards, int cols, int rows, String[] rowConf, int handSize) {
+  public void startGame(List<C> cards, int cols, int rows, List<String> rowConf) {
     if(cards == null || rowConf == null) {
       throw new IllegalArgumentException("Given arguments cannot be null");
     }
@@ -73,7 +123,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
       throw new IllegalArgumentException("Number of columns and rows must be greater than 0");
     }
     int emptySpaces = countEmptySpaces(rowConf);
-    if(Math.ceil(emptySpaces + handSize*2) > cards.size()) {
+    if((emptySpaces + 1) > cards.size()) {
       throw new IllegalArgumentException("List of cards is too short.");
     }
     // checks that the deck has no duplicate cards in it
@@ -108,10 +158,10 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     }
   }
 
-  private void rowConfigToGrid(int cols, int rows, String[] rowConf) {
+  private void rowConfigToGrid(int cols, int rows, List<String> rowConf) {
     for (int col = 0; col < cols; col++) {
       for (int row = 0; row < rows; row++) {
-        if(rowConf[col].charAt(row) == 'X') {
+        if(rowConf.get(col).charAt(row) == 'X') {
           grid[col][row] = new Cell(CellState.HOLE);
         } else {
           grid[col][row] = new Cell(CellState.CARD_SPACE);
@@ -120,11 +170,11 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     }
   }
 
-  private int countEmptySpaces(String[] configuration) {
+  private int countEmptySpaces(List<String> configuration) {
     int emptySpaces = 0;
-    for (int row = 0; row < configuration.length; row++) {
-      for (int charInString = 0; charInString < configuration[row].length(); charInString++) {
-        if(configuration[row].charAt(charInString) == 'c') {
+    for (int row = 0; row < configuration.size(); row++) {
+      for (int charInString = 0; charInString < configuration.get(row).length(); charInString++) {
+        if(configuration.get(row).charAt(charInString) == 'c') {
           emptySpaces++;
         }
       }
@@ -143,15 +193,33 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     }
   }
 
-  @Override
-  public boolean isGameOver() {
-    return this.redHand.isEmpty() || this.blueHand.isEmpty();
+
+  private int cardsInGame() {
+    return cardsLeft.size();
   }
 
 
   @Override
+  public boolean isGameOver() {
+    checkGameStarted();
+
+    if (blueHand.equals(CellState.EMPTY)) {
+      return false;
+    } else if (redHand.equals(CellState.EMPTY)){
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  @Override
   public boolean isCellPlayable(int x, int y) {
-    if (grid[x][y].getCellstate() == CellState.CARD_SPACE && grid[x][y].getOwner() == null) {
+    checkGameStarted();
+    if (x < 0 || y < 0 || x < grid.length || y < grid[0].length) {
+      throw new IllegalArgumentException("Invalid x or y.");
+    }
+
+    if (grid[x][y].equals(CellState.EMPTY)) {
       return true;
     } else {
       return false;
@@ -160,25 +228,27 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
 
   @Override
   public boolean isCellHole(int x, int y) {
-    return grid[x][y].getCellstate() == CellState.HOLE;
+    checkGameStarted();
+    if (x < 0 || y < 0) {
+      throw new IllegalArgumentException("Invalid x or y.");
+    }
+
+    if (grid[x][y].equals(CellState.HOLE)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @Override
   public C getCellCard(int x, int y) {
-    return (C) grid[x][y].getCard();
-  }
-
-  @Override
-  public Player getTurn() {
-    // fiona
     return null;
   }
 
   private Player redPlayer = Player.RED;
   private Player bluePlayer = Player.BLUE;
 
-
-  private Player getCurrPlayer(Player player) {
+  private Player getCurrPlayersCard(Player player) {
     if(this.getTurn() == Player.RED) {
       return redPlayer;
     } else {
@@ -211,12 +281,12 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
 
   @Override
   public Cell[][] getBoard() {
-    // Fiona needs to fix
     checkGameStarted();
-
     return grid;
 
   }
 
 
 }
+
+
