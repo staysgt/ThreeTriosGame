@@ -69,6 +69,7 @@ is a (public enum AttVal) in it that lets the player know what all of the valid 
 
 ## View Explanation 
 - The view incorporates just a text view which renders the grid and lets the user pick whos turn it is in the game.
+This will change later on. 
 
 ## Invariances in the code
 There are a few invariances in the code. There are attack values created for each of the four directions. These attack values
