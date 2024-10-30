@@ -1,10 +1,14 @@
-package cs3500.model;
+package cs3500.controller;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import cs3500.controller.CardFileReader;
+import cs3500.model.Card;
+import cs3500.model.NESWCard;
 
 /**
  * This class reads in the provided card files and extracts

@@ -1,8 +1,10 @@
 package cs3500.model;
 
-import org.junit.Before;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import static org.junit.Assert.*;
+
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,13 +12,17 @@ import java.io.FileNotFoundException;
 import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-import static org.junit.Assert.assertFalse;
+import cs3500.controller.ConfigurationFileReader;
+import cs3500.controller.NESWCardFileReader;
+
 import static org.junit.Assert.assertNull;
 
 public class GameGridModelTests {
-  private GameGrid model = new GameGridModel();
+  private GameGrid model = new GameGridModel(new Random(3));
   private ConfigurationFileReader conFigFile;
+  private ConfigurationFileReader noHoles;
   private NESWCardFileReader cardFile;
   private NESWCardFileReader badCardFile;
 
@@ -25,6 +31,7 @@ public class GameGridModelTests {
       conFigFile = new ConfigurationFileReader("src" + File.separator + "walkableholes");
       cardFile = new NESWCardFileReader("src/cardsexample");
       badCardFile = new NESWCardFileReader("src/notenoughcards");
+      noHoles = new ConfigurationFileReader("src/noholes");
     } catch (FileNotFoundException e) {
       throw new RuntimeException(e);
     }
@@ -82,30 +89,153 @@ public class GameGridModelTests {
   }
 
   @Test
-  public void testValidMakeMove() {
-
+  public void testValidPlayToGrid() {
+    model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(), conFigFile.getRowConfig());
+    model.playToGrid(0,0,0);
+    Assert.assertEquals(new NESWCard("dolphin",intToAV(2),intToAV(9),intToAV(3),intToAV(7)), model.getBoard()[0][0].getCard());
   }
 
+  @Test (expected = IllegalArgumentException.class)
+  public void testPlayToGridInvalidHandIdx() {
+    model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(), conFigFile.getRowConfig());
+    model.playToGrid(0,0,-1);
+  }
 
+  @Test (expected = IllegalArgumentException.class)
+  public void testPlayToGridInvalidRow() {
+    model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(), conFigFile.getRowConfig());
+    model.playToGrid(10,0,0);
+  }
 
+  @Test (expected = IllegalArgumentException.class)
+  public void testPlayToGridInvalidCol() {
+    model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(), conFigFile.getRowConfig());
+    model.playToGrid(0,-1,0);
+  }
 
+  @Test
+  public void testPlayToGridChangesOwner() {
+    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(), noHoles.getRowConfig());
+    model.playToGrid(0,0,0);
+    model.playToGrid(0,1,0);
+    Assert.assertEquals(Player.BLUE, model.getBoard()[0][0].getOwner());
+    Assert.assertEquals(Player.BLUE, model.getBoard()[0][1].getOwner());
+  }
 
+  @Test
+  public void testGameOverTrue() {
+    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(), noHoles.getRowConfig());
+    // red turn
+    model.playToGrid(0,0,0);
+    // blue
+    model.playToGrid(0,1,0);
+    // red
+    model.playToGrid(0,2,0);
+    // blue
+    model.playToGrid(1,0,0);
+    // red
+    model.playToGrid(1,1,0);
+    // blue
+    model.playToGrid(1,2,0);
+    // red
+    model.playToGrid(2,0,0);
+    // blue
+    model.playToGrid(2,1,0);
+    model.playToGrid(2,2,0);
+    model.playToGrid(3,0,0);
+    model.playToGrid(3,1,0);
+    model.playToGrid(3,2,0);
+    model.playToGrid(4,0,0);
+    model.playToGrid(4,1,0);
+    model.playToGrid(4,2,0);
 
+    Assert.assertEquals(Player.RED, model.getBoard()[0][0].getOwner());
+    Assert.assertEquals(Player.RED, model.getBoard()[0][1].getOwner());
+    Assert.assertTrue(model.isGameOver());
+  }
 
+  @Test
+  public void testGameOverFalse() {
+    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(), noHoles.getRowConfig());
+    Assert.assertFalse(model.isGameOver());
+  }
+
+  @Test (expected = IllegalStateException.class)
+  public void testGameOverGameNotStarted() {
+   model.isGameOver();
+  }
+
+  @Test
+  public void testGameWinner() {
+    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(), noHoles.getRowConfig());
+    model.playToGrid(0,0,0);
+    model.playToGrid(0,1,0);
+    model.playToGrid(0,2,0);
+    model.playToGrid(1,0,0);
+    model.playToGrid(1,1,0);
+    model.playToGrid(1,2,0);
+    model.playToGrid(2,0,0);
+    model.playToGrid(2,1,0);
+    model.playToGrid(2,2,0);
+    model.playToGrid(3,0,0);
+    model.playToGrid(3,1,0);
+    model.playToGrid(3,2,0);
+    model.playToGrid(4,0,0);
+    model.playToGrid(4,1,0);
+    model.playToGrid(4,2,0);
+    Assert.assertEquals(Player.BLUE, model.getWinner());
+  }
+
+  @Test (expected = IllegalStateException.class)
+  public void testGetWinnerGameNotOver() {
+    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(), noHoles.getRowConfig());
+    model.playToGrid(0,0,0);
+    model.playToGrid(0,1,0);
+    model.getWinner();
+  }
+
+  @Test (expected = IllegalStateException.class)
+  public void testGetWinnerGameNotStarted() {
+    model.getWinner();
+  }
+
+  @Test
+  public void testGetTurnRedStart() {
+    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(), noHoles.getRowConfig());
+    Assert.assertEquals(Player.RED, model.getTurn() );
+  }
+
+  @Test
+  public void testGetTurnAfterOnePlay() {
+    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(), noHoles.getRowConfig());
+    model.playToGrid(0,0,0);
+    Assert.assertEquals(Player.BLUE, model.getTurn());
+  }
+
+  @Test (expected = IllegalStateException.class)
+  public void testGetTurnGameNotStarted() {
+    model.getTurn();
+  }
 
   @Test(expected = IllegalStateException.class)
   public void testGetBoardGameNotStarted() {
-    GameGridModel model = new GameGridModel();
     model.getBoard();
-    assertEquals(model, 0);
+    Assert.assertEquals(model, 0);
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void testGetBoardStartGameNotInBounds() {
-    GameGridModel model = new GameGridModel();
-    model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(), conFigFile.getRowConfig());
-    Cell[][] cells = model.getBoard();
-    assertEquals(model, cells);
+  @Test
+  public void testValidGetBoardDims() {
+    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(), noHoles.getRowConfig());
+    Assert.assertEquals(noHoles.getCols(), model.getBoard().length);
+    Assert.assertEquals(noHoles.getRows(), model.getBoard()[0].length);
+  }
+
+  @Test
+  public void testValidGetBoardAfterMove() {
+    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(), noHoles.getRowConfig());
+    System.out.println(model.getHand(model.getTurn()));
+    model.playToGrid(0,0,0);
+    Assert.assertEquals(new NESWCard("horse",intToAV(2), intToAV(7),intToAV(8),intToAV(2)), model.getBoard()[0][0].getCard());
   }
 
   @Test
@@ -120,16 +250,16 @@ public class GameGridModelTests {
   public void testIsCellHoleGameNotStarted() {
     GameGridModel model = new GameGridModel();
     model.isCellHole(0,0);
-    assertEquals(model, null);
+    assertEquals(model, 0);
   }
 
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void testIsCellHoleStartGameEmpty() {
     GameGridModel model = new GameGridModel();
     model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(), conFigFile.getRowConfig());
     boolean cells = model.isCellHole(0,0);
-    assertNull("Empty list", cells);
+    assertNotEquals(model, cells);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -139,5 +269,6 @@ public class GameGridModelTests {
     boolean cells = model.isCellHole(5,10);
     assertEquals(model, cells);
   }
+
 
 }

@@ -87,6 +87,7 @@ public interface GameGrid<C extends Card> {
    *
    * @return the winner, or null if there is no winner
    * @throws IllegalStateException if game has not started
+   * @throws IllegalStateException if the game is not over yet.
    */
   Player getWinner();
 

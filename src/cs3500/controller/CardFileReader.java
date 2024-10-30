@@ -1,4 +1,4 @@
-package cs3500.model;
+package cs3500.controller;
 
 /**
  * Interface that represents a CardFileReader

@@ -1,4 +1,4 @@
-package cs3500.model;
+package cs3500.controller;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -14,16 +14,16 @@ public class Cell<C extends Card> {
     }
   }
 
-  public void setCard(C card) {
+  public void setCard(C card, Player player) {
     if(cellstate == CellState.HOLE) {
       throw new IllegalArgumentException("model.Card cannot be placed in hole");
     }
     if(cardPlayed) {
       throw new IllegalArgumentException("Space has already been played to");
     }
-
     this.card = card;
     cardPlayed = true;
+    this.owner = player;
   }
 
   public void setOwner(Player player) {
