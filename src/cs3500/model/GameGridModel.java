@@ -110,11 +110,11 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
 
   @Override
   public void startGame(List<C> cards, int cols, int rows, List<String> rowConf) {
-    if(cards == null || rowConf == null) {
-      throw new IllegalArgumentException("Given arguments cannot be null");
-    }
     if(gameStarted) {
       throw new IllegalStateException("Game has already been started.");
+    }
+    if(cards == null || rowConf == null) {
+      throw new IllegalArgumentException("Given arguments cannot be null");
     }
     if(cards.contains(null)) {
       throw new IllegalArgumentException("Given cards cannot contain null values.");
@@ -190,23 +190,10 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     }
   }
 
-
-  private int cardsInGame() {
-    return cardsLeft.size();
-  }
-
-
   @Override
   public boolean isGameOver() {
     checkGameStarted();
-
-    if (blueHand.equals(CellState.EMPTY)) {
-      return false;
-    } else if (redHand.equals(CellState.EMPTY)){
-      return false;
-    } else {
-      return true;
-    }
+    return redHand.isEmpty();
   }
 
   @Override
@@ -222,45 +209,24 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   @Override
   public boolean isCellHole(int x, int y) {
     checkGameStarted();
-    if (x < 0 || y < 0) {
+    if (x < 0 || y < 0 || x > grid.length || y > grid[0].length) {
       throw new IllegalArgumentException("Invalid x or y.");
     }
 
-    if (grid[x][y].equals(CellState.HOLE)) {
+    if (grid[x][y].getCellstate() == (CellState.HOLE)) {
       return true;
     } else {
       return false;
     }
   }
 
-  private Player redPlayer = Player.RED;
-  private Player bluePlayer = Player.BLUE;
-
-  private Player getCurrPlayersCard(Player player) {
-    if(this.getTurn() == Player.RED) {
-      return redPlayer;
-    } else {
-      return bluePlayer;
-    }
-
-  }
-
   @Override
   public Player getTurn() {
     checkGameStarted();
-    if (getCurrPlayersCard(redPlayer).compareTo(bluePlayer) > 0) {
-      return redPlayer;
-    } else if (getCurrPlayersCard(bluePlayer).compareTo(redPlayer) > 0) {
-      return bluePlayer;
-    }
-    return null;
-  }
-
-  private List<C> getTotalCard(Player player) {
-    if (player == Player.RED) {
-      return redHand;
+    if (getHand(Player.RED) == getHand(Player.BLUE)) {
+      return Player.RED;
     } else {
-      return blueHand;
+      return Player.BLUE;
     }
   }
 
@@ -268,27 +234,28 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   @Override
   public Player getWinner() {
     checkGameStarted();
-
-    int redHandSize = getTotalCard(redPlayer).size();
-    int blueHandSize = getTotalCard(bluePlayer).size();
-
-    while (isGameOver() == true) {
-      if (redHandSize > blueHandSize) {
-        return Player.RED;
-      } else if (blueHandSize > redHandSize) {
-        return Player.BLUE;
-      } else {
-        return null;
+    int blueCount = 0;
+    int redCount = 0;
+    for (int row = 0; row < grid.length; row++) {
+      for (int col = 0; col < grid[0].length; col++) {
+        if(grid[row][col].getOwner() == Player.BLUE) {
+          blueCount++;
+        } else if (grid[row][col].getOwner() == Player.RED) {
+          redCount++;
+        }
       }
     }
-    return null;
+    if(redCount > blueCount) {
+      return Player.RED;
+    } else {
+      return Player.BLUE;
+    }
   }
 
   @Override
   public Cell[][] getBoard() {
     checkGameStarted();
     return grid;
-
   }
 
 

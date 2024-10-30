@@ -18,11 +18,13 @@ public class GameGridModelTests {
   private GameGrid model = new GameGridModel();
   private ConfigurationFileReader conFigFile;
   private NESWCardFileReader cardFile;
+  private NESWCardFileReader badCardFile;
 
   {
     try {
       conFigFile = new ConfigurationFileReader("src" + File.separator + "walkableholes");
       cardFile = new NESWCardFileReader("src/cardsexample");
+      badCardFile = new NESWCardFileReader("src/notenoughcards");
     } catch (FileNotFoundException e) {
       throw new RuntimeException(e);
     }
@@ -35,7 +37,6 @@ public class GameGridModelTests {
     System.out.println(model.getHand(Player.RED));
     Assertions.assertTrue(model.getHand(Player.RED).contains(new NESWCard("dog", intToAV(5),
             intToAV(9),  intToAV(10),  intToAV(2))));
-
   }
 
   private NESWCard.AttVal intToAV(int num) {
@@ -61,8 +62,34 @@ public class GameGridModelTests {
   public void testStartGameTwice() {
     model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(), conFigFile.getRowConfig());
     model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(), conFigFile.getRowConfig());
+  }
+
+  @Test (expected = IllegalArgumentException.class)
+  public void testStartGameGivenNulls() {
+    model.startGame(null, conFigFile.getCols(), conFigFile.getRows(), conFigFile.getRowConfig());
+  }
+
+  @Test (expected = IllegalArgumentException.class)
+  public void testStartGameCardsContainsNull() {
+    List<NESWCard> cards1 = new ArrayList<>();
+    cards1.add(null);
+    model.startGame(cards1, conFigFile.getCols(), conFigFile.getRows(), conFigFile.getRowConfig());
+  }
+
+  @Test (expected = IllegalArgumentException.class)
+  public void testStartGameNotEnoughCards() {
+    model.startGame(badCardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(), conFigFile.getRowConfig());
+  }
+
+  @Test
+  public void testValidMakeMove() {
 
   }
+
+
+
+
+
 
 
 

@@ -29,6 +29,7 @@ public interface GameGrid<C extends Card> {
    * @throws IllegalArgumentException if cols or rows < 0
    * @throws IllegalArgumentException if given cards has null values.
    * @throws IllegalArgumentException if given cards is less than (num of spaces + 1)/2
+   * @throws IllegalArgumentException if any provided values are null
    */
   void startGame(List<C> cards, int cols, int rows, List<String> rowConf);
 
