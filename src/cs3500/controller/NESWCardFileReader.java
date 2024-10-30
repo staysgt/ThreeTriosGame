@@ -11,18 +11,20 @@ import cs3500.model.Card;
 import cs3500.model.NESWCard;
 
 /**
- * This class reads in the provided card files and extracts
- * the card name, and the NESW directions
+ * This class reads in the provided card files and extracts,
+ * the card name, and the NESW directions.
  */
-public class NESWCardFileReader implements CardFileReader {
-  private final String filepath;
-  private List<Card> cards = new ArrayList<>();
+public class NESWCardFileReader implements CardFileReader { private List<Card> cards = new ArrayList<>();
 
+  /**
+   * Constrcutor for a NESWCardFileReader.
+   * @param path the path to the card file.
+   * @throws FileNotFoundException if a file does not exist at the given path.
+   */
   public NESWCardFileReader(String path) throws FileNotFoundException {
-    this.filepath = path;
-    Scanner scan = new Scanner(new File(filepath));
+    Scanner scan = new Scanner(new File(path));
     int i = 1;
-    while(scan.hasNextLine()) {
+    while (scan.hasNextLine()) {
       String currLine = scan.nextLine();
       String[] split = currLine.split("\\s+");
       String name = split[0];
@@ -31,7 +33,7 @@ public class NESWCardFileReader implements CardFileReader {
       NESWCard.AttVal s = split[2].equals("A") ? intToAV(10) : intToAV(Integer.parseInt(split[2]));
       NESWCard.AttVal e = split[3].equals("A") ? intToAV(10) : intToAV(Integer.parseInt(split[3]));
       NESWCard.AttVal w = split[4].equals("A") ? intToAV(10) : intToAV(Integer.parseInt(split[4]));
-      this.cards.add(new NESWCard(name,n,s,e,w));
+      this.cards.add(new NESWCard(name, n, s, e, w));
 
     }
 
@@ -40,7 +42,7 @@ public class NESWCardFileReader implements CardFileReader {
   // helper to associate int value to AttackValue
   private NESWCard.AttVal intToAV(int num) {
     for (NESWCard.AttVal attackValue : NESWCard.AttVal.values()) {
-      if(num == attackValue.getValue()) {
+      if (num == attackValue.getValue()) {
         return attackValue;
       }
     }

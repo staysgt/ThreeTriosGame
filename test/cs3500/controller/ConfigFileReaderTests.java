@@ -26,12 +26,12 @@ public class ConfigFileReaderTests {
 
   @Test
   public void testGetCols() {
-    Assert.assertEquals(3,conFigFile.getCols());
+    Assert.assertEquals(3, conFigFile.getCols());
   }
 
   @Test
   public void testGetRows() {
-    Assert.assertEquals(6,conFigFile.getRows());
+    Assert.assertEquals(6, conFigFile.getRows());
   }
 
   @Test
@@ -43,7 +43,7 @@ public class ConfigFileReaderTests {
     Assert.assertEquals(expected, noHoles.getRowConfig());
   }
 
-  @Test (expected = FileNotFoundException.class)
+  @Test(expected = FileNotFoundException.class)
   public void testInvalidFileName() throws FileNotFoundException {
     new ConfigurationFileReader("blah");
   }

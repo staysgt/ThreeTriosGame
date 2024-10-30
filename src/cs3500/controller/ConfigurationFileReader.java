@@ -11,19 +11,22 @@ import java.util.Scanner;
  * of rows, cols and the row configuration.
  */
 public class ConfigurationFileReader {
-  final private String filePath;
   private int cols;
   private int rows;
   private final List<String> rowConfig = new ArrayList<>();
 
 
+  /**
+   * Constructor for a ConfigurationFileReader.
+   * @param filePath the filepath for the configuration file.
+   * @throws FileNotFoundException if a file does not exist at the given filepath.
+   */
   public ConfigurationFileReader(String filePath) throws FileNotFoundException {
     Scanner scan = new Scanner(new File(filePath));
-    this.filePath = filePath;
     String firstLine = scan.nextLine();
     this.cols = Integer.parseInt(firstLine.split(" ")[0]);
     this.rows = Integer.parseInt(firstLine.split(" ")[1]);
-    while(scan.hasNextLine()) {
+    while (scan.hasNextLine()) {
       rowConfig.add(scan.nextLine());
     }
   }
@@ -38,11 +41,6 @@ public class ConfigurationFileReader {
 
   public List<String> getRowConfig() {
     return this.rowConfig;
-  }
-
-  public static void main(String[] args) throws FileNotFoundException {
-    ConfigurationFileReader cn = new ConfigurationFileReader(("src" + File.separator + "walkableholes"));
-
   }
 
 }

@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
+
 import cs3500.model.NESWCard;
 
 /**
@@ -23,7 +24,7 @@ public class NESWCardFileReaderTests {
 
   @Test
   public void testGetCardsFirstIdx() {
-    NESWCard expected = new NESWCard("dog", intToAV(5), intToAV(9), intToAV(3),intToAV(2));
+    NESWCard expected = new NESWCard("dog", intToAV(5), intToAV(9), intToAV(3), intToAV(2));
     Assert.assertEquals(expected, cardFile.getCards().get(0));
   }
 
@@ -32,21 +33,21 @@ public class NESWCardFileReaderTests {
     Assert.assertEquals(20, cardFile.getCards().size());
   }
 
-  @Test (expected = FileNotFoundException.class)
+  @Test(expected = FileNotFoundException.class)
   public void testGetCardsInvalidFilepath() throws FileNotFoundException {
     NESWCardFileReader noFilePath = new NESWCardFileReader("blahblah");
   }
 
   @Test
   public void testGetCardsMiddleIdx() {
-    NESWCard expected = new NESWCard("chicken", intToAV(3), intToAV(10), intToAV(10),intToAV(3));
+    NESWCard expected = new NESWCard("chicken", intToAV(3), intToAV(10), intToAV(10), intToAV(3));
     Assert.assertEquals(expected, cardFile.getCards().get(10));
   }
 
 
   private NESWCard.AttVal intToAV(int num) {
     for (NESWCard.AttVal attackValue : NESWCard.AttVal.values()) {
-      if(num == attackValue.getValue()) {
+      if (num == attackValue.getValue()) {
         return attackValue;
       }
     }

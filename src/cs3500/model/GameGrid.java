@@ -2,6 +2,10 @@ package cs3500.model;
 
 import java.util.List;
 
+/**
+ * Representation of a game grid.
+ * @param <C> card.
+ */
 public interface GameGrid<C extends Card> {
 
 
@@ -37,7 +41,7 @@ public interface GameGrid<C extends Card> {
    * Returns a copy of the hand in the game. This means modifying the returned list
    * or the cards in the list has no effect on the game.
    * @return a new list containing the cards in the player one's hand or player
-   * two hands in the same order as in the current state of the game.
+   *         two hands in the same order as in the current state of the game.
    * @throws IllegalStateException if the game has not started
    *
    */
@@ -98,7 +102,6 @@ public interface GameGrid<C extends Card> {
    * @throws IllegalStateException if game has not started or game is over
    */
   Cell[][] getBoard();
-
 
 
 }

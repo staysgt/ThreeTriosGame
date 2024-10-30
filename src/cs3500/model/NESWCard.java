@@ -2,6 +2,9 @@ package cs3500.model;
 
 import java.util.Objects;
 
+/**
+ * Representation of a NESW card in three trios.
+ */
 public class NESWCard implements Card {
 
   private final String cardName;
@@ -10,6 +13,14 @@ public class NESWCard implements Card {
   private final AttVal west;
   private final AttVal south;
 
+  /**
+   * Constructor for a NESW card.
+   * @param cardName name of the card
+   * @param north north value of the card.
+   * @param south south value of the card.
+   * @param east east value of the card.
+   * @param west west value of the card.
+   */
   public NESWCard(String cardName, AttVal north, AttVal south, AttVal east, AttVal west) {
     this.cardName = cardName;
     this.north = north;
@@ -18,6 +29,9 @@ public class NESWCard implements Card {
     this.south = south;
   }
 
+  /**
+   * Enum values that represent the possible attack values for a card.
+   */
   public enum AttVal {
     ONE(1),
     TWO(2),
@@ -31,6 +45,7 @@ public class NESWCard implements Card {
     A(10);
 
     private final int value;
+
     AttVal(int i) {
       this.value = i;
     }
@@ -85,4 +100,6 @@ public class NESWCard implements Card {
     NESWCard cm = (NESWCard) obj;
     return Objects.equals(cm.getName(), this.cardName);
   }
+
+
 }

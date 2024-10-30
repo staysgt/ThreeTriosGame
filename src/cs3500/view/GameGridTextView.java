@@ -1,22 +1,22 @@
 package cs3500.view;
-import org.w3c.dom.Text;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Random;
-
-import cs3500.controller.ConfigurationFileReader;
-import cs3500.controller.NESWCardFileReader;
 import cs3500.model.Card;
 import cs3500.model.CellState;
 import cs3500.model.GameGrid;
-import cs3500.model.GameGridModel;
 import cs3500.model.NESWCard;
 import cs3500.model.Player;
 
+/**
+ * Creates a textual view of a GameGrid.
+ * @param <C> card.
+ */
 public class GameGridTextView<C extends Card> implements TextView {
   private GameGrid<NESWCard> model;
 
+  /**
+   * Constructor for a gamegridtextview.
+   * @param model model that the view is being created of.
+   */
   public GameGridTextView(GameGrid model) {
     this.model = model;
   }
