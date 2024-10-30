@@ -47,7 +47,13 @@ public class NESWCard implements Card {
 
   @Override
   public String toString() {
-    return null;
+    StringBuilder sb = new StringBuilder();
+    sb.append(this.cardName);
+    sb.append(" " + north);
+    sb.append(" " + south);
+    sb.append(" " + east);
+    sb.append(" " + west);
+    return sb.toString();
   }
 
   public AttVal getEast() {

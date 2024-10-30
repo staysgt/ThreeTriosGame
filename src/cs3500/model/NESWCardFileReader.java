@@ -17,6 +17,7 @@ public class NESWCardFileReader implements CardFileReader {
   public NESWCardFileReader(String path) throws FileNotFoundException {
     this.filepath = path;
     Scanner scan = new Scanner(new File(filepath));
+    int i = 1;
     while(scan.hasNextLine()) {
       String currLine = scan.nextLine();
       String[] split = currLine.split("\\s+");
@@ -27,6 +28,7 @@ public class NESWCardFileReader implements CardFileReader {
       NESWCard.AttVal e = split[3].equals("A") ? intToAV(10) : intToAV(Integer.parseInt(split[3]));
       NESWCard.AttVal w = split[4].equals("A") ? intToAV(10) : intToAV(Integer.parseInt(split[4]));
       this.cards.add(new NESWCard(name,n,s,e,w));
+
     }
 
   }

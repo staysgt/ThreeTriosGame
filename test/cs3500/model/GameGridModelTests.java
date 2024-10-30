@@ -47,6 +47,24 @@ public class GameGridModelTests {
     throw new IllegalArgumentException("Provided num does not have an associated attack value");
   }
 
+  @Test (expected = IllegalArgumentException.class)
+  public void testStartGameThrowsInvalidCols() {
+    model.startGame(cardFile.getCards(), -3, conFigFile.getRows(), conFigFile.getRowConfig());
+  }
+
+  @Test (expected = IllegalArgumentException.class)
+  public void testStartGameThrowsInvalidRows() {
+    model.startGame(cardFile.getCards(), conFigFile.getCols(), 0 , conFigFile.getRowConfig());
+  }
+
+  @Test (expected = IllegalStateException.class)
+  public void testStartGameTwice() {
+    model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(), conFigFile.getRowConfig());
+    model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(), conFigFile.getRowConfig());
+
+  }
+
+
 
   @Test(expected = IllegalStateException.class)
   public void testGetBoardGameNotStarted() {

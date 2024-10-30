@@ -132,15 +132,14 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     this.grid = new Cell[cols][rows];
     // assigns the cells that are supposed to be holes vs card spaces
     rowConfigToGrid(cols, rows, rowConf);
-    // converts given list of cards into a mutable list, just in case an immutable list was given
-//    ArrayList<C> mutableCards = new ArrayList<>(cards);
+
     // gives the first half of the deck to the red player's hand
     for (int handIdx = 0; handIdx < (emptySpaces + 1)/2; handIdx++) {
       this.redHand.add(handIdx, cards.get(handIdx));
     }
     // gives the second half of the deck to the blue player's hand
     for (int handIdx = (emptySpaces + 1)/2; handIdx < emptySpaces + 1; handIdx++) {
-      this.blueHand.add(handIdx, cards.get(handIdx));
+      this.blueHand.add(handIdx - (emptySpaces + 1)/2, cards.get(handIdx));
     }
 
     gameStarted = true;
@@ -172,7 +171,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     int emptySpaces = 0;
     for (int row = 0; row < configuration.size(); row++) {
       for (int charInString = 0; charInString < configuration.get(row).length(); charInString++) {
-        if(configuration.get(row).charAt(charInString) == 'c') {
+        if(configuration.get(row).charAt(charInString) == 'C') {
           emptySpaces++;
         }
       }
