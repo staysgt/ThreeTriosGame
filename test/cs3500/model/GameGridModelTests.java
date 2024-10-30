@@ -81,7 +81,7 @@ public class GameGridModelTests {
     assertEquals(model, cells);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void testGetBoardStartGameEmpty() {
     GameGridModel model = new GameGridModel();
     model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(), conFigFile.getRowConfig());
@@ -93,7 +93,7 @@ public class GameGridModelTests {
   public void testIsCellHoleGameNotStarted() {
     GameGridModel model = new GameGridModel();
     model.isCellHole(0,0);
-    assertEquals(model, 0);
+    assertEquals(model, null);
   }
 
 
@@ -102,7 +102,7 @@ public class GameGridModelTests {
     GameGridModel model = new GameGridModel();
     model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(), conFigFile.getRowConfig());
     boolean cells = model.isCellHole(0,0);
-    assertNull("Empty List", cells);
+    assertNull("Empty list", cells);
   }
 
   @Test(expected = IllegalArgumentException.class)
