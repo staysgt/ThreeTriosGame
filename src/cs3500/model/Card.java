@@ -25,4 +25,11 @@ public interface Card {
    */
   boolean equals(Object obj);
 
+
+  /**
+   * Overrides hashCode method to ensure two equal cards have same hashcode value.
+   * @return hashcode of given card.
+   */
+  public int hashCode();
+
 }

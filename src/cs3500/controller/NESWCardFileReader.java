@@ -14,7 +14,8 @@ import cs3500.model.NESWCard;
  * This class reads in the provided card files and extracts,
  * the card name, and the NESW directions.
  */
-public class NESWCardFileReader implements CardFileReader { private List<Card> cards = new ArrayList<>();
+public class NESWCardFileReader implements CardFileReader {
+  private List<Card> cards = new ArrayList<>();
 
   /**
    * Constrcutor for a NESWCardFileReader.

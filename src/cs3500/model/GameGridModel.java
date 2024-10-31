@@ -11,6 +11,14 @@ import java.util.Random;
  * @param <C> card type.
  */
 public class GameGridModel<C extends Card> implements GameGrid<C> {
+  /**
+   * INVARIANTS:
+   * - r is not null.
+   * This is ensured in the constructor, preserved by the methods (it is final, so this is
+   * unapplicable), and it is instantaneous.
+   * - blueHand/redHand is not null:
+   * this is ensured in the constructor, preserved by the methods, and instantaneous.
+   */
   private Cell[][] grid;
   private List<C> blueHand = new ArrayList<>();
   private List<C> redHand = new ArrayList<>();
@@ -60,7 +68,8 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   }
 
   // Performs the battle stage.
-  private void battle(int rowIdx, int colIdx, boolean battleN, boolean battleE, boolean battleS, boolean battleW) {
+  private void battle(int rowIdx, int colIdx, boolean battleN, boolean battleE, boolean battleS,
+                      boolean battleW) {
 
     // battles to the north & sets ownership + adds to map that tracks if its been visited
     if (battleN && rowIdx + 1 < grid.length && colIdx < grid[0].length

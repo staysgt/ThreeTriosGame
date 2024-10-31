@@ -20,8 +20,12 @@ public class NESWCard implements Card {
    * @param south south value of the card.
    * @param east east value of the card.
    * @param west west value of the card.
+   * @throws IllegalArgumentException if given arguments are null.
    */
   public NESWCard(String cardName, AttVal north, AttVal south, AttVal east, AttVal west) {
+    if (cardName == null || north == null || south == null || east == null || west == null) {
+      throw new IllegalArgumentException("Given values cannot be null.");
+    }
     this.cardName = cardName;
     this.north = north;
     this.east = east;
@@ -99,6 +103,11 @@ public class NESWCard implements Card {
 
     NESWCard cm = (NESWCard) obj;
     return Objects.equals(cm.getName(), this.cardName);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(cardName);
   }
 
 

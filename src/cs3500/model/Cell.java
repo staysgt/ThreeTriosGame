@@ -11,6 +11,10 @@ public class Cell<C extends Card> {
 
   private boolean cardPlayed = false;
 
+  /**
+   * Constructor for a cell.
+   * @param state the cell state for the cell.
+   */
   public Cell(CellState state) {
     this.cellstate = state;
     if (cellstate == CellState.HOLE) {

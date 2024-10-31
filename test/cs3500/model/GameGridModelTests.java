@@ -2,7 +2,6 @@ package cs3500.model;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -44,10 +43,9 @@ public class GameGridModelTests {
   public void testValidStartGame() {
     model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(),
             conFigFile.getRowConfig());
-    System.out.println(model.getHand(Player.RED));
-    Assertions.assertTrue(model.getHand(Player.RED).contains(new NESWCard("dog",
-            intToAV(5),
-            intToAV(9), intToAV(10), intToAV(2))));
+    NESWCard card = new NESWCard("dog", intToAV(5), intToAV(9),
+            intToAV(10), intToAV(2));
+    Assert.assertTrue(model.getHand(Player.RED).contains(card));
   }
 
   private NESWCard.AttVal intToAV(int num) {
