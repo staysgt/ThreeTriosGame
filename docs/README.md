@@ -46,18 +46,18 @@ focus for this project is the model interface. Below, there is a layout of what 
 
 
 ## Controller Explanation
-- In our src we have created a cs3500 package that takes in a controller.
+- In our src we have created a cs3500 package that takes in a controller package.
 - CardFileReader is currently not implemented yet but will be used to read
 the users card and let them keep track of their cards
 - ConfigurationFileReader is used for implementations 
 
 
 ## Model Explanation
-- In our src we have created a cs3500 package that takes in classes and creates a model.
+- In our src we have created a cs3500 package that takes in classes and creates a model package.
 - The Card Interface is potentially one of the most important interfaces as it is implemented
 into many different classes. It keeps track of the different types of cards in the game
-- The Cell class is the grid used for the game. This is where the user will place the 
-cards. If the cell has a hole in it which means that it is a card can't be placed then an
+- The Cell class is the grid used for the game. This is where the 
+cards are placed. If the cell has a hole in it which means that it is a card can't be placed then an
 IllegalException will be thrown
 - CellState is an enum which is just if the cell is a hole or not
 - Game grid is the interface that runs the game model. This interface lets us know how the game 
@@ -68,6 +68,7 @@ is a (public enum AttVal) in it that lets the player know what all of the valid 
 - The two players are placed in an enum since their values never change.
 
 ## View Explanation 
+- In our src we have created a cs3500 package that takes in classes and creates a view package.
 - The view incorporates just a text view which renders the grid and lets the user pick whos turn it is in the game.
 This will change later on. 
 
