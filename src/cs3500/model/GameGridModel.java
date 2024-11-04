@@ -322,7 +322,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     checkGameStarted();
     if (grid[x][y].getCellState() == CellState.HOLE) {
       return false;
-    } else if (){
+    } else {
       // check to see if name is in space or not
 
     }
@@ -332,6 +332,6 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
 }
 
 
-}
+
 
 

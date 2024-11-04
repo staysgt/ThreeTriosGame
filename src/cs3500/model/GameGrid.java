@@ -6,7 +6,7 @@ import java.util.List;
  * Representation of a game grid.
  * @param <C> card.
  */
-public interface GameGrid<C extends Card> {
+public interface GameGrid<C extends Card> extends ReadOnlyGameGridModel {
 
 
   /**
