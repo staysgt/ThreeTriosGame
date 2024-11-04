@@ -54,7 +54,7 @@ public class Cell<C extends Card> {
     return owner;
   }
 
-  public CellState getCellstate() {
+  public CellState getCellState() {
     return cellstate;
   }
 

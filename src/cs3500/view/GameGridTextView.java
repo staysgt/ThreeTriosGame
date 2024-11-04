@@ -31,7 +31,7 @@ public class GameGridTextView<C extends Card> implements TextView {
         if (model.getBoard()[col][row].getCard() != null) {
           sb.append(model.getBoard()[col][row].getCard().getName());
         } else {
-          if (model.getBoard()[col][row].getCellstate() == CellState.CARD_SPACE) {
+          if (model.getBoard()[col][row].getCellState() == CellState.CARD_SPACE) {
             sb.append("_");
           } else {
             sb.append(" ");

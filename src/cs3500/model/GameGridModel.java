@@ -56,7 +56,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     if (isGameOver()) {
       throw new IllegalStateException("Game is over.");
     }
-    if (grid[row][col].getCellstate() == CellState.HOLE) {
+    if (grid[row][col].getCellState() == CellState.HOLE) {
       throw new IllegalArgumentException("Card cannot be played in a hole");
     }
 
@@ -223,7 +223,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
       throw new IllegalArgumentException("Invalid x or y.");
     }
 
-    return grid[x][y].getCellstate().equals(CellState.EMPTY);
+    return grid[x][y].getCellState().equals(CellState.EMPTY);
   }
 
   @Override
@@ -233,7 +233,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
       throw new IllegalArgumentException("Invalid x or y.");
     }
 
-    return grid[x][y].getCellstate() == (CellState.HOLE);
+    return grid[x][y].getCellState() == (CellState.HOLE);
   }
 
   @Override
@@ -274,8 +274,62 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   @Override
   public Cell[][] getBoard() {
     checkGameStarted();
-    return grid;
+    Cell[][] copy = new Cell[grid.length][grid[0].length];
+    for (int row = 0; row < grid.length; row++) {
+      copy[row] = grid[row];
+    }
+    return copy;
   }
+
+  @Override
+  public int getScore(Player player) {
+    checkGameStarted();
+    int count = 0;
+    for (int row = 0; row < grid.length; row++) {
+      for (int col = 0; col < grid[0].length; col++) {
+        if (grid[row][col].getOwner() == player) {
+          count++;
+        }
+      }
+    }
+    return count;
+  }
+
+  /**
+   * This gets how many cards a player can flip.
+   * @param x coordinate of grid
+   * @param y coordinate of grid
+   * @return the amount of cards a player can flip.
+   * @throws IllegalStateException if game has not started or game is over
+   */
+  @Override
+  public int cardsFlipped(int x, int y, int handIdx) {
+
+    return 0;
+  }
+
+
+  /**
+   * This tells us if the play is legal or not.
+   * @param player a specific player
+   * @param x coordinate of grid
+   * @param y coordinate of grid
+   * @return true or false.
+   * @throws IllegalStateException if game has not started or game is over
+   */
+  @Override
+  public boolean legalCard(Player player, int x, int y) {
+    checkGameStarted();
+    if (grid[x][y].getCellState() == CellState.HOLE) {
+      return false;
+    } else if (){
+      // check to see if name is in space or not
+
+    }
+    return true;
+  }
+
+}
 
 
 }
