@@ -385,7 +385,6 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
       return false;
     } else {
       // check to see if name is in space or not
-
     }
     return true;
   }
