@@ -1,5 +1,6 @@
 package cs3500.model;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -304,8 +305,68 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
    */
   @Override
   public int cardsFlipped(int x, int y, int handIdx) {
+    // should supply battle no mutation with a grid from getCopy
+    Cell[][] copy = getBoard();
 
     return 0;
+  }
+
+  /**
+   * Counts the number of cards flipped within a battle.
+   *
+   * @return
+   */
+  private int battleNoMutation(Cell[][] grid, int rowIdx, int colIdx, boolean battleN, boolean battleE, boolean battleS,
+                               boolean battleW, int count) {
+
+
+    // battles to the north & sets ownership + adds to map that tracks if its been visited
+    if (battleN && rowIdx + 1 < grid.length && colIdx < grid[0].length
+            && grid[rowIdx + 1][colIdx].getCard() != null) {
+      NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();
+      NESWCard adjCard = (NESWCard) grid[rowIdx + 1][colIdx].getCard();
+      if (adjCard != null && currCard != null && grid[rowIdx + 1][colIdx].getOwner() != getTurn()
+              && currCard.getNorth().getValue() > adjCard.getSouth().getValue()) {
+        grid[rowIdx + 1][colIdx].setOwner(getTurn());
+        battleNoMutation(grid, rowIdx + 1, colIdx, true, true, false, true, count);
+      }
+    }
+
+    //battles card to the south & sets ownership
+    if (battleS && rowIdx - 1 >= 0 && colIdx < grid[0].length &&
+            grid[rowIdx - 1][colIdx].getCard() != null) {
+      NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();
+      NESWCard adjCard = (NESWCard) grid[rowIdx - 1][colIdx].getCard();
+      if (adjCard != null && currCard != null && grid[rowIdx - 1][colIdx].getOwner() != getTurn()
+              && currCard.getSouth().getValue() > adjCard.getNorth().getValue()) {
+        grid[rowIdx - 1][colIdx].setOwner(getTurn());
+        return battleNoMutation(grid, rowIdx - 1, colIdx, false, true, true, true, count);
+      }
+    }
+
+    // battles card to the east & sets ownership
+    if (battleE && colIdx + 1 < grid[0].length && grid[rowIdx][colIdx + 1].getCard() != null) {
+      NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();
+      NESWCard adjCard = (NESWCard) grid[rowIdx][colIdx + 1].getCard();
+      if (adjCard != null && currCard != null && grid[rowIdx][colIdx + 1].getOwner() != getTurn()
+              && currCard.getEast().getValue() > adjCard.getWest().getValue()) {
+        grid[rowIdx][colIdx + 1].setOwner(getTurn());
+        return battleNoMutation(grid, rowIdx, colIdx + 1, true, true, true, false, count);
+      }
+    }
+
+    // battles card to the west & sets ownership
+    if (battleW && colIdx - 1 >= 0 && colIdx < grid[0].length
+            && grid[rowIdx][colIdx - 1].getCard() != null) {
+      NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();
+      NESWCard adjCard = (NESWCard) grid[rowIdx][colIdx - 1].getCard();
+      if (adjCard != null && currCard != null && grid[rowIdx][colIdx - 1].getOwner() != getTurn()
+              && currCard.getWest().getValue() > adjCard.getEast().getValue()) {
+        grid[rowIdx][colIdx - 1].setOwner(getTurn());
+        return battleNoMutation(grid, rowIdx, colIdx - 1, true, false, true, true, count);
+      }
+    }
+    return count;
   }
 
 
