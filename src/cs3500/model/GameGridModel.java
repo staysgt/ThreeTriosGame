@@ -3,8 +3,10 @@ package cs3500.model;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 
 /**
@@ -42,12 +44,12 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
 
 
   @Override
-  public void playToGrid(int row, int col, int handIdx) {
+  public void playToGrid(int col, int row, int handIdx) {
     int gridLink = grid.length;
-    if (row < 0 || row > grid.length) {
+    if (col < 0 || col > grid.length) {
       throw new IllegalArgumentException("Too little or too many cards.");
     }
-    if (col < 0 || col > grid[row].length) {
+    if (row < 0 || row > grid[col].length) {
       throw new IllegalArgumentException("Too little or too many cards.");
     }
     checkGameStarted();
@@ -57,57 +59,32 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     if (isGameOver()) {
       throw new IllegalStateException("Game is over.");
     }
-    if (grid[row][col].getCellState() == CellState.HOLE) {
+    if (grid[col][row].getCellState() == CellState.HOLE) {
       throw new IllegalArgumentException("Card cannot be played in a hole");
     }
 
     // sets the card at the desired position
-    grid[row][col].setCard(getHand(getTurn()).get(handIdx), getTurn());
+    grid[col][row].setCard(getHand(getTurn()).get(handIdx), getTurn());
     // performs the battle stage
-    battle(col, row, true, true, true, true);
+    battle(grid, row, col, true, true, true, true);
     getHand(getTurn()).remove(handIdx);
   }
 
   // Performs the battle stage.
-  private void battle(int rowIdx, int colIdx, boolean battleN, boolean battleE, boolean battleS,
+  private void battle(Cell[][] grid, int rowIdx, int colIdx, boolean battleN, boolean battleE, boolean battleS,
                       boolean battleW) {
 
     // battles to the north & sets ownership + adds to map that tracks if its been visited
-    if (battleN && rowIdx + 1 < grid.length && colIdx < grid[0].length
-            && grid[rowIdx + 1][colIdx].getCard() != null) {
-      NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();
-      NESWCard adjCard = (NESWCard) grid[rowIdx + 1][colIdx].getCard();
-      if (adjCard != null && currCard != null && grid[rowIdx + 1][colIdx].getOwner() != getTurn()
-              && currCard.getNorth().getValue() > adjCard.getSouth().getValue()) {
-        grid[rowIdx + 1][colIdx].setOwner(getTurn());
-        battle(rowIdx + 1, colIdx, true, true, false, true);
-      }
-    }
-
+    battleNorth(grid, rowIdx, colIdx, battleN);
     //battles card to the south & sets ownership
-    if (battleS && rowIdx - 1 >= 0 && colIdx < grid[0].length &&
-            grid[rowIdx - 1][colIdx].getCard() != null) {
-      NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();
-      NESWCard adjCard = (NESWCard) grid[rowIdx - 1][colIdx].getCard();
-      if (adjCard != null && currCard != null && grid[rowIdx - 1][colIdx].getOwner() != getTurn()
-              && currCard.getSouth().getValue() > adjCard.getNorth().getValue()) {
-        grid[rowIdx - 1][colIdx].setOwner(getTurn());
-        battle(rowIdx - 1, colIdx, false, true, true, true);
-      }
-    }
-
+    battleSouth(grid, rowIdx, colIdx, battleS);
     // battles card to the east & sets ownership
-    if (battleE && colIdx + 1 < grid[0].length && grid[rowIdx][colIdx + 1].getCard() != null) {
-      NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();
-      NESWCard adjCard = (NESWCard) grid[rowIdx][colIdx + 1].getCard();
-      if (adjCard != null && currCard != null && grid[rowIdx][colIdx + 1].getOwner() != getTurn()
-              && currCard.getEast().getValue() > adjCard.getWest().getValue()) {
-        grid[rowIdx][colIdx + 1].setOwner(getTurn());
-        battle(rowIdx, colIdx + 1, true, true, true, false);
-      }
-    }
-
+    battleEast(grid, rowIdx, colIdx, battleE);
     // battles card to the west & sets ownership
+    battleWest(grid, rowIdx, colIdx, battleW);
+  }
+
+  private void battleWest(Cell[][] grid, int rowIdx, int colIdx, boolean battleW) {
     if (battleW && colIdx - 1 >= 0 && colIdx < grid[0].length
             && grid[rowIdx][colIdx - 1].getCard() != null) {
       NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();
@@ -115,7 +92,49 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
       if (adjCard != null && currCard != null && grid[rowIdx][colIdx - 1].getOwner() != getTurn()
               && currCard.getWest().getValue() > adjCard.getEast().getValue()) {
         grid[rowIdx][colIdx - 1].setOwner(getTurn());
-        battle(rowIdx, colIdx - 1, true, false, true, true);
+        System.out.println("w flip");
+        battle(grid, rowIdx, colIdx - 1, true, false, true, true);
+      }
+    }
+  }
+
+  private void battleEast(Cell[][] grid, int rowIdx, int colIdx, boolean battleE) {
+    if (battleE && colIdx + 1 < grid[0].length && grid[rowIdx][colIdx + 1].getCard() != null) {
+      NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();
+      NESWCard adjCard = (NESWCard) grid[rowIdx][colIdx + 1].getCard();
+      if (adjCard != null && currCard != null && grid[rowIdx][colIdx + 1].getOwner() != getTurn()
+              && currCard.getEast().getValue() > adjCard.getWest().getValue()) {
+        grid[rowIdx][colIdx + 1].setOwner(getTurn());
+        System.out.println("e flip");
+        battle(grid, rowIdx, colIdx + 1, true, true, true, false);
+      }
+    }
+  }
+
+  private void battleSouth(Cell[][] grid, int rowIdx, int colIdx, boolean battleS) {
+    if (battleS && rowIdx - 1 >= 0 && colIdx < grid[0].length &&
+            grid[rowIdx - 1][colIdx].getCard() != null) {
+      NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();
+      NESWCard adjCard = (NESWCard) grid[rowIdx - 1][colIdx].getCard();
+      if (adjCard != null && currCard != null && grid[rowIdx - 1][colIdx].getOwner() != getTurn()
+              && currCard.getSouth().getValue() > adjCard.getNorth().getValue()) {
+        grid[rowIdx - 1][colIdx].setOwner(getTurn());
+        System.out.println("s flip");
+        battle(grid, rowIdx - 1, colIdx, false, true, true, true);
+      }
+    }
+  }
+
+  private void battleNorth(Cell[][] grid, int rowIdx, int colIdx, boolean battleN) {
+    if (battleN && rowIdx + 1 < grid.length && colIdx < grid[0].length
+            && grid[rowIdx + 1][colIdx].getCard() != null) {
+      NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();
+      NESWCard adjCard = (NESWCard) grid[rowIdx + 1][colIdx].getCard();
+      if (adjCard != null && currCard != null && grid[rowIdx + 1][colIdx].getOwner() != getTurn()
+              && currCard.getNorth().getValue() > adjCard.getSouth().getValue()) {
+        grid[rowIdx + 1][colIdx].setOwner(getTurn());
+        System.out.println("n flip");
+        battle(grid, rowIdx + 1, colIdx, true, true, false, true);
       }
     }
   }
@@ -218,23 +237,23 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   }
 
   @Override
-  public boolean isCellPlayable(int x, int y) {
+  public boolean isCellPlayable(int row, int col) {
     checkGameStarted();
-    if (x < 0 || y < 0 || x > grid.length || y > grid[0].length) {
-      throw new IllegalArgumentException("Invalid x or y.");
+    if (row < 0 || col < 0 || row > grid.length || col > grid[0].length) {
+      throw new IllegalArgumentException("Invalid row or y.");
     }
 
-    return grid[x][y].getCellState().equals(CellState.EMPTY);
+    return grid[row][col].getCellState().equals(CellState.EMPTY);
   }
 
   @Override
-  public boolean isCellHole(int x, int y) {
+  public boolean isCellHole(int row, int col) {
     checkGameStarted();
-    if (x < 0 || y < 0 || x > grid.length || y > grid[0].length) {
-      throw new IllegalArgumentException("Invalid x or y.");
+    if (row < 0 || col < 0 || row > grid.length || col > grid[0].length) {
+      throw new IllegalArgumentException("Invalid row or y.");
     }
 
-    return grid[x][y].getCellState() == (CellState.HOLE);
+    return grid[row][col].getCellState() == (CellState.HOLE);
   }
 
   @Override
@@ -277,7 +296,9 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     checkGameStarted();
     Cell[][] copy = new Cell[grid.length][grid[0].length];
     for (int row = 0; row < grid.length; row++) {
-      copy[row] = grid[row];
+      for (int col = 0; col < grid[row].length; col++) {
+        copy[row][col] = new Cell(grid[row][col].getCellState(), grid[row][col].getCard());
+      }
     }
     return copy;
   }
@@ -285,6 +306,11 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   @Override
   public int getScore(Player player) {
     checkGameStarted();
+    int count = getCount(grid, player);
+    return count;
+  }
+
+  private int getCount(Cell[][] grid, Player player) {
     int count = 0;
     for (int row = 0; row < grid.length; row++) {
       for (int col = 0; col < grid[0].length; col++) {
@@ -298,96 +324,40 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
 
   /**
    * This gets how many cards a player can flip.
-   * @param x coordinate of grid
-   * @param y coordinate of grid
+   * @param row coordinate of grid
+   * @param col coordinate of grid
    * @return the amount of cards a player can flip.
    * @throws IllegalStateException if game has not started or game is over
    */
   @Override
-  public int cardsFlipped(int x, int y, int handIdx) {
+  public int cardsFlipped(int row, int col, int handIdx) {
     // should supply battle no mutation with a grid from getCopy
+    if(grid[row][col].getCard() != null) {
+      throw new IllegalArgumentException("Spot is already taken up");
+    }
     Cell[][] copy = getBoard();
+    copy[row][col].setCard(getHand(getTurn()).get(handIdx), getTurn());
+    int before = getCount(copy,getTurn());
 
-    return 0;
-  }
-
-  /**
-   * Counts the number of cards flipped within a battle.
-   *
-   * @return
-   */
-  private int battleNoMutation(Cell[][] grid, int rowIdx, int colIdx, boolean battleN, boolean battleE, boolean battleS,
-                               boolean battleW, int count) {
-
-
-    // battles to the north & sets ownership + adds to map that tracks if its been visited
-    if (battleN && rowIdx + 1 < grid.length && colIdx < grid[0].length
-            && grid[rowIdx + 1][colIdx].getCard() != null) {
-      NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();
-      NESWCard adjCard = (NESWCard) grid[rowIdx + 1][colIdx].getCard();
-      if (adjCard != null && currCard != null && grid[rowIdx + 1][colIdx].getOwner() != getTurn()
-              && currCard.getNorth().getValue() > adjCard.getSouth().getValue()) {
-        grid[rowIdx + 1][colIdx].setOwner(getTurn());
-        battleNoMutation(grid, rowIdx + 1, colIdx, true, true, false, true, count);
-      }
-    }
-
-    //battles card to the south & sets ownership
-    if (battleS && rowIdx - 1 >= 0 && colIdx < grid[0].length &&
-            grid[rowIdx - 1][colIdx].getCard() != null) {
-      NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();
-      NESWCard adjCard = (NESWCard) grid[rowIdx - 1][colIdx].getCard();
-      if (adjCard != null && currCard != null && grid[rowIdx - 1][colIdx].getOwner() != getTurn()
-              && currCard.getSouth().getValue() > adjCard.getNorth().getValue()) {
-        grid[rowIdx - 1][colIdx].setOwner(getTurn());
-        return battleNoMutation(grid, rowIdx - 1, colIdx, false, true, true, true, count);
-      }
-    }
-
-    // battles card to the east & sets ownership
-    if (battleE && colIdx + 1 < grid[0].length && grid[rowIdx][colIdx + 1].getCard() != null) {
-      NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();
-      NESWCard adjCard = (NESWCard) grid[rowIdx][colIdx + 1].getCard();
-      if (adjCard != null && currCard != null && grid[rowIdx][colIdx + 1].getOwner() != getTurn()
-              && currCard.getEast().getValue() > adjCard.getWest().getValue()) {
-        grid[rowIdx][colIdx + 1].setOwner(getTurn());
-        return battleNoMutation(grid, rowIdx, colIdx + 1, true, true, true, false, count);
-      }
-    }
-
-    // battles card to the west & sets ownership
-    if (battleW && colIdx - 1 >= 0 && colIdx < grid[0].length
-            && grid[rowIdx][colIdx - 1].getCard() != null) {
-      NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();
-      NESWCard adjCard = (NESWCard) grid[rowIdx][colIdx - 1].getCard();
-      if (adjCard != null && currCard != null && grid[rowIdx][colIdx - 1].getOwner() != getTurn()
-              && currCard.getWest().getValue() > adjCard.getEast().getValue()) {
-        grid[rowIdx][colIdx - 1].setOwner(getTurn());
-        return battleNoMutation(grid, rowIdx, colIdx - 1, true, false, true, true, count);
-      }
-    }
-    return count;
+    battle(copy, row,col,true,true,true, true);
+    int after = getCount(copy,getTurn());
+    return after - before;
   }
 
 
-  /**
-   * This tells us if the play is legal or not.
-   * @param player a specific player
-   * @param x coordinate of grid
-   * @param y coordinate of grid
-   * @return true or false.
-   * @throws IllegalStateException if game has not started or game is over
-   */
+
+
   @Override
-  public boolean legalCard(Player player, int x, int y) {
+  public boolean legalCard(Player player, int row, int col) {
     checkGameStarted();
-    if (grid[x][y].getCellState() == CellState.HOLE) {
+    if (grid[row][col].getCellState() == CellState.HOLE) {
       return false;
-    } else {
-      // check to see if name is in space or not
+    } else if (grid[row][col].getCard().getName().equals(player.toString())) {
+      return false;
     }
     return true;
   }
+
 
 }
 

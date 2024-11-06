@@ -22,6 +22,14 @@ public class Cell<C extends Card> {
     }
   }
 
+  public Cell(CellState state, C card) {
+    this.cellstate = state;
+    if (cellstate == CellState.HOLE) {
+      card = null;
+    }
+    this.card = card;
+  }
+
   /**
    * Sets the card for a cell and original owner of a cell.
    * @param card the card that the cell is being set as.

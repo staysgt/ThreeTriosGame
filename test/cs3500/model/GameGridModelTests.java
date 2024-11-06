@@ -14,6 +14,7 @@ import java.util.Random;
 
 import cs3500.controller.ConfigurationFileReader;
 import cs3500.controller.NESWCardFileReader;
+import cs3500.view.GameGridTextView;
 
 import static org.junit.Assert.assertNull;
 
@@ -292,6 +293,44 @@ public class GameGridModelTests {
             conFigFile.getRowConfig());
     boolean cells = model.isCellHole(5, 10);
     assertEquals(model, cells);
+  }
+
+  @Test
+  public void testCardsFlipped() {
+    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
+            noHoles.getRowConfig());
+    GameGridTextView<NESWCard> view = new GameGridTextView(model);
+
+    // red turn
+    model.playToGrid(0, 0, 0);
+    // blue
+    model.playToGrid(0, 1, 0);
+    // red
+    model.playToGrid(0, 2, 0);
+    // blue
+    model.playToGrid(1, 0, 0);
+    // red
+    model.playToGrid(3, 2, 0);
+    // blue
+    model.playToGrid(1, 2, 0);
+    // red
+    model.playToGrid(2, 0, 0);
+    // blue
+    model.playToGrid(2, 1, 0);
+
+
+
+    view.render();
+
+    System.out.println(model.getTurn());
+
+    System.out.println(model.cardsFlipped(1,1,0));
+
+//    model.playToGrid(1,1,0);
+    view.render();
+
+
+
   }
 
 
