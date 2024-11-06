@@ -3,14 +3,14 @@ package cs3500.view;
 import javax.swing.*;
 import java.awt.*;
 
-public class GameGridFrameView implements FrameView {
+public class GameGridFrameView extends JFrame implements FrameView {
 
-  private JFrame frame;
 
   public GameGridFrameView(int width, int height) {
     JFrame frame = new JFrame("Three Trios");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.getContentPane().setLayout(new BorderLayout());
+    frame.setMinimumSize(new Dimension(20, 20));
     frame.setPreferredSize(new Dimension(width, height));
     frame.pack();
   }
@@ -18,7 +18,7 @@ public class GameGridFrameView implements FrameView {
 
   @Override
   public void showFrame() {
-    frame.setVisible(true);
+    setVisible(true);
   }
 
 }
