@@ -26,8 +26,9 @@ public class GameGridTextView<C extends Card> implements TextView {
     StringBuilder sb = new StringBuilder();
     sb.append("Red Hand: " + model.getHand(Player.RED) + "\n");
     sb.append("Blue Hand: " + model.getHand(Player.BLUE) + "\n");
-    for (int row = 0; row < model.getBoard()[0].length; row++) { // Rows come first
-      for (int col = 0; col < model.getBoard().length; col++) { // Columns come second
+
+    for (int col = 0; col < model.getBoard().length; col++) { // Columns come first
+      for (int row = 0; row < model.getBoard()[0].length; row++) { // Rows come second
         if (model.getBoard()[col][row].getCard() != null) {
           sb.append(model.getBoard()[col][row].getCard().getName());
         } else {

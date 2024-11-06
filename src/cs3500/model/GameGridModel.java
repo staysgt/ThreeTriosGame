@@ -44,27 +44,29 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
 
 
   @Override
-  public void playToGrid(int col, int row, int handIdx) {
-    int gridLink = grid.length;
-    if (col < 0 || col > grid.length) {
-      throw new IllegalArgumentException("Too little or too many cards.");
-    }
-    if (row < 0 || row > grid[col].length) {
-      throw new IllegalArgumentException("Too little or too many cards.");
-    }
+  public void playToGrid(int row, int col, int handIdx) {
     checkGameStarted();
-    if (handIdx < 0 || handIdx > getHand(getTurn()).size()) {
-      throw new IllegalArgumentException("Not a hand index");
-    }
     if (isGameOver()) {
       throw new IllegalStateException("Game is over.");
     }
-    if (grid[col][row].getCellState() == CellState.HOLE) {
+    if (row < 0 || row >= grid.length) {
+      throw new IllegalArgumentException("Row index out of bounds");
+    }
+    if (col < 0 || col >= grid[0].length) {
+      throw new IllegalArgumentException("Column index out of bounds");
+    }
+    if (handIdx > getHand(getTurn()).size() || handIdx < 0) {
+      throw new IllegalArgumentException("Hand idx out of bounds");
+    }
+    if (grid[row][col].getCellState() == CellState.HOLE) {
       throw new IllegalArgumentException("Card cannot be played in a hole");
+    }
+    if (grid[row][col].getCard() != null) {
+      throw new IllegalArgumentException("Location is already taken");
     }
 
     // sets the card at the desired position
-    grid[col][row].setCard(getHand(getTurn()).get(handIdx), getTurn());
+    grid[row][col].setCard(getHand(getTurn()).get(handIdx), getTurn());
     // performs the battle stage
     battle(grid, row, col, true, true, true, true);
     getHand(getTurn()).remove(handIdx);
@@ -92,7 +94,6 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
       if (adjCard != null && currCard != null && grid[rowIdx][colIdx - 1].getOwner() != getTurn()
               && currCard.getWest().getValue() > adjCard.getEast().getValue()) {
         grid[rowIdx][colIdx - 1].setOwner(getTurn());
-        System.out.println("w flip");
         battle(grid, rowIdx, colIdx - 1, true, false, true, true);
       }
     }
@@ -105,7 +106,6 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
       if (adjCard != null && currCard != null && grid[rowIdx][colIdx + 1].getOwner() != getTurn()
               && currCard.getEast().getValue() > adjCard.getWest().getValue()) {
         grid[rowIdx][colIdx + 1].setOwner(getTurn());
-        System.out.println("e flip");
         battle(grid, rowIdx, colIdx + 1, true, true, true, false);
       }
     }
@@ -119,7 +119,6 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
       if (adjCard != null && currCard != null && grid[rowIdx - 1][colIdx].getOwner() != getTurn()
               && currCard.getSouth().getValue() > adjCard.getNorth().getValue()) {
         grid[rowIdx - 1][colIdx].setOwner(getTurn());
-        System.out.println("s flip");
         battle(grid, rowIdx - 1, colIdx, false, true, true, true);
       }
     }
@@ -133,7 +132,6 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
       if (adjCard != null && currCard != null && grid[rowIdx + 1][colIdx].getOwner() != getTurn()
               && currCard.getNorth().getValue() > adjCard.getSouth().getValue()) {
         grid[rowIdx + 1][colIdx].setOwner(getTurn());
-        System.out.println("n flip");
         battle(grid, rowIdx + 1, colIdx, true, true, false, true);
       }
     }
@@ -166,9 +164,9 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     // checks that the deck has no duplicate cards in it
     checkDuplicateCardNames(cards);
     // instantiates the grid
-    this.grid = new Cell[cols][rows];
+    this.grid = new Cell[rows][cols];
     // assigns the cells that are supposed to be holes vs card spaces
-    rowConfigToGrid(cols, rows, rowConf);
+    rowConfigToGrid(rows, cols, rowConf);
 
     // shuffles list, stores in new variable to ensure mutability.
     List<C> shuffledList = new ArrayList<>(cards);
@@ -195,13 +193,13 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     }
   }
 
-  private void rowConfigToGrid(int cols, int rows, List<String> rowConf) {
+  private void rowConfigToGrid(int rows, int cols, List<String> rowConf) {
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < cols; col++) {
         if (rowConf.get(row).charAt(col) == 'X') {
-          grid[col][row] = new Cell(CellState.HOLE);
+          grid[row][col] = new Cell(CellState.HOLE);
         } else {
-          grid[col][row] = new Cell(CellState.CARD_SPACE);
+          grid[row][col] = new Cell(CellState.CARD_SPACE);
         }
       }
     }
@@ -209,9 +207,9 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
 
   private int countEmptySpaces(List<String> configuration) {
     int emptySpaces = 0;
-    for (int row = 0; row < configuration.size(); row++) {
-      for (int charInString = 0; charInString < configuration.get(row).length(); charInString++) {
-        if (configuration.get(row).charAt(charInString) == 'C') {
+    for (String s : configuration) {
+      for (int charInString = 0; charInString < s.length(); charInString++) {
+        if (s.charAt(charInString) == 'C') {
           emptySpaces++;
         }
       }
@@ -297,7 +295,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     Cell[][] copy = new Cell[grid.length][grid[0].length];
     for (int row = 0; row < grid.length; row++) {
       for (int col = 0; col < grid[row].length; col++) {
-        copy[row][col] = new Cell(grid[row][col].getCellState(), grid[row][col].getCard());
+        copy[row][col] = new Cell(grid[row][col].getCellState(), grid[row][col].getCard(), grid[row][col].getOwner());
       }
     }
     return copy;
@@ -311,6 +309,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   }
 
   private int getCount(Cell[][] grid, Player player) {
+    checkGameStarted();
     int count = 0;
     for (int row = 0; row < grid.length; row++) {
       for (int col = 0; col < grid[0].length; col++) {
@@ -348,11 +347,11 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
 
 
   @Override
-  public boolean legalCard(Player player, int row, int col) {
+  public boolean legalCard(int row, int col) {
     checkGameStarted();
     if (grid[row][col].getCellState() == CellState.HOLE) {
       return false;
-    } else if (grid[row][col].getCard().getName().equals(player.toString())) {
+    } else if (grid[row][col].getCard() != null) {
       return false;
     }
     return true;

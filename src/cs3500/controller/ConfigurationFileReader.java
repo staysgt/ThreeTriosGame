@@ -24,8 +24,8 @@ public class ConfigurationFileReader {
   public ConfigurationFileReader(String filePath) throws FileNotFoundException {
     Scanner scan = new Scanner(new File(filePath));
     String firstLine = scan.nextLine();
-    this.cols = Integer.parseInt(firstLine.split(" ")[0]);
-    this.rows = Integer.parseInt(firstLine.split(" ")[1]);
+    this.cols = Integer.parseInt(firstLine.split(" ")[1]);
+    this.rows = Integer.parseInt(firstLine.split(" ")[0]);
     while (scan.hasNextLine()) {
       rowConfig.add(scan.nextLine());
     }

@@ -2,6 +2,7 @@ package cs3500.model;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -100,8 +101,8 @@ public class GameGridModelTests {
     model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(),
             conFigFile.getRowConfig());
     model.playToGrid(0, 0, 0);
-    Assert.assertEquals(new NESWCard("dolphin", intToAV(2), intToAV(9),
-            intToAV(3), intToAV(7)), model.getBoard()[0][0].getCard());
+    Assert.assertEquals(new NESWCard("horse", intToAV(2), intToAV(7),
+            intToAV(8), intToAV(2)), model.getBoard()[0][0].getCard());
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -129,39 +130,33 @@ public class GameGridModelTests {
   public void testPlayToGridChangesOwner() {
     model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
             noHoles.getRowConfig());
-    model.playToGrid(0, 0, 0);
-    model.playToGrid(0, 1, 0);
+    System.out.println(model.getHand(Player.BLUE));
+    System.out.println(model.getHand(Player.RED));
+    model.playToGrid(0, 0, 1);
+    model.playToGrid(1, 0, 0);
     Assert.assertEquals(Player.BLUE, model.getBoard()[0][0].getOwner());
-    Assert.assertEquals(Player.BLUE, model.getBoard()[0][1].getOwner());
+    Assert.assertEquals(Player.BLUE, model.getBoard()[1][0].getOwner());
   }
 
   @Test
   public void testGameOverTrue() {
     model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
             noHoles.getRowConfig());
-    // red turn
     model.playToGrid(0, 0, 0);
-    // blue
-    model.playToGrid(0, 1, 0);
-    // red
-    model.playToGrid(0, 2, 0);
-    // blue
     model.playToGrid(1, 0, 0);
-    // red
-    model.playToGrid(1, 1, 0);
-    // blue
-    model.playToGrid(1, 2, 0);
-    // red
     model.playToGrid(2, 0, 0);
-    // blue
+    model.playToGrid(0, 1, 0);
+    model.playToGrid(1, 1, 0);
     model.playToGrid(2, 1, 0);
+    model.playToGrid(0, 2, 0);
+    model.playToGrid(1, 2, 0);
     model.playToGrid(2, 2, 0);
-    model.playToGrid(3, 0, 0);
-    model.playToGrid(3, 1, 0);
-    model.playToGrid(3, 2, 0);
-    model.playToGrid(4, 0, 0);
-    model.playToGrid(4, 1, 0);
-    model.playToGrid(4, 2, 0);
+    model.playToGrid(0, 3, 0);
+    model.playToGrid(1, 3, 0);
+    model.playToGrid(2, 3, 0);
+    model.playToGrid(0, 4, 0);
+    model.playToGrid(1, 4, 0);
+    model.playToGrid(2, 4, 0);
 
     Assert.assertEquals(Player.RED, model.getBoard()[0][0].getOwner());
     Assert.assertEquals(Player.RED, model.getBoard()[0][1].getOwner());
@@ -185,21 +180,21 @@ public class GameGridModelTests {
     model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
             noHoles.getRowConfig());
     model.playToGrid(0, 0, 0);
-    model.playToGrid(0, 1, 0);
-    model.playToGrid(0, 2, 0);
     model.playToGrid(1, 0, 0);
-    model.playToGrid(1, 1, 0);
-    model.playToGrid(1, 2, 0);
     model.playToGrid(2, 0, 0);
+    model.playToGrid(0, 1, 0);
+    model.playToGrid(1, 1, 0);
     model.playToGrid(2, 1, 0);
+    model.playToGrid(0, 2, 0);
+    model.playToGrid(1, 2, 0);
     model.playToGrid(2, 2, 0);
-    model.playToGrid(3, 0, 0);
-    model.playToGrid(3, 1, 0);
-    model.playToGrid(3, 2, 0);
-    model.playToGrid(4, 0, 0);
-    model.playToGrid(4, 1, 0);
-    model.playToGrid(4, 2, 0);
-    Assert.assertEquals(Player.BLUE, model.getWinner());
+    model.playToGrid(0, 3, 0);
+    model.playToGrid(1, 3, 0);
+    model.playToGrid(2, 3, 0);
+    model.playToGrid(0, 4, 0);
+    model.playToGrid(1, 4, 0);
+    model.playToGrid(2, 4, 0);
+    Assert.assertEquals(Player.RED, model.getWinner());
   }
 
   @Test(expected = IllegalStateException.class)
@@ -246,8 +241,8 @@ public class GameGridModelTests {
   public void testValidGetBoardDims() {
     model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
             noHoles.getRowConfig());
-    Assert.assertEquals(noHoles.getCols(), model.getBoard().length);
-    Assert.assertEquals(noHoles.getRows(), model.getBoard()[0].length);
+    Assert.assertEquals(noHoles.getCols(), model.getBoard()[0].length);
+    Assert.assertEquals(noHoles.getRows(), model.getBoard().length);
   }
 
   @Test
@@ -266,7 +261,7 @@ public class GameGridModelTests {
     model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(),
             conFigFile.getRowConfig());
     Cell[][] cells = model.getBoard();
-    assertNull("Empty List", cells);
+    assertNull(cells[0][0].getCard());
   }
 
   @Test(expected = IllegalStateException.class)
@@ -299,38 +294,64 @@ public class GameGridModelTests {
   public void testCardsFlipped() {
     model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
             noHoles.getRowConfig());
-    GameGridTextView<NESWCard> view = new GameGridTextView(model);
 
-    // red turn
     model.playToGrid(0, 0, 0);
-    // blue
     model.playToGrid(0, 1, 0);
-    // red
     model.playToGrid(0, 2, 0);
-    // blue
     model.playToGrid(1, 0, 0);
-    // red
-    model.playToGrid(3, 2, 0);
-    // blue
+    model.playToGrid(2, 3, 0);
     model.playToGrid(1, 2, 0);
-    // red
     model.playToGrid(2, 0, 0);
-    // blue
     model.playToGrid(2, 1, 0);
 
+    Assertions.assertEquals(0, model.cardsFlipped(0, 4, 0));
+    Assertions.assertEquals(1, model.cardsFlipped(2, 2, 0));
+  }
 
+  @Test
+  public void testGetScore() {
+    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
+            noHoles.getRowConfig());
 
-    view.render();
+    model.playToGrid(0, 0, 0);
+    model.playToGrid(0, 1, 0);
+    model.playToGrid(0, 2, 0);
 
-    System.out.println(model.getTurn());
+    Assertions.assertEquals(1, model.getScore(Player.BLUE));
+    Assertions.assertEquals(2, model.getScore(Player.RED));
 
-    System.out.println(model.cardsFlipped(1,1,0));
+  }
 
-//    model.playToGrid(1,1,0);
-    view.render();
+  @Test(expected = IllegalStateException.class)
+  public void testGetScoreGameNotStarted() {
+    model.getScore(Player.BLUE);
+  }
 
+  @Test
+  public void testLegalCardTrue() {
+    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
+            noHoles.getRowConfig());
+    Assert.assertTrue(model.legalCard(0, 0));
+  }
 
+  @Test
+  public void testLegalCardFalseCardAlreadyPlayed() {
+    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
+            noHoles.getRowConfig());
+    model.playToGrid(0, 0, 0);
+    Assert.assertFalse(model.legalCard(0, 0));
+  }
 
+  @Test
+  public void testLegalCardFalseHole() {
+    model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(),
+            conFigFile.getRowConfig());
+    Assert.assertFalse(model.legalCard(1, 0));
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void testLegalCardGameNotStarted() {
+    model.legalCard(0, 0);
   }
 
 

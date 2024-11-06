@@ -25,23 +25,23 @@ public interface ReadOnlyGameGridModel<C extends Card> {
 
   /**
    * This is used to see if the cell on the grid is empty or not.
-   * @param x coordinate of grid
-   * @param y coordinate of grid
+   * @param row coordinate of grid
+   * @param col coordinate of grid
    * @return true if cell is empty and false if cell isn't empty
    * @throws IllegalStateException if game has not started or game is over
    * @throws IllegalArgumentException if x or y < 0, or x > num of col, y > num of rows
    */
-  boolean isCellPlayable(int x, int y);
+  boolean isCellPlayable(int row, int col);
 
   /**
    * This is used to see if the cell is a hole or not.
-   * @param x coordinate of grid
-   * @param y coordinate of grid
+   * @param row coordinate of grid
+   * @param col coordinate of grid
    * @return true if cell is a hole and false if cell is not a hole
    * @throws IllegalStateException if game has not started or game is over
    * @throws IllegalArgumentException if x or y < 0, or x > num of col, y > num of rows
    */
-  boolean isCellHole(int x, int y);
+  boolean isCellHole(int row, int col);
 
 
 
@@ -82,23 +82,22 @@ public interface ReadOnlyGameGridModel<C extends Card> {
 
   /**
    * This gets how many cards a player can flip.
-   * @param x coordinate of grid
-   * @param y coordinate of grid
+   * @param row coordinate of grid
+   * @param col coordinate of grid
    * @param handIdx the desired handIdx
    * @return the amount of cards a player can flip.
    * @throws IllegalStateException if game has not started or game is over
    */
-  int cardsFlipped(int x, int y, int handIdx);
+  int cardsFlipped(int row, int col, int handIdx);
 
   /**
-   * This tells is if the play is legal or not.
-   * @param player a specific player
-   * @param x coordinate of grid
-   * @param y coordinate of grid
+   * This tells if the play is legal or not.
+   * @param row coordinate of grid
+   * @param col coordinate of grid
    * @return true or false.
    * @throws IllegalStateException if game has not started or game is over
    */
-  boolean legalCard(Player player, int x, int y);
+  boolean legalCard(int row, int col);
 
 }
 

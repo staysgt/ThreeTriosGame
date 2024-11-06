@@ -22,12 +22,13 @@ public class Cell<C extends Card> {
     }
   }
 
-  public Cell(CellState state, C card) {
+  public Cell(CellState state, C card, Player owner) {
     this.cellstate = state;
     if (cellstate == CellState.HOLE) {
       card = null;
     }
     this.card = card;
+    this.owner = owner;
   }
 
   /**
