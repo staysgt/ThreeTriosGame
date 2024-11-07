@@ -303,9 +303,8 @@ public class GameGridModelTests {
     model.playToGrid(1, 2, 0);
     model.playToGrid(2, 0, 0);
     model.playToGrid(2, 1, 0);
-
-    Assertions.assertEquals(0, model.cardsFlipped(0, 4, 0));
-    Assertions.assertEquals(1, model.cardsFlipped(2, 2, 0));
+    Assertions.assertEquals(0, model.cardsFlipped(0, 4, 0, Player.RED));
+    Assertions.assertEquals(1, model.cardsFlipped(2, 2, 0, Player.RED));
   }
 
   @Test

@@ -1,5 +1,7 @@
 package cs3500.model;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,9 +10,14 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import cs3500.controller.CardFileReader;
+import cs3500.controller.ConfigurationFileReader;
+import cs3500.controller.NESWCardFileReader;
+
 
 /**
  * Grid Model for a ThreeTrios game.
+ * All coordinates are 0-based.
  * @param <C> card type.
  */
 public class GameGridModel<C extends Card> implements GameGrid<C> {
@@ -42,6 +49,20 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     this.r = r;
   }
 
+  /**
+   * Constructor that starts the game
+   *
+   * @param configFilePath configuration file.
+   * @param cardFilePath   card file to start game.
+   */
+  public GameGridModel(String configFilePath, String cardFilePath, Random r) throws FileNotFoundException {
+    this.r = r;
+    gameStarted = true;
+    ConfigurationFileReader configFile = new ConfigurationFileReader(configFilePath);
+    NESWCardFileReader cardFile = new NESWCardFileReader(cardFilePath);
+    startGame(cardFile.getCards(), configFile.getCols(), configFile.getRows(), configFile.getRowConfig());
+  }
+
 
   @Override
   public void playToGrid(int row, int col, int handIdx) {
@@ -68,71 +89,81 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     // sets the card at the desired position
     grid[row][col].setCard(getHand(getTurn()).get(handIdx), getTurn());
     // performs the battle stage
-    battle(grid, row, col, true, true, true, true);
+    battle(grid, row, col, true, true, true, true, getTurn());
     getHand(getTurn()).remove(handIdx);
   }
 
   // Performs the battle stage.
   private void battle(Cell[][] grid, int rowIdx, int colIdx, boolean battleN, boolean battleE, boolean battleS,
-                      boolean battleW) {
+                      boolean battleW, Player player) {
 
     // battles to the north & sets ownership + adds to map that tracks if its been visited
-    battleNorth(grid, rowIdx, colIdx, battleN);
+    battleNorth(grid, rowIdx, colIdx, battleN, player);
     //battles card to the south & sets ownership
-    battleSouth(grid, rowIdx, colIdx, battleS);
+    battleSouth(grid, rowIdx, colIdx, battleS, player);
     // battles card to the east & sets ownership
-    battleEast(grid, rowIdx, colIdx, battleE);
+    battleEast(grid, rowIdx, colIdx, battleE, player);
     // battles card to the west & sets ownership
-    battleWest(grid, rowIdx, colIdx, battleW);
+    battleWest(grid, rowIdx, colIdx, battleW, player);
   }
 
-  private void battleWest(Cell[][] grid, int rowIdx, int colIdx, boolean battleW) {
+  private void battleWest(Cell[][] grid, int rowIdx, int colIdx, boolean battleW, Player player) {
     if (battleW && colIdx - 1 >= 0 && colIdx < grid[0].length
             && grid[rowIdx][colIdx - 1].getCard() != null) {
       NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();
       NESWCard adjCard = (NESWCard) grid[rowIdx][colIdx - 1].getCard();
-      if (adjCard != null && currCard != null && grid[rowIdx][colIdx - 1].getOwner() != getTurn()
+      if (adjCard != null && currCard != null && grid[rowIdx][colIdx - 1].getOwner() != player
               && currCard.getWest().getValue() > adjCard.getEast().getValue()) {
-        grid[rowIdx][colIdx - 1].setOwner(getTurn());
-        battle(grid, rowIdx, colIdx - 1, true, false, true, true);
+        grid[rowIdx][colIdx - 1].setOwner(player);
+        System.out.println("curr west: " + currCard.getWest().getValue());
+        System.out.println("adj card east: " + adjCard.getEast().getValue());
+        System.out.println(adjCard);
+        battle(grid, rowIdx, colIdx - 1, true, false, true, true, player);
       }
     }
   }
 
-  private void battleEast(Cell[][] grid, int rowIdx, int colIdx, boolean battleE) {
+  private void battleEast(Cell[][] grid, int rowIdx, int colIdx, boolean battleE, Player player) {
     if (battleE && colIdx + 1 < grid[0].length && grid[rowIdx][colIdx + 1].getCard() != null) {
       NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();
       NESWCard adjCard = (NESWCard) grid[rowIdx][colIdx + 1].getCard();
-      if (adjCard != null && currCard != null && grid[rowIdx][colIdx + 1].getOwner() != getTurn()
+      if (adjCard != null && currCard != null && grid[rowIdx][colIdx + 1].getOwner() != player
               && currCard.getEast().getValue() > adjCard.getWest().getValue()) {
-        grid[rowIdx][colIdx + 1].setOwner(getTurn());
-        battle(grid, rowIdx, colIdx + 1, true, true, true, false);
+        grid[rowIdx][colIdx + 1].setOwner(player);
+        System.out.println("curr card east: " + currCard + currCard.getEast().getValue());
+        System.out.println("adj card west: " + adjCard.getWest().getValue());
+        System.out.println(adjCard);
+        battle(grid, rowIdx, colIdx + 1, true, true, true, false, player);
       }
     }
   }
 
-  private void battleSouth(Cell[][] grid, int rowIdx, int colIdx, boolean battleS) {
+  private void battleSouth(Cell[][] grid, int rowIdx, int colIdx, boolean battleS, Player player) {
     if (battleS && rowIdx - 1 >= 0 && colIdx < grid[0].length &&
             grid[rowIdx - 1][colIdx].getCard() != null) {
       NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();
       NESWCard adjCard = (NESWCard) grid[rowIdx - 1][colIdx].getCard();
-      if (adjCard != null && currCard != null && grid[rowIdx - 1][colIdx].getOwner() != getTurn()
+      if (adjCard != null && currCard != null
+              && grid[rowIdx - 1][colIdx].getOwner() != player
               && currCard.getSouth().getValue() > adjCard.getNorth().getValue()) {
-        grid[rowIdx - 1][colIdx].setOwner(getTurn());
-        battle(grid, rowIdx - 1, colIdx, false, true, true, true);
+        grid[rowIdx - 1][colIdx].setOwner(player);
+        System.out.println();
+        System.out.println(adjCard);
+        battle(grid, rowIdx - 1, colIdx, false, true, true, true, player);
       }
     }
   }
 
-  private void battleNorth(Cell[][] grid, int rowIdx, int colIdx, boolean battleN) {
+  private void battleNorth(Cell[][] grid, int rowIdx, int colIdx, boolean battleN, Player player) {
     if (battleN && rowIdx + 1 < grid.length && colIdx < grid[0].length
             && grid[rowIdx + 1][colIdx].getCard() != null) {
       NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();
       NESWCard adjCard = (NESWCard) grid[rowIdx + 1][colIdx].getCard();
-      if (adjCard != null && currCard != null && grid[rowIdx + 1][colIdx].getOwner() != getTurn()
+      if (adjCard != null && currCard != null && grid[rowIdx + 1][colIdx].getOwner() != player
               && currCard.getNorth().getValue() > adjCard.getSouth().getValue()) {
-        grid[rowIdx + 1][colIdx].setOwner(getTurn());
-        battle(grid, rowIdx + 1, colIdx, true, true, false, true);
+        grid[rowIdx + 1][colIdx].setOwner(player);
+        System.out.println(adjCard);
+        battle(grid, rowIdx + 1, colIdx, true, true, false, true, player);
       }
     }
   }
@@ -329,17 +360,17 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
    * @throws IllegalStateException if game has not started or game is over
    */
   @Override
-  public int cardsFlipped(int row, int col, int handIdx) {
+  public int cardsFlipped(int row, int col, int handIdx, Player player) {
     // should supply battle no mutation with a grid from getCopy
     if(grid[row][col].getCard() != null) {
       throw new IllegalArgumentException("Spot is already taken up");
     }
     Cell[][] copy = getBoard();
-    copy[row][col].setCard(getHand(getTurn()).get(handIdx), getTurn());
-    int before = getCount(copy,getTurn());
+    copy[row][col].setCard(getHand(player).get(handIdx), player);
+    int before = getCount(copy, player);
 
-    battle(copy, row,col,true,true,true, true);
-    int after = getCount(copy,getTurn());
+    battle(copy, row, col, true, true, true, true, player);
+    int after = getCount(copy, player);
     return after - before;
   }
 

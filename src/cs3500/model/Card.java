@@ -18,6 +18,7 @@ public interface Card {
    */
   String toString();
 
+
   /**
    * Overrides equals to compare two cards to one another.
    * @param obj object that the card is being compared to.

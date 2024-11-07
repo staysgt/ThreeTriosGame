@@ -14,8 +14,8 @@ import cs3500.model.NESWCard;
  * This class reads in the provided card files and extracts,
  * the card name, and the NESW directions.
  */
-public class NESWCardFileReader implements CardFileReader {
-  private List<Card> cards = new ArrayList<>();
+public class NESWCardFileReader<C extends Card> implements CardFileReader {
+  private final List<C> cards = new ArrayList<>();
 
   /**
    * Constrcutor for a NESWCardFileReader.
@@ -34,7 +34,7 @@ public class NESWCardFileReader implements CardFileReader {
       NESWCard.AttVal s = split[2].equals("A") ? intToAV(10) : intToAV(Integer.parseInt(split[2]));
       NESWCard.AttVal e = split[3].equals("A") ? intToAV(10) : intToAV(Integer.parseInt(split[3]));
       NESWCard.AttVal w = split[4].equals("A") ? intToAV(10) : intToAV(Integer.parseInt(split[4]));
-      this.cards.add(new NESWCard(name, n, s, e, w));
+      this.cards.add((C) new NESWCard(name, n, s, e, w));
 
     }
 
@@ -50,7 +50,7 @@ public class NESWCardFileReader implements CardFileReader {
     throw new IllegalArgumentException("Provided num does not have an associated attack value");
   }
 
-  public List<Card> getCards() {
+  public List<C> getCards() {
     return this.cards;
   }
 

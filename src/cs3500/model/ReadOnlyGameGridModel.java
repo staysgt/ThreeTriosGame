@@ -85,10 +85,11 @@ public interface ReadOnlyGameGridModel<C extends Card> {
    * @param row coordinate of grid
    * @param col coordinate of grid
    * @param handIdx the desired handIdx
+   * @param player the player who is doing the flipping.
    * @return the amount of cards a player can flip.
    * @throws IllegalStateException if game has not started or game is over
    */
-  int cardsFlipped(int row, int col, int handIdx);
+  int cardsFlipped(int row, int col, int handIdx, Player player);
 
   /**
    * This tells if the play is legal or not.
