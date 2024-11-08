@@ -1,5 +1,7 @@
 package cs3500.controller.strategy;
 
+import java.util.List;
+
 import cs3500.model.GameGrid;
 import cs3500.model.Player;
 
@@ -8,7 +10,21 @@ import cs3500.model.Player;
  */
 public class CardLessLikelyFlippedStrategy implements ThreeTriosStrategy {
   @Override
-  public int[] choosePosition(GameGrid model, Player player) {
-    return new int[0];
+  public List<int[]> choosePosition(GameGrid model, Player player) {
+
+
+    // iterates through rows
+    for (int row = 0; row < model.getBoard().length; row++) {
+      // iterates through the columns of the grid
+      for (int col = 0; col < model.getBoard()[0].length; col++) {
+        // goes through each hand in the players hand
+
+        for (int handIdx = 0; handIdx < model.getHand(player).size(); handIdx++) {
+
+        }
+      }
+
+    }
+    return null;
   }
 }

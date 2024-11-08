@@ -1,5 +1,8 @@
 package cs3500.controller.strategy;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cs3500.model.GameGrid;
 import cs3500.model.NESWCard;
 import cs3500.model.Player;
@@ -12,11 +15,11 @@ import cs3500.model.Player;
 public class CornersStrategy implements ThreeTriosStrategy {
 
   @Override
-  public int[] choosePosition(GameGrid model, Player player) {
-    int rowMax = 0;
-    int colMax = 0;
-    int handMax = 0;
-    int maxPower = 0;
+  public List<int[]> choosePosition(GameGrid model, Player player) {
+    // list to store the best moves for a players turn
+    List<int[]> bestMoves = new ArrayList<>();
+    boolean madeMove = false;
+    int maxPower = -1;
 
     int[] rowCorner = {0, model.getBoard().length - 1};
     int[] colCorner = {0, model.getBoard()[0].length - 1};
@@ -25,8 +28,10 @@ public class CornersStrategy implements ThreeTriosStrategy {
       for (int col = 0; col < colCorner.length; col++) {
         int currRow = rowCorner[row];
         int currCol = colCorner[col];
-        for (int handIdx = 0; handIdx < model.getHand(player).size(); handIdx++) {
-          if (model.legalCard(row, col)) {
+
+        if (model.legalPlay(currRow, currCol)) {
+          for (int handIdx = 0; handIdx < model.getHand(player).size(); handIdx++) {
+            // checks if the spot is a valid place to play
             NESWCard currCard = (NESWCard) model.getHand(player).get(handIdx);
             int power = 0;
             if (currRow == 0) {
@@ -40,18 +45,25 @@ public class CornersStrategy implements ThreeTriosStrategy {
               power += currCard.getWest().getValue();
             }
             if (power > maxPower) {
+              bestMoves.clear();
+              madeMove = true;
+              bestMoves.add(new int[]{currRow, currCol, handIdx});
               maxPower = power;
-              rowMax = row;
-              colMax = col;
-              handMax = handIdx;
-            }
+            } else if (power == maxPower) {
+              bestMoves.add(new int[]{currRow, currCol, handIdx});
 
+            }
           }
         }
 
       }
     }
 
-    return new int[]{rowMax, colMax, handMax};
+    if (!madeMove) {
+      return null;
+    }
+
+    return bestMoves;
   }
+
 }

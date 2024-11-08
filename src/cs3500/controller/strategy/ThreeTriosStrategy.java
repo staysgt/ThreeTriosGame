@@ -1,6 +1,8 @@
 package cs3500.controller.strategy;
 
 
+import java.util.List;
+
 import cs3500.model.Card;
 import cs3500.model.GameGrid;
 import cs3500.model.Player;
@@ -11,9 +13,16 @@ import cs3500.model.Player;
 public interface ThreeTriosStrategy<C extends Card> {
 
   /**
-   * Finds the best position to play to based on a strategy.
+   * Finds the best positions to play to based on a strategy.
    *
-   * @return the best position to play to.
+   * @return a list of the best positions to play to.
    */
-  int[] choosePosition(GameGrid<C> model, Player player);
+  List<int[]> choosePosition(GameGrid<C> model, Player player);
+
+  /**
+   * Converts the list of position into a string.
+   *
+   * @return a string version of the list.
+   */
+  String toString();
 }

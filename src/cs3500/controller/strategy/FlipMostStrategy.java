@@ -1,9 +1,9 @@
 package cs3500.controller.strategy;
 
-import cs3500.controller.ConfigurationFileReader;
-import cs3500.model.Card;
+import java.util.ArrayList;
+import java.util.List;
+
 import cs3500.model.GameGrid;
-import cs3500.model.GameGridModel;
 import cs3500.model.Player;
 
 /**
@@ -18,7 +18,10 @@ public class FlipMostStrategy implements ThreeTriosStrategy {
   }
 
   @Override
-  public int[] choosePosition(GameGrid model, Player player) {
+  public List<int[]> choosePosition(GameGrid model, Player player) {
+    // list to store the best moves for a players turn
+    List<int[]> bestMoves = new ArrayList<>();
+
     int rowMax = 0;
     int colMax = 0;
     int handIdxMax = 0;
@@ -31,19 +34,20 @@ public class FlipMostStrategy implements ThreeTriosStrategy {
           // since the for loops iterate through the rows starts from the top and cols starting
           // from L to R, the uppermost, leftmost will always be the max and thus won't be replaced
           // by the new max.
-          if (model.legalCard(row, col)) {
+          if (model.legalPlay(row, col)) {
             int flips = model.cardsFlipped(row, col, handIdx, player);
             if (flips > maxFlips) {
+              bestMoves.clear();
+              bestMoves.add(new int[]{row, col, handIdx});
               maxFlips = flips;
-              rowMax = row;
-              colMax = col;
-              handIdxMax = handIdx;
+            } else if (flips == maxFlips) {
+              bestMoves.add(new int[]{row, col, handIdx});
             }
           }
         }
       }
     }
 
-    return new int[]{rowMax, colMax, handIdxMax};
+    return bestMoves;
   }
 }

@@ -1,5 +1,7 @@
 package cs3500.controller.strategy;
 
+import java.util.List;
+
 import cs3500.model.Card;
 import cs3500.model.GameGrid;
 import cs3500.model.Player;
@@ -11,7 +13,7 @@ public class MinMaxStrategy implements ThreeTriosStrategy {
 
 
   @Override
-  public int[] choosePosition(GameGrid model, Player player) {
-    return new int[0];
+  public List<int[]> choosePosition(GameGrid model, Player player) {
+    return null;
   }
 }

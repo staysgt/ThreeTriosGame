@@ -15,7 +15,6 @@ import java.util.Random;
 
 import cs3500.controller.ConfigurationFileReader;
 import cs3500.controller.NESWCardFileReader;
-import cs3500.view.GameGridTextView;
 
 import static org.junit.Assert.assertNull;
 
@@ -330,7 +329,7 @@ public class GameGridModelTests {
   public void testLegalCardTrue() {
     model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
             noHoles.getRowConfig());
-    Assert.assertTrue(model.legalCard(0, 0));
+    Assert.assertTrue(model.legalPlay(0, 0));
   }
 
   @Test
@@ -338,19 +337,19 @@ public class GameGridModelTests {
     model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
             noHoles.getRowConfig());
     model.playToGrid(0, 0, 0);
-    Assert.assertFalse(model.legalCard(0, 0));
+    Assert.assertFalse(model.legalPlay(0, 0));
   }
 
   @Test
   public void testLegalCardFalseHole() {
     model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(),
             conFigFile.getRowConfig());
-    Assert.assertFalse(model.legalCard(1, 0));
+    Assert.assertFalse(model.legalPlay(1, 0));
   }
 
   @Test(expected = IllegalStateException.class)
   public void testLegalCardGameNotStarted() {
-    model.legalCard(0, 0);
+    model.legalPlay(0, 0);
   }
 
 

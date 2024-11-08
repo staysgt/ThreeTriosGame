@@ -98,7 +98,7 @@ public interface ReadOnlyGameGridModel<C extends Card> {
    * @return true or false.
    * @throws IllegalStateException if game has not started or game is over
    */
-  boolean legalCard(int row, int col);
+  boolean legalPlay(int row, int col);
 
 }
 

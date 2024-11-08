@@ -378,14 +378,10 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
 
 
   @Override
-  public boolean legalCard(int row, int col) {
+  public boolean legalPlay(int row, int col) {
     checkGameStarted();
-    if (grid[row][col].getCellState() == CellState.HOLE) {
-      return false;
-    } else if (grid[row][col].getCard() != null) {
-      return false;
-    }
-    return true;
+    Cell currCell = grid[row][col];
+    return currCell.getCellState() == CellState.CARD_SPACE && currCell.getCard() == null;
   }
 
 
