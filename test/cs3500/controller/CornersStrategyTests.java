@@ -9,13 +9,10 @@ import java.util.Arrays;
 import java.util.Random;
 
 import cs3500.controller.strategy.CornersStrategy;
-import cs3500.controller.strategy.FlipMostStrategy;
 import cs3500.controller.strategy.ThreeTriosStrategy;
 import cs3500.model.GameGrid;
 import cs3500.model.GameGridModel;
-import cs3500.model.NESWCard;
 import cs3500.model.Player;
-import cs3500.view.GameGridTextView;
 
 /**
  * Tests for the corner strategy.
@@ -45,16 +42,14 @@ public class CornersStrategyTests {
             noHoles.getRowConfig());
     ThreeTriosStrategy corners = new CornersStrategy();
 
+    for (int i = 0; i < corners.choosePosition(modelNH, Player.RED).size(); i++) {
+      System.out.println(Arrays.toString((int[]) corners.choosePosition(modelNH, Player.BLUE).get(i)));
+    }
 
-    // should be top left corner
-    // should be the card with the highest combined power of the S/E values
-    System.out.println(corners.choosePosition(modelNH, Player.RED));
+    Assert.assertEquals(1, corners.choosePosition(modelNH, Player.RED).size());
+    Assert.assertEquals(Arrays.toString(new int[]{0, 0, 4}),
+            Arrays.toString((int[]) corners.choosePosition(modelNH, Player.RED).get(0)));
 
-
-//    Assert.assertEquals(Arrays.toString(new int[]{0, 0, 4}),
-//            corners.choosePosition(modelNH, Player.RED));
-//    Assert.assertEquals(Arrays.toString(new int[]{2, 4, 4}),
-//            Arrays.toString(corners.choosePosition(modelNH, Player.BLUE)));
   }
 
   @Test

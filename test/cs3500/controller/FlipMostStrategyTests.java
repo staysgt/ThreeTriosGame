@@ -18,6 +18,7 @@ import cs3500.model.GameGrid;
 import cs3500.model.GameGridModel;
 import cs3500.model.Player;
 import cs3500.view.GameGridTextView;
+import cs3500.view.TextView;
 
 /**
  * Tests for flipping the most cards strategy.
@@ -41,14 +42,17 @@ public class FlipMostStrategyTests {
   }
 
   @Test
-  public void testFirstMoveEmptyGrid() {
+  public void testChoosePosnEmptyGrid() {
     modelNH.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
             noHoles.getRowConfig());
     ThreeTriosStrategy flipMost = new FlipMostStrategy();
 
-    // should be top left corner
-//    Assert.assertEquals(Arrays.toString(new int[]{0, 0, 0}),
-//            Arrays.toString(flipMost.choosePosition(modelNH, Player.RED)));
+    // the list should contain every possible combination since there would be a tie
+    Assert.assertEquals(120, flipMost.choosePosition(modelNH, Player.RED).size());
+
+    Assert.assertEquals(Arrays.toString(new int[]{0, 0, 0}),
+            Arrays.toString((int[]) flipMost.choosePosition(modelNH, Player.RED).get(0)));
+
   }
 
   @Test
@@ -63,14 +67,18 @@ public class FlipMostStrategyTests {
     modelNH.playToGrid(1, 2, 0);
     modelNH.playToGrid(2, 0, 0);
     modelNH.playToGrid(2, 1, 0);
-    System.out.println("DONE PLAY TO GRID");
 
     ThreeTriosStrategy flipMost = new FlipMostStrategy();
     GameGridTextView view = new GameGridTextView(modelNH);
     view.render();
 
-    System.out.println();
-    System.out.println(modelNH.cardsFlipped(1, 1, 1, Player.RED));
+    for (int i = 0; i < flipMost.choosePosition(modelNH, Player.RED).size(); i++) {
+      System.out.println(Arrays.toString((int[]) flipMost.choosePosition(modelNH, Player.RED).get(i)));
+    }
+
+    Assert.assertEquals(Arrays.toString(new int[]{1, 1, 1}),
+            Arrays.toString((int[]) flipMost.choosePosition(modelNH, Player.RED).get(0)));
+
   }
 
 }

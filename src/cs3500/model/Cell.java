@@ -5,9 +5,9 @@ package cs3500.model;
  * @param <C> card.
  */
 public class Cell<C extends Card> {
-  Player owner = null;
-  C card = null;
-  final CellState cellstate;
+  private Player owner = null;
+  private C card = null;
+  private final CellState cellstate;
 
   private boolean cardPlayed = false;
 
@@ -59,14 +59,27 @@ public class Cell<C extends Card> {
     owner = player;
   }
 
+  /**
+   * Gets the owner of the cell.
+   *
+   * @return the owner of the cell.
+   */
   public Player getOwner() {
     return owner;
   }
 
+  /**
+   * Gets the CellState of the cell.
+   * @return the CellState of the cell.
+   */
   public CellState getCellState() {
     return cellstate;
   }
 
+  /**
+   * Gets the current card occupying the cell.
+   * @return the card occupying the cell.
+   */
   public C getCard() {
     return card;
   }

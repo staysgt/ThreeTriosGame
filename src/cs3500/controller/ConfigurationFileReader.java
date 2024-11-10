@@ -31,14 +31,27 @@ public class ConfigurationFileReader {
     }
   }
 
+  /**
+   * Gets the number of columns in the configuration file.
+   *
+   * @return the number of columns in the config file.
+   */
   public int getCols() {
     return this.cols;
   }
 
+  /**
+   * Gets the number of rows in the configuration file.
+   * @return the number of rows in the config file.
+   */
   public int getRows() {
     return this.rows;
   }
 
+  /**
+   * Gets the row configuration in the configuration file.
+   * @return the row configuration of the config file.
+   */
   public List<String> getRowConfig() {
     return this.rowConfig;
   }

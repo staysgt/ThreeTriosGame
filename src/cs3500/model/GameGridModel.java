@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -35,6 +37,9 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   private boolean gameStarted = false;
   private final Random r;
 
+  private final HashMap<Integer, HashMap<Cell<C>[][], List<C>[]>> gameStatuses = new HashMap<>();
+  private int numPlays = 0;
+
   /**
    * Constructor for a model.GameGridModel.
    */
@@ -48,6 +53,24 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   public GameGridModel(Random r) {
     this.r = r;
   }
+
+  /**
+   * Constructor used for starting a game mid-game.
+   * For purposes of strategies.
+   *
+   * @param grid     the gameGrid.
+   * @param redHand  red players hand.
+   * @param blueHand blue players hand.
+   */
+  public GameGridModel(Cell[][] grid, List<C> redHand, List<C> blueHand) {
+    this.r = new Random();
+    this.grid = grid;
+    gameStarted = true;
+    this.redHand = redHand;
+    this.blueHand = blueHand;
+  }
+
+
 
   /**
    * Constructor that starts the game
@@ -91,6 +114,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     // performs the battle stage
     battle(grid, row, col, true, true, true, true, getTurn());
     getHand(getTurn()).remove(handIdx);
+    updateStatuses();
   }
 
   // Performs the battle stage.
@@ -115,9 +139,9 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
       if (adjCard != null && currCard != null && grid[rowIdx][colIdx - 1].getOwner() != player
               && currCard.getWest().getValue() > adjCard.getEast().getValue()) {
         grid[rowIdx][colIdx - 1].setOwner(player);
-        System.out.println("curr west: " + currCard.getWest().getValue());
-        System.out.println("adj card east: " + adjCard.getEast().getValue());
-        System.out.println(adjCard);
+//        System.out.println("curr west: " + currCard.getWest().getValue());
+//        System.out.println("adj card east: " + adjCard.getEast().getValue());
+//        System.out.println(adjCard);
         battle(grid, rowIdx, colIdx - 1, true, false, true, true, player);
       }
     }
@@ -130,9 +154,9 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
       if (adjCard != null && currCard != null && grid[rowIdx][colIdx + 1].getOwner() != player
               && currCard.getEast().getValue() > adjCard.getWest().getValue()) {
         grid[rowIdx][colIdx + 1].setOwner(player);
-        System.out.println("curr card east: " + currCard + currCard.getEast().getValue());
-        System.out.println("adj card west: " + adjCard.getWest().getValue());
-        System.out.println(adjCard);
+//        System.out.println("curr card east: " + currCard + currCard.getEast().getValue());
+//        System.out.println("adj card west: " + adjCard.getWest().getValue());
+//        System.out.println(adjCard);
         battle(grid, rowIdx, colIdx + 1, true, true, true, false, player);
       }
     }
@@ -147,8 +171,8 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
               && grid[rowIdx - 1][colIdx].getOwner() != player
               && currCard.getSouth().getValue() > adjCard.getNorth().getValue()) {
         grid[rowIdx - 1][colIdx].setOwner(player);
-        System.out.println();
-        System.out.println(adjCard);
+//        System.out.println();
+//        System.out.println(adjCard);
         battle(grid, rowIdx - 1, colIdx, false, true, true, true, player);
       }
     }
@@ -162,7 +186,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
       if (adjCard != null && currCard != null && grid[rowIdx + 1][colIdx].getOwner() != player
               && currCard.getNorth().getValue() > adjCard.getSouth().getValue()) {
         grid[rowIdx + 1][colIdx].setOwner(player);
-        System.out.println(adjCard);
+//        System.out.println(adjCard);
         battle(grid, rowIdx + 1, colIdx, true, true, false, true, player);
       }
     }
@@ -212,6 +236,14 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     }
 
     gameStarted = true;
+    updateStatuses();
+  }
+
+  private void updateStatuses() {
+    HashMap<Cell<C>[][], List<C>[]> currStatus = new HashMap<>();
+    currStatus.put(getBoard(), new List[]{redHand, blueHand});
+    gameStatuses.put(numPlays, currStatus);
+    numPlays++;
   }
 
   private void checkDuplicateCardNames(List<? extends Card> cards) {
@@ -321,9 +353,9 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   }
 
   @Override
-  public Cell[][] getBoard() {
+  public Cell<C>[][] getBoard() {
     checkGameStarted();
-    Cell[][] copy = new Cell[grid.length][grid[0].length];
+    Cell<C>[][] copy = new Cell[grid.length][grid[0].length];
     for (int row = 0; row < grid.length; row++) {
       for (int col = 0; col < grid[row].length; col++) {
         copy[row][col] = new Cell(grid[row][col].getCellState(), grid[row][col].getCard(), grid[row][col].getOwner());
@@ -374,14 +406,18 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     return after - before;
   }
 
-
-
-
   @Override
   public boolean legalPlay(int row, int col) {
     checkGameStarted();
-    Cell currCell = grid[row][col];
+    Cell<C> currCell = grid[row][col];
     return currCell.getCellState() == CellState.CARD_SPACE && currCell.getCard() == null;
+  }
+
+
+  @Override
+  public HashMap<Integer, HashMap<Cell<C>[][], List<C>[]>> getGameStatuses() {
+    checkGameStarted();
+    return gameStatuses;
   }
 
 

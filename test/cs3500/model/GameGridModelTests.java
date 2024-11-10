@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -350,6 +351,27 @@ public class GameGridModelTests {
   @Test(expected = IllegalStateException.class)
   public void testLegalCardGameNotStarted() {
     model.legalPlay(0, 0);
+  }
+
+
+  @Test
+  public void testGetBoardGivenMovesStartOfGame() {
+    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
+            noHoles.getRowConfig());
+    model.playToGrid(0, 0, 0);
+    model.playToGrid(1, 0, 0);
+    model.playToGrid(2, 0, 0);
+    model.playToGrid(0, 1, 0);
+
+    Cell[][] cells = (Cell[][]) model.getPreviousMoves().get(0);
+    assertNull(cells[0][0].getCard());
+    assertNull(cells[0][1].getCard());
+    assertNull(cells[2][4].getCard());
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void testGetBoardGivenMovesGameNotStarted() {
+    model.getPreviousMoves();
   }
 
 

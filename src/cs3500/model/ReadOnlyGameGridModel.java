@@ -1,5 +1,6 @@
 package cs3500.model;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface ReadOnlyGameGridModel<C extends Card> {
@@ -99,6 +100,17 @@ public interface ReadOnlyGameGridModel<C extends Card> {
    * @throws IllegalStateException if game has not started or game is over
    */
   boolean legalPlay(int row, int col);
+
+
+  /**
+   * Gets the previous statuses of the game.
+   * Integer is the move number, the correlated hashmap is a map of the game board and an array
+   * of both lists of hand
+   *
+   * @return the previous statuses of the game.
+   * @throws IllegalStateException if game has not started
+   */
+  HashMap<Integer, HashMap<Cell<C>[][], List<C>[]>> getGameStatuses();
 
 }
 

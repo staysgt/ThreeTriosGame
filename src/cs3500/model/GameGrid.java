@@ -37,4 +37,5 @@ public interface GameGrid<C extends Card> extends ReadOnlyGameGridModel {
    */
   void startGame(List<C> cards, int cols, int rows, List<String> rowConf);
 
+
 }
