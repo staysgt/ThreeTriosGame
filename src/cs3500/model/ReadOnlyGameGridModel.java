@@ -70,7 +70,7 @@ public interface ReadOnlyGameGridModel<C extends Card> {
    * @return the current state of the board.
    * @throws IllegalStateException if game has not started or game is over
    */
-  Cell[][] getBoard();
+  Cell<C>[][] getBoard();
 
 
   /**
@@ -103,14 +103,12 @@ public interface ReadOnlyGameGridModel<C extends Card> {
 
 
   /**
-   * Gets the previous statuses of the game.
-   * Integer is the move number, the correlated hashmap is a map of the game board and an array
-   * of both lists of hand
+   * Gets a list of the previous statuses of the game.
    *
    * @return the previous statuses of the game.
    * @throws IllegalStateException if game has not started
    */
-  HashMap<Integer, HashMap<Cell<C>[][], List<C>[]>> getGameStatuses();
+  List<GameGrid<C>> getGameStatuses();
 
 }
 

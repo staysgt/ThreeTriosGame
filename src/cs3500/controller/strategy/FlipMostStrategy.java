@@ -3,13 +3,14 @@ package cs3500.controller.strategy;
 import java.util.ArrayList;
 import java.util.List;
 
+import cs3500.model.Card;
 import cs3500.model.GameGrid;
 import cs3500.model.Player;
 
 /**
  * Class that performs the strategy of flipping the most cards.
  */
-public class FlipMostStrategy implements ThreeTriosStrategy {
+public class FlipMostStrategy<C extends Card> implements ThreeTriosStrategy<C> {
 
   /**
    * Constructor for strategy that flips the most cards.
@@ -18,7 +19,7 @@ public class FlipMostStrategy implements ThreeTriosStrategy {
   }
 
   @Override
-  public List<int[]> choosePosition(GameGrid model, Player player) {
+  public List<int[]> choosePosition(GameGrid<C> model, Player player) {
     // list to store the best moves for a players turn
     List<int[]> bestMoves = new ArrayList<>();
 

@@ -2,15 +2,16 @@ package cs3500.controller.strategy;
 
 import java.util.List;
 
+import cs3500.model.Card;
 import cs3500.model.GameGrid;
 import cs3500.model.Player;
 
 /**
  * Class that performs the strategy of playing the card that is least likely to be flipped.
  */
-public class CardLessLikelyFlippedStrategy implements ThreeTriosStrategy {
+public class CardLessLikelyFlippedStrategy<C extends Card> implements ThreeTriosStrategy<C> {
   @Override
-  public List<int[]> choosePosition(GameGrid model, Player player) {
+  public List<int[]> choosePosition(GameGrid<C> model, Player player) {
 
 
     // iterates through rows

@@ -3,6 +3,7 @@ package cs3500.controller.strategy;
 import java.util.ArrayList;
 import java.util.List;
 
+import cs3500.model.Card;
 import cs3500.model.GameGrid;
 import cs3500.model.NESWCard;
 import cs3500.model.Player;
@@ -12,10 +13,10 @@ import cs3500.model.Player;
  * is determined by the sum of its two exposed parts of the card (ie SOUTH/EAST for the
  * top left card.
  */
-public class CornersStrategy implements ThreeTriosStrategy {
+public class CornersStrategy<C extends Card> implements ThreeTriosStrategy<C> {
 
   @Override
-  public List<int[]> choosePosition(GameGrid model, Player player) {
+  public List<int[]> choosePosition(GameGrid<C> model, Player player) {
     // list to store the best moves for a players turn
     List<int[]> bestMoves = new ArrayList<>();
     boolean madeMove = false;

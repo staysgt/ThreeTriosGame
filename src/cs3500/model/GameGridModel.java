@@ -37,6 +37,8 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   private boolean gameStarted = false;
   private final Random r;
 
+  private final List<GameGridModel<C>> statuses = new ArrayList<>();
+
   private final HashMap<Integer, HashMap<Cell<C>[][], List<C>[]>> gameStatuses = new HashMap<>();
   private int numPlays = 0;
 
@@ -415,9 +417,9 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
 
 
   @Override
-  public HashMap<Integer, HashMap<Cell<C>[][], List<C>[]>> getGameStatuses() {
-    checkGameStarted();
-    return gameStatuses;
+  public List<GameGridModel<C>> getGameStatuses() {
+    statuses.add(new GameGridModel<C>(grid, redHand, blueHand));
+    return statuses;
   }
 
 
