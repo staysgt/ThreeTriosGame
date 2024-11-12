@@ -1,18 +1,13 @@
 package cs3500.model;
 
-import java.io.File;
+
 import java.io.FileNotFoundException;
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
-import cs3500.controller.CardFileReader;
 import cs3500.controller.ConfigurationFileReader;
 import cs3500.controller.NESWCardFileReader;
 
@@ -20,6 +15,7 @@ import cs3500.controller.NESWCardFileReader;
 /**
  * Grid Model for a ThreeTrios game.
  * All coordinates are 0-based.
+ *
  * @param <C> card type.
  */
 public class GameGridModel<C extends Card> implements GameGrid<C> {
@@ -31,7 +27,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
    * - blueHand/redHand is not null:
    * this is ensured in the constructor, preserved by the methods, and instantaneous.
    */
-  private Cell[][] grid;
+  private Cell<C>[][] grid;
   private List<C> blueHand = new ArrayList<>();
   private List<C> redHand = new ArrayList<>();
   private boolean gameStarted = false;
@@ -64,7 +60,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
    * @param redHand  red players hand.
    * @param blueHand blue players hand.
    */
-  public GameGridModel(Cell[][] grid, List<C> redHand, List<C> blueHand) {
+  public GameGridModel(Cell<C>[][] grid, List<C> redHand, List<C> blueHand) {
     this.r = new Random();
     this.grid = grid;
     gameStarted = true;
@@ -73,19 +69,20 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   }
 
 
-
   /**
-   * Constructor that starts the game
+   * Constructor that starts the game.
    *
    * @param configFilePath configuration file.
    * @param cardFilePath   card file to start game.
    */
-  public GameGridModel(String configFilePath, String cardFilePath, Random r) throws FileNotFoundException {
+  public GameGridModel(String configFilePath, String cardFilePath, Random r)
+          throws FileNotFoundException {
     this.r = r;
     gameStarted = true;
     ConfigurationFileReader configFile = new ConfigurationFileReader(configFilePath);
     NESWCardFileReader cardFile = new NESWCardFileReader(cardFilePath);
-    startGame(cardFile.getCards(), configFile.getCols(), configFile.getRows(), configFile.getRowConfig());
+    startGame(cardFile.getCards(), configFile.getCols(), configFile.getRows(),
+            configFile.getRowConfig());
   }
 
 
@@ -120,7 +117,8 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   }
 
   // Performs the battle stage.
-  private void battle(Cell[][] grid, int rowIdx, int colIdx, boolean battleN, boolean battleE, boolean battleS,
+  private void battle(Cell[][] grid, int rowIdx, int colIdx, boolean battleN, boolean battleE,
+                      boolean battleS,
                       boolean battleW, Player player) {
 
     // battles to the north & sets ownership + adds to map that tracks if its been visited
@@ -141,10 +139,8 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
       if (adjCard != null && currCard != null && grid[rowIdx][colIdx - 1].getOwner() != player
               && currCard.getWest().getValue() > adjCard.getEast().getValue()) {
         grid[rowIdx][colIdx - 1].setOwner(player);
-//        System.out.println("curr west: " + currCard.getWest().getValue());
-//        System.out.println("adj card east: " + adjCard.getEast().getValue());
-//        System.out.println(adjCard);
-        battle(grid, rowIdx, colIdx - 1, true, false, true, true, player);
+        battle(grid, rowIdx, colIdx - 1, true, false, true,
+                true, player);
       }
     }
   }
@@ -156,26 +152,23 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
       if (adjCard != null && currCard != null && grid[rowIdx][colIdx + 1].getOwner() != player
               && currCard.getEast().getValue() > adjCard.getWest().getValue()) {
         grid[rowIdx][colIdx + 1].setOwner(player);
-//        System.out.println("curr card east: " + currCard + currCard.getEast().getValue());
-//        System.out.println("adj card west: " + adjCard.getWest().getValue());
-//        System.out.println(adjCard);
-        battle(grid, rowIdx, colIdx + 1, true, true, true, false, player);
+        battle(grid, rowIdx, colIdx + 1, true, true, true,
+                false, player);
       }
     }
   }
 
   private void battleSouth(Cell[][] grid, int rowIdx, int colIdx, boolean battleS, Player player) {
-    if (battleS && rowIdx - 1 >= 0 && colIdx < grid[0].length &&
-            grid[rowIdx - 1][colIdx].getCard() != null) {
+    if (battleS && rowIdx - 1 >= 0 && colIdx < grid[0].length
+            && grid[rowIdx - 1][colIdx].getCard() != null) {
       NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();
       NESWCard adjCard = (NESWCard) grid[rowIdx - 1][colIdx].getCard();
       if (adjCard != null && currCard != null
               && grid[rowIdx - 1][colIdx].getOwner() != player
               && currCard.getSouth().getValue() > adjCard.getNorth().getValue()) {
         grid[rowIdx - 1][colIdx].setOwner(player);
-//        System.out.println();
-//        System.out.println(adjCard);
-        battle(grid, rowIdx - 1, colIdx, false, true, true, true, player);
+        battle(grid, rowIdx - 1, colIdx, false, true, true,
+                true, player);
       }
     }
   }
@@ -188,8 +181,8 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
       if (adjCard != null && currCard != null && grid[rowIdx + 1][colIdx].getOwner() != player
               && currCard.getNorth().getValue() > adjCard.getSouth().getValue()) {
         grid[rowIdx + 1][colIdx].setOwner(player);
-//        System.out.println(adjCard);
-        battle(grid, rowIdx + 1, colIdx, true, true, false, true, player);
+        battle(grid, rowIdx + 1, colIdx, true, true, false,
+                true, player);
       }
     }
   }
@@ -360,7 +353,8 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     Cell<C>[][] copy = new Cell[grid.length][grid[0].length];
     for (int row = 0; row < grid.length; row++) {
       for (int col = 0; col < grid[row].length; col++) {
-        copy[row][col] = new Cell(grid[row][col].getCellState(), grid[row][col].getCard(), grid[row][col].getOwner());
+        copy[row][col] = new Cell(grid[row][col].getCellState(), grid[row][col].getCard(),
+                grid[row][col].getOwner());
       }
     }
     return copy;
@@ -388,6 +382,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
 
   /**
    * This gets how many cards a player can flip.
+   *
    * @param row coordinate of grid
    * @param col coordinate of grid
    * @return the amount of cards a player can flip.
@@ -396,7 +391,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   @Override
   public int cardsFlipped(int row, int col, int handIdx, Player player) {
     // should supply battle no mutation with a grid from getCopy
-    if(grid[row][col].getCard() != null) {
+    if (grid[row][col].getCard() != null) {
       throw new IllegalArgumentException("Spot is already taken up");
     }
     Cell[][] copy = getBoard();
@@ -418,7 +413,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
 
   @Override
   public List<GameGridModel<C>> getGameStatuses() {
-    statuses.add(new GameGridModel<C>(grid, redHand, blueHand));
+    statuses.add(new GameGridModel<>(grid, redHand, blueHand));
     return statuses;
   }
 

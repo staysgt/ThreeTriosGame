@@ -7,6 +7,11 @@ import cs3500.model.Card;
 import cs3500.model.GameGrid;
 import cs3500.model.Player;
 
+/**
+ * Class for least likely flipped card decorator
+ *
+ * @param <C> generic type for card.
+ */
 public class CardLessLikelyDecorator<C extends Card> implements ThreeTriosStrategy {
   private final ThreeTriosStrategy<C> baseStrategy;
 

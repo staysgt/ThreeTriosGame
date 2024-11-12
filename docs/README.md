@@ -99,14 +99,14 @@ the playToGrid method on the previously created/started model.
 ## Changes made to the model from HW5
 
 We had a few necessary changes to make from our original model in HW5 in order to make the
-strategies possible. First, we started
-by making a ReadOnlyGameGridModel interface, that contains the methods that cannot alter the grid.
-Our original interface extends the read only interface.
-We also added in a few new methods, cardsFlipped (necessary for flip most strategy), legalPlay (
-needed for strategies), and getGameStatuses
-(needed for minimax strategy). A few other miscellaneous changes were made, including ensuring the
-getBoard was returning a deep copy of the board,
-so that the user could not use this to cheat.
+strategies possible. First, we started by making a ReadOnlyGameGridModel interface, that contains
+the methods that cannot alter the grid. Our original interface extends the read only interface. We
+also added in a few new methods, cardsFlipped (necessary for flip most strategy), legalPlay
+(needed for strategies), and getGameStatuses (needed for minimax strategy). A few other
+miscellaneous changes were made, including ensuring the getBoard was returning a deep copy of the
+board, so that the user could not use this to cheat. As well, we added another constructor that
+constructs an in progress game, which was needed for getting the possible strategies used on
+previous moves.
 
 ## Extra Credit Strategies Implemented
 

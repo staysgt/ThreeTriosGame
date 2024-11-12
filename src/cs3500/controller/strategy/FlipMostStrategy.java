@@ -12,10 +12,13 @@ import cs3500.model.Player;
  */
 public class FlipMostStrategy<C extends Card> implements ThreeTriosStrategy<C> {
 
+  int mostFlips;
+
   /**
    * Constructor for strategy that flips the most cards.
    */
   public FlipMostStrategy() {
+    mostFlips = 0;
   }
 
   @Override
@@ -23,9 +26,6 @@ public class FlipMostStrategy<C extends Card> implements ThreeTriosStrategy<C> {
     // list to store the best moves for a players turn
     List<int[]> bestMoves = new ArrayList<>();
 
-    int rowMax = 0;
-    int colMax = 0;
-    int handIdxMax = 0;
     int maxFlips = 0;
     // iterates through each card in the hand and then each space in the grid to determine the set
     // produces the maximum amount of spaces flipped
@@ -41,6 +41,7 @@ public class FlipMostStrategy<C extends Card> implements ThreeTriosStrategy<C> {
               bestMoves.clear();
               bestMoves.add(new int[]{row, col, handIdx});
               maxFlips = flips;
+              mostFlips = flips;
             } else if (flips == maxFlips) {
               bestMoves.add(new int[]{row, col, handIdx});
             }
@@ -50,5 +51,14 @@ public class FlipMostStrategy<C extends Card> implements ThreeTriosStrategy<C> {
     }
 
     return bestMoves;
+  }
+
+  /**
+   * Getter to get the most flips in a round.
+   *
+   * @return the number of most flips.
+   */
+  public int getMostFlips() {
+    return mostFlips;
   }
 }

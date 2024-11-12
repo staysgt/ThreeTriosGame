@@ -32,8 +32,9 @@ public class MiniMaxStrategy<C extends Card> implements ThreeTriosStrategy<C> {
         return block(new CornersStrategy<>(), model, player);
       case CARD_LESS_LIKELY:
         return block(new CardLessLikelyFlippedStrategy<>(), model, player);
+      default:
+        return null;
     }
-    return null;
   }
 
   // returns a list of moves that would block the opposing players best move
@@ -84,14 +85,12 @@ public class MiniMaxStrategy<C extends Card> implements ThreeTriosStrategy<C> {
 
     // iterate through the hashmap to see the strategy that the user is likely using
     Strategies bestStrat = null;
+    int highest = 0;
     for (Strategies strat : strategiesScore.keySet()) {
-      int highest = 0;
       if (strategiesScore.get(strat) > highest) {
         highest = strategiesScore.get(strat);
         bestStrat = strat;
       }
-
-
     }
 
     return bestStrat;
@@ -105,7 +104,7 @@ public class MiniMaxStrategy<C extends Card> implements ThreeTriosStrategy<C> {
     strategiesScore.put(Strategies.CORNERS, 0);
     strategiesScore.put(Strategies.CARD_LESS_LIKELY, 0);
 
-    ThreeTriosStrategy currStrategy;
+    ThreeTriosStrategy<C> currStrategy;
     Strategies currStrategyEnum;
 
     for (int strategy = 0; strategy < 4; strategy++) {
@@ -154,7 +153,8 @@ public class MiniMaxStrategy<C extends Card> implements ThreeTriosStrategy<C> {
     for (int row = 0; row < grid.length; row++) {
       for (int col = 0; col < grid[0].length; col++) {
         if (grid[row][col].getCard() != null && alteredGrid[row][col].getCard() != null) {
-          if (!Objects.equals(grid[row][col].getCard().getName(), alteredGrid[row][col].getCard().getName())) {
+          if (!Objects.equals(grid[row][col].getCard().getName(),
+                  alteredGrid[row][col].getCard().getName())) {
             changedRow = row;
             changedCol = col;
             cardName = alteredGrid[row][col].getCard().getName();

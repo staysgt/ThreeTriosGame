@@ -1,8 +1,12 @@
 package cs3500.model;
 
-import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Interface for a gameGrid that contains the methods that cnanot alter the game.
+ *
+ * @param <C> generic type for a card.
+ */
 public interface ReadOnlyGameGridModel<C extends Card> {
 
   /**
