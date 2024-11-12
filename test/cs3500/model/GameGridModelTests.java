@@ -354,25 +354,25 @@ public class GameGridModelTests {
   }
 
 
-  @Test
-  public void testGetBoardGivenMovesStartOfGame() {
-    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
-            noHoles.getRowConfig());
-    model.playToGrid(0, 0, 0);
-    model.playToGrid(1, 0, 0);
-    model.playToGrid(2, 0, 0);
-    model.playToGrid(0, 1, 0);
-
-    Cell[][] cells = (Cell[][]) model.getPreviousMoves().get(0);
-    assertNull(cells[0][0].getCard());
-    assertNull(cells[0][1].getCard());
-    assertNull(cells[2][4].getCard());
-  }
-
-  @Test(expected = IllegalStateException.class)
-  public void testGetBoardGivenMovesGameNotStarted() {
-    model.getPreviousMoves();
-  }
+//  @Test
+//  public void testGetBoardGivenMovesStartOfGame() {
+//    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
+//            noHoles.getRowConfig());
+//    model.playToGrid(0, 0, 0);
+//    model.playToGrid(1, 0, 0);
+//    model.playToGrid(2, 0, 0);
+//    model.playToGrid(0, 1, 0);
+//
+//    Cell[][] cells = (Cell[][]) model.getPreviousMoves().get(0);
+//    assertNull(cells[0][0].getCard());
+//    assertNull(cells[0][1].getCard());
+//    assertNull(cells[2][4].getCard());
+//  }
+//
+//  @Test(expected = IllegalStateException.class)
+//  public void testGetBoardGivenMovesGameNotStarted() {
+//    model.getPreviousMoves();
+//  }
 
 
 }

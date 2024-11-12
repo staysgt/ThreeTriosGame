@@ -12,8 +12,6 @@ import cs3500.model.Player;
 public class CardLessLikelyFlippedStrategy<C extends Card> implements ThreeTriosStrategy<C> {
   @Override
   public List<int[]> choosePosition(GameGrid<C> model, Player player) {
-
-
     // iterates through rows
     for (int row = 0; row < model.getBoard().length; row++) {
       // iterates through the columns of the grid

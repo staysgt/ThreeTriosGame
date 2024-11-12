@@ -1,18 +1,12 @@
 package cs3500.controller.strategy;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-import javax.swing.text.rtf.RTFEditorKit;
-
 import cs3500.model.Card;
 import cs3500.model.Cell;
 import cs3500.model.GameGrid;
-import cs3500.model.GameGridModel;
-import cs3500.model.NESWCard;
 import cs3500.model.Player;
 
 /**
@@ -21,10 +15,14 @@ import cs3500.model.Player;
  */
 public class MiniMaxStrategy<C extends Card> implements ThreeTriosStrategy<C> {
 
-  // chooses the position for minimax strategy and defaults to playing flipmost strategy
-  // TODO: make it not default to flopmost strategy
+  // chooses the position for minimax strategy and defaults to playing flip most strategy
+  // TODO: make it not default to flop most strategy
   @Override
   public List<int[]> choosePosition(GameGrid<C> model, Player player) {
+    System.out.println(predictStrategy(model, player));
+    if (predictStrategy(model, player) == null) {
+      return null;
+    }
     switch (predictStrategy(model, player)) {
       case FLIP_MOST:
         return block(new FlipMostStrategy<>(), model, player);
@@ -34,9 +32,8 @@ public class MiniMaxStrategy<C extends Card> implements ThreeTriosStrategy<C> {
         return block(new CornersStrategy<>(), model, player);
       case CARD_LESS_LIKELY:
         return block(new CardLessLikelyFlippedStrategy<>(), model, player);
-      default:
-        return new FlipMostStrategy<>().choosePosition((GameGrid<Card>) model, player);
     }
+    return null;
   }
 
   // returns a list of moves that would block the opposing players best move
@@ -120,12 +117,10 @@ public class MiniMaxStrategy<C extends Card> implements ThreeTriosStrategy<C> {
         case 1:
           currStrategy = new MiniMaxStrategy();
           currStrategyEnum = Strategies.MINIMAX;
-
           break;
         case 2:
           currStrategy = new CornersStrategy();
           currStrategyEnum = Strategies.CORNERS;
-
           break;
         default:
           currStrategy = new CardLessLikelyFlippedStrategy();
@@ -133,12 +128,14 @@ public class MiniMaxStrategy<C extends Card> implements ThreeTriosStrategy<C> {
           break;
       }
 
-      for (int idx = 0; idx < currStrategy.choosePosition(model, opposingPlayer).size(); idx++) {
-        List<int[]> potentialMoves = currStrategy.choosePosition(model, opposingPlayer);
-        if (potentialMoves.get(idx)[0] == lastMove[0] &&
-                potentialMoves.get(idx)[1] == lastMove[1] &&
-                potentialMoves.get(idx)[2] == lastMove[2]) {
-          strategiesScore.put(currStrategyEnum, strategiesScore.get(currStrategyEnum) + 1);
+      if (currStrategy.choosePosition(model, opposingPlayer) != null) {
+        for (int idx = 0; idx < currStrategy.choosePosition(model, opposingPlayer).size(); idx++) {
+          List<int[]> potentialMoves = currStrategy.choosePosition(model, opposingPlayer);
+          if (potentialMoves.get(idx)[0] == lastMove[0] &&
+                  potentialMoves.get(idx)[1] == lastMove[1] &&
+                  potentialMoves.get(idx)[2] == lastMove[2]) {
+            strategiesScore.put(currStrategyEnum, strategiesScore.get(currStrategyEnum) + 1);
+          }
         }
       }
     }
@@ -156,10 +153,12 @@ public class MiniMaxStrategy<C extends Card> implements ThreeTriosStrategy<C> {
 
     for (int row = 0; row < grid.length; row++) {
       for (int col = 0; col < grid[0].length; col++) {
-        if (!Objects.equals(grid[row][col].getCard().getName(), alteredGrid[row][col].getCard().getName())) {
-          changedRow = row;
-          changedCol = col;
-          cardName = alteredGrid[row][col].getCard().getName();
+        if (grid[row][col].getCard() != null && alteredGrid[row][col].getCard() != null) {
+          if (!Objects.equals(grid[row][col].getCard().getName(), alteredGrid[row][col].getCard().getName())) {
+            changedRow = row;
+            changedCol = col;
+            cardName = alteredGrid[row][col].getCard().getName();
+          }
         }
       }
     }
@@ -172,7 +171,4 @@ public class MiniMaxStrategy<C extends Card> implements ThreeTriosStrategy<C> {
 
     return new int[]{changedRow, changedCol, handIdx};
   }
-
-
-
 }

@@ -29,7 +29,7 @@ public class FlipMostStrategy<C extends Card> implements ThreeTriosStrategy<C> {
     int maxFlips = 0;
     // iterates through each card in the hand and then each space in the grid to determine the set
     // produces the maximum amount of spaces flipped
-    for (int handIdx = 0; handIdx < model.getHand(model.getTurn()).size(); handIdx++) {
+    for (int handIdx = 0; handIdx < model.getHand(model.getTurn()).size() - 1; handIdx++) {
       for (int row = 0; row < model.getBoard().length; row++) {
         for (int col = 0; col < model.getBoard()[0].length; col++) {
           // since the for loops iterate through the rows starts from the top and cols starting
