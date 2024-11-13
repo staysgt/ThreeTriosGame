@@ -22,6 +22,14 @@ public class Cell<C extends Card> {
     }
   }
 
+  /**
+   * Constructor for a cell.
+   *
+   * @param state state of the card.
+   * @param card  card for the cell.
+   * @param owner original owner of the cell.
+   */
+
   public Cell(CellState state, C card, Player owner) {
     this.cellstate = state;
     if (cellstate == CellState.HOLE) {

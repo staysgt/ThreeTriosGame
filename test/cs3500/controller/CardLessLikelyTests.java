@@ -121,6 +121,28 @@ public class CardLessLikelyTests<C extends Card> {
 
     // with the mock there should be no best move for this strategy
     Assert.assertEquals(List.of(), cardLessLikely.choosePosition(mockModel, Player.RED));
+  }
+
+  @Test
+  public void testCLLWithMockNotEmpty() {
+    MockFlipModel<C> mockModel = new MockFlipModel<>();
+    mockModel.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
+            noHoles.getRowConfig());
+
+    ThreeTriosStrategy<C> cardLessLikely = new CardLessLikelyFlippedStrategy<>();
+
+
+    mockModel.playToGrid(0, 2, 0);
+    mockModel.playToGrid(1, 0, 0);
+    mockModel.playToGrid(2, 0, 0);
+    mockModel.playToGrid(0, 1, 0);
+
+    List<int[]> bestMoves = cardLessLikely.choosePosition(mockModel, Player.RED);
+    for (int i = 0; i < bestMoves.size(); i++) {
+      System.out.println(Arrays.toString(bestMoves.get(i)));
+    }
+    // 0, 0, 0 is best move
+    Assert.assertEquals(Arrays.toString(bestMoves.getFirst()), Arrays.toString(new int[]{0, 0, 0}));
 
   }
 

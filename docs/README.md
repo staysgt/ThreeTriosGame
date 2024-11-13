@@ -108,6 +108,12 @@ board, so that the user could not use this to cheat. As well, we added another c
 constructs an in progress game, which was needed for getting the possible strategies used on
 previous moves.
 
+## New Strategies Package
+
+For HW6, we created a package within the controller to hold all of the strategies, and files
+related to the strategy. Each of the four strategies and their decorators have their own class that
+contain the logic behind running the strategies.
+
 ## Extra Credit Strategies Implemented
 
 In order to implement all 4 of the strategies we first used the strategy design pattern to make sure

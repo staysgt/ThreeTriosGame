@@ -17,7 +17,7 @@ public class MockFlipModel<C extends Card> extends GameGridModel<C> {
   }
 
   /**
-   * Gets the transcript of the moves checked
+   * Gets the transcript of the moves checked.
    *
    * @return the spaces checked.
    */

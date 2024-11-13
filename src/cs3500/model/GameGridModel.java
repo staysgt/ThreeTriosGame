@@ -235,10 +235,8 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   }
 
   private void updateStatuses() {
-    HashMap<Cell<C>[][], List<C>[]> currStatus = new HashMap<>();
-    currStatus.put(getBoard(), new List[]{redHand, blueHand});
-    gameStatuses.put(numPlays, currStatus);
-    numPlays++;
+    statuses.add(new GameGridModel<>(this.getBoard(), this.getHand(Player.RED),
+            this.getHand(Player.BLUE)));
   }
 
   private void checkDuplicateCardNames(List<? extends Card> cards) {
@@ -412,7 +410,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
 
   @Override
   public List<GameGridModel<C>> getGameStatuses() {
-    statuses.add(new GameGridModel<>(grid, redHand, blueHand));
+    checkGameStarted();
     return statuses;
   }
 

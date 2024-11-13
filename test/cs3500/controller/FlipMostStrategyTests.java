@@ -26,13 +26,12 @@ public class FlipMostStrategyTests<C extends Card> {
   private final ConfigurationFileReader noHoles;
   private final NESWCardFileReader<C> cardFile;
 
-  private final ConfigurationFileReader walkableholes;
+//  private final ConfigurationFileReader walkableholes;
 
   {
     try {
-      walkableholes = new ConfigurationFileReader("src" + File.separator + "walkableholes");
+//      walkableholes = new ConfigurationFileReader("src" + File.separator + "walkableholes");
       cardFile = new NESWCardFileReader<>("src/cardsexample");
-      NESWCardFileReader<C> badCardFile = new NESWCardFileReader<>("src/notenoughcards");
       noHoles = new ConfigurationFileReader("src/noholes");
     } catch (FileNotFoundException e) {
       throw new RuntimeException(e);
@@ -105,7 +104,6 @@ public class FlipMostStrategyTests<C extends Card> {
     mockModel.playToGrid(1, 2, 0);
 
     ThreeTriosStrategy<C> flipMost = new FlipMostStrategy<>();
-
     Assert.assertEquals(Arrays.toString(new int[]{0, 0, 0}),
             Arrays.toString(flipMost.choosePosition(mockModel, Player.RED).getFirst()));
     Assert.assertEquals(1, flipMost.choosePosition(mockModel, Player.RED).size());

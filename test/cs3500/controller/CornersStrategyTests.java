@@ -22,12 +22,13 @@ public class CornersStrategyTests<C extends Card> {
 
   private final GameGrid<C> modelNH = new GameGridModel<>(new Random(3));
   private final ConfigurationFileReader noHoles;
+  private final ConfigurationFileReader holes33;
+
   private final NESWCardFileReader<C> cardFile;
 
   {
     try {
-      ConfigurationFileReader conFigFile =
-              new ConfigurationFileReader("src" + File.separator + "walkableholes");
+      holes33 = new ConfigurationFileReader("src" + File.separator + "33noholes");
       cardFile = new NESWCardFileReader<>("src/cardsexample");
       NESWCardFileReader<C> badCardFile = new NESWCardFileReader<>("src/notenoughcards");
       noHoles = new ConfigurationFileReader("src/noholes");
@@ -83,6 +84,19 @@ public class CornersStrategyTests<C extends Card> {
     CornersStrategy<C> corners = new CornersStrategy<>();
     Assert.assertEquals(Arrays.toString(new int[]{0, 4, 2}),
             Arrays.toString(corners.choosePosition(modelNH, Player.BLUE).getFirst()));
+
+  }
+
+  @Test
+  public void testCorn() {
+    modelNH.startGame(cardFile.getCards(), holes33.getCols(), holes33.getRows(),
+            holes33.getRowConfig());
+
+    // playing to grid so that most corners are full
+
+    CornersStrategy<C> corners = new CornersStrategy<>();
+    corners.choosePosition(modelNH, Player.BLUE);
+    System.out.println(corners.getTranscript());
 
   }
 

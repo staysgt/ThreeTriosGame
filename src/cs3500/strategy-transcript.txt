@@ -1,0 +1,23 @@
+Checking: row: 0 col: 0 hand: horse 2 7 8 2
+New best move: row: 0 col: 0 hand: horse 2 7 8 2
+Checking: row: 0 col: 0 hand: giraffe 2 9 A 3
+Checking: row: 0 col: 0 hand: dog 5 9 3 2
+New best move: row: 0 col: 0 hand: dog 5 9 3 2
+Checking: row: 0 col: 0 hand: pig 3 2 1 9
+Checking: row: 0 col: 0 hand: chicken 3 A A 3
+Checking: row: 0 col: 2 hand: horse 2 7 8 2
+Checking: row: 0 col: 2 hand: giraffe 2 9 A 3
+Checking: row: 0 col: 2 hand: dog 5 9 3 2
+New best move: row: 0 col: 2 hand: dog 5 9 3 2
+Checking: row: 0 col: 2 hand: pig 3 2 1 9
+Checking: row: 0 col: 2 hand: chicken 3 A A 3
+Checking: row: 2 col: 0 hand: horse 2 7 8 2
+Checking: row: 2 col: 0 hand: giraffe 2 9 A 3
+Checking: row: 2 col: 0 hand: dog 5 9 3 2
+Checking: row: 2 col: 0 hand: pig 3 2 1 9
+Checking: row: 2 col: 0 hand: chicken 3 A A 3
+Checking: row: 2 col: 2 hand: horse 2 7 8 2
+Checking: row: 2 col: 2 hand: giraffe 2 9 A 3
+Checking: row: 2 col: 2 hand: dog 5 9 3 2
+Checking: row: 2 col: 2 hand: pig 3 2 1 9
+Checking: row: 2 col: 2 hand: chicken 3 A A 3

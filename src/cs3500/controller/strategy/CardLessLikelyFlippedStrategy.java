@@ -27,7 +27,8 @@ public class CardLessLikelyFlippedStrategy<C extends Card> implements ThreeTrios
           for (int handIdx = 0; handIdx < model.getHand(player).size(); handIdx++) {
             // if this card is placed in this row/col, how many cards will the other player
             // be able to flip
-            GameGridModel<C> testModel = new GameGridModel<C>(model.getBoard(), model.getHand(Player.RED),
+            GameGridModel<C> testModel = new GameGridModel<C>(model.getBoard(),
+                    model.getHand(Player.RED),
                     model.getHand(Player.BLUE));
             testModel.playToGrid(row, col, handIdx);
             // now i need to know how many cards would be flipped for the other player if this move

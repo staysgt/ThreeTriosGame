@@ -58,6 +58,11 @@ public class NESWCard implements Card {
       return this.value;
     }
 
+    /**
+     * Creates a string version of an attack value.
+     *
+     * @return string version of the attack value.
+     */
     public String toString() {
       if (this.getValue() != 10) {
         return String.valueOf(this.getValue());

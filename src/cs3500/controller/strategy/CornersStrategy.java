@@ -15,6 +15,8 @@ import cs3500.model.Player;
  */
 public class CornersStrategy<C extends Card> implements ThreeTriosStrategy<C> {
 
+  StringBuilder transcript = new StringBuilder();
+
   @Override
   public List<int[]> choosePosition(GameGrid<C> model, Player player) {
     // list to store the best moves for a players turn
@@ -30,8 +32,11 @@ public class CornersStrategy<C extends Card> implements ThreeTriosStrategy<C> {
         int currRow = rowCorner[row];
         int currCol = colCorner[col];
 
+
         if (model.legalPlay(currRow, currCol)) {
           for (int handIdx = 0; handIdx < model.getHand(player).size(); handIdx++) {
+            transcript.append("Checking: row: " + currRow + " col: " + currCol + " hand: " +
+                    model.getHand(model.getTurn()).get(handIdx) + "\n");
             // checks if the spot is a valid place to play
             NESWCard currCard = (NESWCard) model.getHand(player).get(handIdx);
             int power = 0;
@@ -46,6 +51,8 @@ public class CornersStrategy<C extends Card> implements ThreeTriosStrategy<C> {
               power += currCard.getWest().getValue();
             }
             if (power > maxPower) {
+              transcript.append("New best move: row: " + currRow + " col: " + currCol + " hand: " +
+                      model.getHand(model.getTurn()).get(handIdx) + "\n");
               bestMoves.clear();
               madeMove = true;
               bestMoves.add(new int[]{currRow, currCol, handIdx});
@@ -67,4 +74,12 @@ public class CornersStrategy<C extends Card> implements ThreeTriosStrategy<C> {
     return bestMoves;
   }
 
+  /**
+   * Gets a transcript of the moves made.
+   *
+   * @return string version of the spots checked.
+   */
+  public String getTranscript() {
+    return transcript.toString();
+  }
 }

@@ -5,14 +5,18 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.sql.SQLOutput;
 import java.util.Random;
 
+import cs3500.controller.strategy.CardLessLikelyFlippedStrategy;
 import cs3500.controller.strategy.FlipMostStrategy;
 import cs3500.controller.strategy.MiniMaxStrategy;
 import cs3500.controller.strategy.ThreeTriosStrategy;
 import cs3500.model.Card;
 import cs3500.model.GameGrid;
 import cs3500.model.GameGridModel;
+import cs3500.model.MockFlipModel;
+import cs3500.model.MockMiniMaxModel;
 import cs3500.model.Player;
 
 /**
@@ -72,5 +76,22 @@ public class MinimaxStrategyTests<C extends Card> {
     MiniMaxStrategy<C> minimax = new MiniMaxStrategy<>();
     minimax.choosePosition(modelNH, Player.BLUE);
     Assert.assertNull(minimax.choosePosition(modelNH, Player.BLUE));
+  }
+
+  @Test
+  public void testMiniMaxWithMock() {
+    MockMiniMaxModel<C> mockModel = new MockMiniMaxModel<>();
+    mockModel.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
+            noHoles.getRowConfig());
+
+    mockModel.playToGrid(0, 2, 0);
+    mockModel.playToGrid(1, 0, 0);
+
+    ThreeTriosStrategy<C> strategy = new MiniMaxStrategy<>();
+
+    mockModel.isForStrategy(true);
+    strategy.choosePosition(mockModel, Player.RED);
+
+    Assert.assertNull(mockModel.getTranscript());
   }
 }

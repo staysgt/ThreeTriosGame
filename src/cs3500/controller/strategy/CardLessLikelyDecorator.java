@@ -8,7 +8,7 @@ import cs3500.model.GameGrid;
 import cs3500.model.Player;
 
 /**
- * Class for least likely flipped card decorator
+ * Class for least likely flipped card decorator.
  *
  * @param <C> generic type for card.
  */
