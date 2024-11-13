@@ -255,9 +255,9 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < cols; col++) {
         if (rowConf.get(row).charAt(col) == 'X') {
-          grid[row][col] = new Cell(CellState.HOLE);
+          grid[row][col] = new Cell<>(CellState.HOLE);
         } else {
-          grid[row][col] = new Cell(CellState.CARD_SPACE);
+          grid[row][col] = new Cell<>(CellState.CARD_SPACE);
         }
       }
     }
@@ -353,7 +353,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     Cell<C>[][] copy = new Cell[grid.length][grid[0].length];
     for (int row = 0; row < grid.length; row++) {
       for (int col = 0; col < grid[row].length; col++) {
-        copy[row][col] = new Cell(grid[row][col].getCellState(), grid[row][col].getCard(),
+        copy[row][col] = new Cell<>(grid[row][col].getCellState(), grid[row][col].getCard(),
                 grid[row][col].getOwner());
       }
     }
