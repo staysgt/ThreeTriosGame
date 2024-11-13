@@ -1,6 +1,7 @@
 package cs3500.view;
 
 import cs3500.model.Card;
+import cs3500.model.Player;
 import cs3500.model.ReadOnlyGameGridModel;
 
 
@@ -34,19 +35,32 @@ public class Graphics2DView<C extends Card> extends FunGraphics implements Graph
 
     int numRows = model.getBoard().length;
     int numCols = model.getBoard()[0].length;
-    int cellWidth = getWidth() / numCols;
-    int cellHeight = getHeight() / numRows;
+    int cellWidth = getWidth() / (numCols + 2);
+    int cellHeight = getHeight() / (numRows);
+    int cellHeightHand = getHeight() / (model.getHand(Player.BLUE).size());
 
     for (int row = 0; row < numRows; row++) {
-      for (int col = 0; col < numCols; col++) {
+      for (int col = 1; col <= numCols; col++) {
         int xPos = col * cellWidth;
         int yPos = row * cellHeight;
-        fillRect(g2d, xPos, yPos, cellWidth, cellHeight, row, col);
+        fillRect(g2d, xPos, yPos, cellWidth, cellHeight, row, col, false);
+      }
+    }
+    int[] handCols = new int[]{0, getWidth() - cellWidth};
+
+
+    for (int col = 0; col < handCols.length; col++) {
+      // rowHand = each row in this context is a card
+      // gets for the blue player since it will always be the larger hand
+      for (int rowCard = 0; rowCard < model.getHand(Player.BLUE).size(); rowCard++) {
+        int xPos = handCols[col];
+        int yPos = rowCard * cellHeightHand;
+        fillRect(g2d, xPos, yPos, cellWidth, cellHeightHand, rowCard, col, true);
       }
     }
 
-
   }
+
 
   @Override
   public Graphics create() {
@@ -54,13 +68,24 @@ public class Graphics2DView<C extends Card> extends FunGraphics implements Graph
   }
 
   @Override
-  public void fillRect(Graphics2D g2d, int x, int y, int width, int height, int row, int col) {
-    int xMax = model.getBoard().length;
-    int yMax = model.getBoard()[0].length;
-    if (model.isCellHole(row, col)) {
-      g2d.setColor(Color.GRAY);
+  public void fillRect(Graphics2D g2d, int x, int y, int width, int height, int row, int col,
+                       boolean isHand) {
+
+    if (!isHand) {
+      if (model.isCellHole(row, col - 1)) {
+        g2d.setColor(Color.GRAY);
+      } else {
+        g2d.setColor(Color.YELLOW);
+      }
+
     } else {
-      g2d.setColor(Color.YELLOW);
+      if (col == 0) {
+        g2d.setColor(Color.RED);
+      } else {
+        g2d.setColor(Color.BLUE);
+      }
+
+
     }
 
     g2d.fillRect(x, y, width, height);
@@ -90,14 +115,20 @@ public class Graphics2DView<C extends Card> extends FunGraphics implements Graph
   }
 
 
+  private double width;
+  private double height;
+  private int cardIndex;
+
   public class CardPlacement extends Path2D.Double {
 
     private double width;
     private double height;
+    private int cardIndex;
 
     public CardPlacement(double x, double y, double width, double height) {
       this.width = width;
       this.height = height;
+      this.cardIndex = cardIndex;
       cardSize(x, y);
     }
 
@@ -111,8 +142,12 @@ public class Graphics2DView<C extends Card> extends FunGraphics implements Graph
     public void render(Graphics2D g2d) {
       g2d.draw(this);
     }
+
+    public int getCardIndex() {
+      return cardIndex;
   }
 
+  }
 //    private AffineTransform getLogicalToPhysicalTransformation() {
 //        AffineTransform transform = new AffineTransform();
 //        Dimension logicalDims = getLogicalDims
