@@ -180,16 +180,23 @@ public class Graphics2DView<C extends Card> extends FunGraphics implements Graph
   }
 
 
-  private double width;
-  private double height;
-  private int cardIndex;
-
+  /**
+   * This class determines the cardPlacement.
+   */
   public class CardPlacement extends Path2D.Double {
 
     private double width;
     private double height;
     private int cardIndex;
 
+    /**
+     * This is the constructor for card placement
+     *
+     * @param x      coordinate of card
+     * @param y      coordinate of card
+     * @param width  width of card
+     * @param height height of card
+     */
     public CardPlacement(double x, double y, double width, double height) {
       this.width = width;
       this.height = height;
@@ -208,9 +215,13 @@ public class Graphics2DView<C extends Card> extends FunGraphics implements Graph
       g2d.draw(this);
     }
 
+    /**
+     * This gets the card index.
+     * @return the card index
+     */
     public int getCardIndex() {
       return cardIndex;
-  }
+    }
 
   }
 //    private AffineTransform getLogicalToPhysicalTransformation() {

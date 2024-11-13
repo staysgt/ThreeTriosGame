@@ -1,22 +1,17 @@
 package cs3500.view;
 
 
+import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
 
 /**
- * Class for FunGraphics.
+ * This is the graphics class and incoorporates create.
  */
-public class FunGraphics extends Panel implements GraphicsView {
-
-  //private final ReadOnlyGameGridModel model;
-  @Override
-  public void update(Graphics g) {
-
-  }
+public class FunGraphics extends JPanel {
 
 
   protected Graphics create(int x, int y, int width, int height) {
     return create(x, y, width, height);
   }
 }
+

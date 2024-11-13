@@ -1,8 +1,10 @@
 package cs3500.view;
 
 import javax.swing.*;
-import java.awt.*;
 
+/**
+ * This is the class that allows the gui frame to be shown.
+ */
 public class GameGridFrameView extends JFrame implements FrameView {
 
   @Override
