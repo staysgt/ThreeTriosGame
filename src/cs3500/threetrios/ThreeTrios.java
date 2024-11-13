@@ -13,6 +13,7 @@ import cs3500.model.GameGrid;
 import cs3500.model.GameGridModel;
 import cs3500.model.NESWCard;
 import cs3500.view.Graphics2DView;
+import cs3500.view.MouseClick;
 
 /**
  * Class for running the game.
@@ -33,15 +34,10 @@ public final class ThreeTrios {
     model.startGame(cardFile.getCards(), conFigFile.getCols(),
             conFigFile.getRows(), conFigFile.getRowConfig());
 
-    model.playToGrid(0, 0, 0);
-    model.playToGrid(0, 1, 0);
-    model.playToGrid(0, 2, 0);
-
-    model.playToGrid(1, 2, 0);
-
 
     Graphics2DView view = new Graphics2DView(model);
-
+    MouseClick mouseClickListener = new MouseClick(model, view, model.getTurn());
+    view.addMouseListener(mouseClickListener);
 
     JFrame frame = new JFrame("Three Trios");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -15,6 +15,7 @@ import cs3500.controller.strategy.ThreeTriosStrategy;
 import cs3500.model.Card;
 import cs3500.model.GameGrid;
 import cs3500.model.GameGridModel;
+import cs3500.model.MockFlipModel;
 import cs3500.model.Player;
 
 /**
@@ -108,5 +109,19 @@ public class CardLessLikelyTests<C extends Card> {
     }
   }
 
+
+  @Test
+  public void testCLLWithMockEmptyGrid() {
+    MockFlipModel<C> mockModel = new MockFlipModel<>();
+    mockModel.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
+            noHoles.getRowConfig());
+
+    ThreeTriosStrategy<C> cardLessLikely = new CardLessLikelyFlippedStrategy<>();
+    cardLessLikely.choosePosition(mockModel, Player.RED);
+
+    // with the mock there should be no best move for this strategy
+    Assert.assertEquals(List.of(), cardLessLikely.choosePosition(mockModel, Player.RED));
+
+  }
 
 }

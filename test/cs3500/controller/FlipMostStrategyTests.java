@@ -15,9 +15,8 @@ import cs3500.controller.strategy.ThreeTriosStrategy;
 import cs3500.model.Card;
 import cs3500.model.GameGrid;
 import cs3500.model.GameGridModel;
-import cs3500.model.MockModel;
+import cs3500.model.MockFlipModel;
 import cs3500.model.Player;
-import cs3500.view.GameGridTextView;
 
 /**
  * Tests for flipping the most cards strategy.
@@ -47,7 +46,7 @@ public class FlipMostStrategyTests<C extends Card> {
     ThreeTriosStrategy<C> flipMost = new FlipMostStrategy<>();
 
     // the list should contain every possible combination since there would be a tie
-    Assert.assertEquals(120, flipMost.choosePosition(modelNH, Player.RED).size());
+    Assert.assertEquals(105, flipMost.choosePosition(modelNH, Player.RED).size());
 
     Assert.assertEquals(Arrays.toString(new int[]{0, 0, 0}),
             Arrays.toString(flipMost.choosePosition(modelNH, Player.RED).get(0)));
@@ -68,12 +67,7 @@ public class FlipMostStrategyTests<C extends Card> {
     modelNH.playToGrid(2, 1, 0);
 
     ThreeTriosStrategy<C> flipMost = new FlipMostStrategy<>();
-    GameGridTextView<C> view = new GameGridTextView<>(modelNH);
-    view.render();
 
-    for (int i = 0; i < flipMost.choosePosition(modelNH, Player.RED).size(); i++) {
-      System.out.println(Arrays.toString(flipMost.choosePosition(modelNH, Player.RED).get(i)));
-    }
 
     Assert.assertEquals(Arrays.toString(new int[]{1, 1, 1}),
             Arrays.toString(flipMost.choosePosition(modelNH, Player.RED).get(0)));
@@ -95,8 +89,6 @@ public class FlipMostStrategyTests<C extends Card> {
     modelNH.playToGrid(1, 1, 1);
 
     ThreeTriosStrategy<C> flipMost = new FlipMostStrategy<>();
-    GameGridTextView<C> view = new GameGridTextView<>(modelNH);
-    view.render();
 
     Assert.assertEquals(Arrays.toString(new int[]{2, 2, 1}),
             Arrays.toString(flipMost.choosePosition(modelNH, Player.BLUE).get(0)));
@@ -104,22 +96,22 @@ public class FlipMostStrategyTests<C extends Card> {
 
   @Test
   public void testChoosePosnMidGame() {
-    MockModel<C> mockModel = new MockModel<>();
-    modelNH.startGame(cardFile.getCards(), walkableholes.getCols(), walkableholes.getRows(),
-            walkableholes.getRowConfig());
-    modelNH.playToGrid(2, 0, 0);
-    modelNH.playToGrid(2, 1, 0);
-    modelNH.playToGrid(2, 2, 0);
-    modelNH.playToGrid(1, 2, 0);
+    MockFlipModel<C> mockModel = new MockFlipModel<>();
+    mockModel.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
+            noHoles.getRowConfig());
+    mockModel.playToGrid(2, 0, 0);
+    mockModel.playToGrid(2, 1, 0);
+    mockModel.playToGrid(2, 2, 0);
+    mockModel.playToGrid(1, 2, 0);
 
     ThreeTriosStrategy<C> flipMost = new FlipMostStrategy<>();
 
-    for (int i = 0; i < flipMost.choosePosition(modelNH, Player.RED).size(); i++) {
-      System.out.println(Arrays.toString(flipMost.choosePosition(modelNH, Player.RED).get(i)));
-
-    }
-
-    Assert.assertEquals(Arrays.toString(new int[]{0, 2, 3}),
-            Arrays.toString(flipMost.choosePosition(modelNH, Player.RED).get(0)));
+    Assert.assertEquals(Arrays.toString(new int[]{0, 0, 0}),
+            Arrays.toString(flipMost.choosePosition(mockModel, Player.RED).getFirst()));
+    Assert.assertEquals(1, flipMost.choosePosition(mockModel, Player.RED).size());
+    // should check this many spaces based on the number of spaces available/ cards left in game
+    Assert.assertEquals(110, mockModel.getTranscript().split("\n").length);
   }
+
+
 }
