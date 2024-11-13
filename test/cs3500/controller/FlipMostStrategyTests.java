@@ -15,6 +15,7 @@ import cs3500.controller.strategy.ThreeTriosStrategy;
 import cs3500.model.Card;
 import cs3500.model.GameGrid;
 import cs3500.model.GameGridModel;
+import cs3500.model.MockModel;
 import cs3500.model.Player;
 import cs3500.view.GameGridTextView;
 
@@ -26,10 +27,11 @@ public class FlipMostStrategyTests<C extends Card> {
   private final ConfigurationFileReader noHoles;
   private final NESWCardFileReader<C> cardFile;
 
+  private final ConfigurationFileReader walkableholes;
+
   {
     try {
-      ConfigurationFileReader conFigFile =
-              new ConfigurationFileReader("src" + File.separator + "walkableholes");
+      walkableholes = new ConfigurationFileReader("src" + File.separator + "walkableholes");
       cardFile = new NESWCardFileReader<>("src/cardsexample");
       NESWCardFileReader<C> badCardFile = new NESWCardFileReader<>("src/notenoughcards");
       noHoles = new ConfigurationFileReader("src/noholes");
@@ -100,4 +102,24 @@ public class FlipMostStrategyTests<C extends Card> {
             Arrays.toString(flipMost.choosePosition(modelNH, Player.BLUE).get(0)));
   }
 
+  @Test
+  public void testChoosePosnMidGame() {
+    MockModel<C> mockModel = new MockModel<>();
+    modelNH.startGame(cardFile.getCards(), walkableholes.getCols(), walkableholes.getRows(),
+            walkableholes.getRowConfig());
+    modelNH.playToGrid(2, 0, 0);
+    modelNH.playToGrid(2, 1, 0);
+    modelNH.playToGrid(2, 2, 0);
+    modelNH.playToGrid(1, 2, 0);
+
+    ThreeTriosStrategy<C> flipMost = new FlipMostStrategy<>();
+
+    for (int i = 0; i < flipMost.choosePosition(modelNH, Player.RED).size(); i++) {
+      System.out.println(Arrays.toString(flipMost.choosePosition(modelNH, Player.RED).get(i)));
+
+    }
+
+    Assert.assertEquals(Arrays.toString(new int[]{0, 2, 3}),
+            Arrays.toString(flipMost.choosePosition(modelNH, Player.RED).get(0)));
+  }
 }

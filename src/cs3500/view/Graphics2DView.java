@@ -15,7 +15,9 @@ import java.util.List;
 
 import javax.swing.*;
 
-
+/**
+ * Creates the 2D graphics.
+ */
 public class Graphics2DView<C extends Card> extends FunGraphics implements Graphics2DInf {
 
   ReadOnlyGameGridModel<C> model;
@@ -91,7 +93,7 @@ public class Graphics2DView<C extends Card> extends FunGraphics implements Graph
                   new Color(119, 170, 252) : new Color(252, 119, 119);
           g2d.setColor(c);
         } else {
-          g2d.setColor(new Color(252, 220, 88));
+          g2d.setColor(new Color(250, 234, 90));
         }
       }
       fillRectAndBorder(g2d, x, y, width, height);

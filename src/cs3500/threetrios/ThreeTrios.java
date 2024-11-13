@@ -1,10 +1,15 @@
 package cs3500.threetrios;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Random;
+
+import javax.swing.*;
 
 import cs3500.controller.ConfigurationFileReader;
 import cs3500.controller.NESWCardFileReader;
+import cs3500.model.GameGrid;
 import cs3500.model.GameGridModel;
 import cs3500.model.NESWCard;
 import cs3500.view.Graphics2DView;
@@ -18,23 +23,36 @@ public final class ThreeTrios {
    *
    * @param args arguments taken in to start the game.
    */
-  public static void main(String[] args) {
-    ConfigurationFileReader conFigFile;
-    NESWCardFileReader<NESWCard> cardFile;
+  public static void main(String[] args) throws FileNotFoundException {
+    GameGrid<NESWCard> model = new GameGridModel<>(new Random(3));
 
-    {
-      try {
-        conFigFile = new ConfigurationFileReader("src" + File.separator + "walkableholes");
-        cardFile = new NESWCardFileReader("src/cardsexample");
-      } catch (FileNotFoundException e) {
-        throw new RuntimeException(e);
-      }
-    }
+    ConfigurationFileReader conFigFile = new ConfigurationFileReader("src" +
+            File.separator + "walkableholes");
+    NESWCardFileReader<NESWCard> cardFile = new NESWCardFileReader<>("src/cardsexample");
 
-    GameGridModel<NESWCard> model = new GameGridModel<>();
-    model.startGame(cardFile.getCards(), conFigFile.getRows(),
-            conFigFile.getCols(), conFigFile.getRowConfig());
-    Graphics2DView<NESWCard> view = new Graphics2DView<NESWCard>(model);
-    view.setVisible(true);
+    model.startGame(cardFile.getCards(), conFigFile.getCols(),
+            conFigFile.getRows(), conFigFile.getRowConfig());
+
+    model.playToGrid(0, 0, 0);
+    model.playToGrid(0, 1, 0);
+    model.playToGrid(0, 2, 0);
+
+    model.playToGrid(1, 2, 0);
+
+
+    Graphics2DView view = new Graphics2DView(model);
+
+
+    JFrame frame = new JFrame("Three Trios");
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setLocation(0, 0);
+    frame.setPreferredSize(new Dimension(1200, 1200));
+
+    frame.add(view);
+
+    frame.pack();
+    frame.setVisible(true);
+
+
   }
 }
