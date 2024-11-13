@@ -1,6 +1,7 @@
 package cs3500.view;
 
 import cs3500.model.Card;
+import cs3500.model.NESWCard;
 import cs3500.model.Player;
 import cs3500.model.ReadOnlyGameGridModel;
 
@@ -9,8 +10,8 @@ import java.awt.*;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Graphics;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -37,7 +38,7 @@ public class Graphics2DView<C extends Card> extends FunGraphics implements Graph
     int numCols = model.getBoard()[0].length;
     int cellWidth = getWidth() / (numCols + 2);
     int cellHeight = getHeight() / (numRows);
-    int cellHeightHand = getHeight() / (model.getHand(Player.BLUE).size());
+//    int cellHeightHand = getHeight() / (model.getHand(Player.BLUE).size());
 
     for (int row = 0; row < numRows; row++) {
       for (int col = 1; col <= numCols; col++) {
@@ -48,14 +49,24 @@ public class Graphics2DView<C extends Card> extends FunGraphics implements Graph
     }
     int[] handCols = new int[]{0, getWidth() - cellWidth};
 
-
     for (int col = 0; col < handCols.length; col++) {
       // rowHand = each row in this context is a card
       // gets for the blue player since it will always be the larger hand
       for (int rowCard = 0; rowCard < model.getHand(Player.BLUE).size(); rowCard++) {
+        int cellHeightHand;
+        if (col == 0 && model.getHand(Player.RED).size() < model.getHand(Player.BLUE).size()) {
+          cellHeightHand = getHeight() / (model.getHand(Player.RED).size());
+        } else {
+          cellHeightHand = getHeight() / (model.getHand(Player.BLUE).size());
+        }
         int xPos = handCols[col];
         int yPos = rowCard * cellHeightHand;
-        fillRect(g2d, xPos, yPos, cellWidth, cellHeightHand, rowCard, col, true);
+        if (col == 0 && model.getHand(Player.RED).size() == rowCard) {
+
+        } else {
+          fillRect(g2d, xPos, yPos, cellWidth, cellHeightHand, rowCard, col, true);
+
+        }
       }
     }
 
@@ -73,24 +84,76 @@ public class Graphics2DView<C extends Card> extends FunGraphics implements Graph
 
     if (!isHand) {
       if (model.isCellHole(row, col - 1)) {
-        g2d.setColor(Color.GRAY);
+        g2d.setColor(new Color(59, 59, 58));
       } else {
-        g2d.setColor(Color.YELLOW);
+        if (model.getBoard()[row][col - 1].getCard() != null) {
+          Color c = model.getBoard()[row][col - 1].getOwner() == Player.BLUE ?
+                  new Color(119, 170, 252) : new Color(252, 119, 119);
+          g2d.setColor(c);
+        } else {
+          g2d.setColor(new Color(252, 220, 88));
+        }
       }
-
+      fillRectAndBorder(g2d, x, y, width, height);
     } else {
       if (col == 0) {
-        g2d.setColor(Color.RED);
+        g2d.setColor(new Color(252, 119, 119));
       } else {
-        g2d.setColor(Color.BLUE);
+        g2d.setColor(new Color(119, 170, 252));
       }
-
-
+      fillRectAndBorder(g2d, x, y, width, height);
     }
 
+
+    if (isHand) {
+      List<NESWCard> hand = (List<NESWCard>)
+              (col == 0 ? model.getHand(Player.RED) : model.getHand(Player.BLUE));
+      // row = the idx of the card in the hand
+      if (col == 0 && row == model.getHand(Player.RED).size()) {
+        // should not be added to the card
+      } else {
+        NESWCard currCard = hand.get(row);
+        addCardNumbers(g2d, x, y, width, height, currCard);
+      }
+    } else {
+      if (model.getBoard()[row][col - 1].getCard() != null) {
+        NESWCard currCard = (NESWCard) model.getBoard()[row][col - 1].getCard();
+        addCardNumbers(g2d, x, y, width, height, currCard);
+      }
+    }
+
+    if (!isHand && model.getBoard()[row][col - 1].getCard() != null) {
+      NESWCard currCard = (NESWCard) model.getBoard()[row][col - 1].getCard();
+      addCardNumbers(g2d, x, y, width, height, currCard);
+    }
+
+  }
+
+  private void fillRectAndBorder(Graphics2D g2d, int x, int y, int width, int height) {
     g2d.fillRect(x, y, width, height);
     g2d.setColor(Color.BLACK);
     g2d.drawRect(x, y, width, height);
+  }
+
+  private void addCardNumbers(Graphics2D g2d, int x, int y, int width, int height, NESWCard currCard) {
+    int horizCenter = x + width / 2;
+    int vertCenter = y + height / 2;
+
+    int fontSize = width / 6;
+
+    int offX = width / 12;
+    int offY = height / 4;
+
+    g2d.setFont(new Font("Arial", Font.BOLD, fontSize));
+    g2d.setColor(Color.BLACK);
+    g2d.drawString(currCard.getNorth().toString(), horizCenter - offX / 2,
+            vertCenter - offY / 2);
+    g2d.drawString(currCard.getSouth().toString(), horizCenter - offX / 2,
+            vertCenter + offY);
+    g2d.drawString(currCard.getWest().toString(), horizCenter - (offX * 4),
+            vertCenter + offY / 2);
+    g2d.drawString(currCard.getEast().toString(), horizCenter + (offX * 3),
+            vertCenter + offY / 2);
   }
 
   @Override

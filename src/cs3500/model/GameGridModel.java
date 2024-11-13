@@ -308,7 +308,6 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     if (row < 0 || col < 0 || row > grid.length || col > grid[0].length) {
       throw new IllegalArgumentException("Invalid row or y.");
     }
-    System.out.println("row: " + row + " col: " + col);
     return grid[row][col].getCellState() == CellState.HOLE;
   }
 

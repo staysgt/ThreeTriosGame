@@ -57,6 +57,14 @@ public class NESWCard implements Card {
     public int getValue() {
       return this.value;
     }
+
+    public String toString() {
+      if (this.getValue() != 10) {
+        return String.valueOf(this.getValue());
+      } else {
+        return "A";
+      }
+    }
   }
 
   @Override
