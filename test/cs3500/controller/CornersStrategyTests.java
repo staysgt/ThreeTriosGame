@@ -88,15 +88,37 @@ public class CornersStrategyTests<C extends Card> {
   }
 
   @Test
-  public void testCorn() {
+  public void testCornChecksCorrectSpaces() {
     modelNH.startGame(cardFile.getCards(), holes33.getCols(), holes33.getRows(),
             holes33.getRowConfig());
-
     // playing to grid so that most corners are full
-
     CornersStrategy<C> corners = new CornersStrategy<>();
     corners.choosePosition(modelNH, Player.BLUE);
-    System.out.println(corners.getTranscript());
+
+    String expected = "Checking: row: 0 col: 0 hand: horse 2 7 8 2\n" +
+            "New best move: row: 0 col: 0 hand: horse 2 7 8 2\n" +
+            "Checking: row: 0 col: 0 hand: giraffe 2 9 A 3\n" +
+            "Checking: row: 0 col: 0 hand: dog 5 9 3 2\n" +
+            "New best move: row: 0 col: 0 hand: dog 5 9 3 2\n" +
+            "Checking: row: 0 col: 0 hand: pig 3 2 1 9\n" +
+            "Checking: row: 0 col: 0 hand: chicken 3 A A 3\n" +
+            "Checking: row: 0 col: 2 hand: horse 2 7 8 2\n" +
+            "Checking: row: 0 col: 2 hand: giraffe 2 9 A 3\n" +
+            "Checking: row: 0 col: 2 hand: dog 5 9 3 2\n" +
+            "New best move: row: 0 col: 2 hand: dog 5 9 3 2\n" +
+            "Checking: row: 0 col: 2 hand: pig 3 2 1 9\n" +
+            "Checking: row: 0 col: 2 hand: chicken 3 A A 3\n" +
+            "Checking: row: 2 col: 0 hand: horse 2 7 8 2\n" +
+            "Checking: row: 2 col: 0 hand: giraffe 2 9 A 3\n" +
+            "Checking: row: 2 col: 0 hand: dog 5 9 3 2\n" +
+            "Checking: row: 2 col: 0 hand: pig 3 2 1 9\n" +
+            "Checking: row: 2 col: 0 hand: chicken 3 A A 3\n" +
+            "Checking: row: 2 col: 2 hand: horse 2 7 8 2\n" +
+            "Checking: row: 2 col: 2 hand: giraffe 2 9 A 3\n" +
+            "Checking: row: 2 col: 2 hand: dog 5 9 3 2\n" +
+            "Checking: row: 2 col: 2 hand: pig 3 2 1 9\n" +
+            "Checking: row: 2 col: 2 hand: chicken 3 A A 3\n";
+    Assert.assertEquals(expected, corners.getTranscript());
 
   }
 

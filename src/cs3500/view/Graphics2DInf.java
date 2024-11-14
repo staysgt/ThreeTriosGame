@@ -1,6 +1,7 @@
 package cs3500.view;
 
-import java.awt.*;
+import java.awt.Graphics2D;
+import java.awt.Graphics;
 
 /**
  * This is the interface for the 2D graphics class.

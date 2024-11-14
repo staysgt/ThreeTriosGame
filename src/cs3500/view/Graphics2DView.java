@@ -6,14 +6,14 @@ import cs3500.model.Player;
 import cs3500.model.ReadOnlyGameGridModel;
 
 
-import java.awt.*;
+import java.awt.Font;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Graphics;
 import java.awt.geom.Path2D;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.JLabel;
 
 /**
  * Creates the 2D graphics.
@@ -40,7 +40,8 @@ public class Graphics2DView<C extends Card> extends FunGraphics implements Graph
     int numCols = model.getBoard()[0].length;
     int cellWidth = getWidth() / (numCols + 2);
     int cellHeight = getHeight() / (numRows);
-//    int cellHeightHand = getHeight() / (model.getHand(Player.BLUE).size());
+
+    //int cellHeightHand = getHeight() / (model.getHand(Player.BLUE).size());
 
     for (int row = 0; row < numRows; row++) {
       for (int col = 1; col <= numCols; col++) {
@@ -64,7 +65,7 @@ public class Graphics2DView<C extends Card> extends FunGraphics implements Graph
         int xPos = handCols[col];
         int yPos = rowCard * cellHeightHand;
         if (col == 0 && model.getHand(Player.RED).size() == rowCard) {
-
+          // for when red has less cards than blue
         } else {
           fillRect(g2d, xPos, yPos, cellWidth, cellHeightHand, rowCard, col, true);
 
@@ -137,7 +138,8 @@ public class Graphics2DView<C extends Card> extends FunGraphics implements Graph
     g2d.drawRect(x, y, width, height);
   }
 
-  private void addCardNumbers(Graphics2D g2d, int x, int y, int width, int height, NESWCard currCard) {
+  private void addCardNumbers(Graphics2D g2d, int x, int y, int width, int height,
+                              NESWCard currCard) {
     int horizCenter = x + width / 2;
     int vertCenter = y + height / 2;
 
@@ -190,7 +192,7 @@ public class Graphics2DView<C extends Card> extends FunGraphics implements Graph
     private int cardIndex;
 
     /**
-     * This is the constructor for card placement
+     * This is the constructor for card placement.
      *
      * @param x      coordinate of card
      * @param y      coordinate of card
@@ -224,16 +226,5 @@ public class Graphics2DView<C extends Card> extends FunGraphics implements Graph
     }
 
   }
-//    private AffineTransform getLogicalToPhysicalTransformation() {
-//        AffineTransform transform = new AffineTransform();
-//        Dimension logicalDims = getLogicalDims
-//    }
-
-
-//    private void drawGrid(Graphics2D g2d) {
-//        AffineTransform modelToLogicalXForm
-//
-//
-//    }
 
 }

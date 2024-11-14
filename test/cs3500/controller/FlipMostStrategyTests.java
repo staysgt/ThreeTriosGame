@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Random;
@@ -26,11 +25,8 @@ public class FlipMostStrategyTests<C extends Card> {
   private final ConfigurationFileReader noHoles;
   private final NESWCardFileReader<C> cardFile;
 
-//  private final ConfigurationFileReader walkableholes;
-
   {
     try {
-//      walkableholes = new ConfigurationFileReader("src" + File.separator + "walkableholes");
       cardFile = new NESWCardFileReader<>("src/cardsexample");
       noHoles = new ConfigurationFileReader("src/noholes");
     } catch (FileNotFoundException e) {

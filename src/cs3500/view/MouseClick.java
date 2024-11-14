@@ -1,10 +1,16 @@
 package cs3500.view;
 
-import cs3500.model.*;
+import cs3500.model.Card;
+import cs3500.model.ReadOnlyGameGridModel;
+import cs3500.model.Player;
+import cs3500.model.Cell;
+import cs3500.model.CellState;
 
-import javax.swing.*;
 
-import java.awt.*;
+import javax.swing.JPanel;
+import javax.swing.BorderFactory;
+
+import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
@@ -12,7 +18,6 @@ import java.util.List;
 /**
  * This class implements the MouseListener java interface and allows
  * the user to click on the card and print it to the grid.
- *
  * @param <C> card
  */
 public class MouseClick<C extends Card> implements MouseListener {
@@ -22,13 +27,14 @@ public class MouseClick<C extends Card> implements MouseListener {
   private Player currentPlayer;
   private int cardIdx = -1;
   private boolean cardSelected = false;
-  private JPanel highlightPanel;
+  private final JPanel highlightPanel;
 
   /**
-   * This is the constructor for the MouseClick class.
-   * @param model takes in the model
-   * @param view takes in the view
-   * @param startingPlayer lets the user know who is starting
+   * Constructor for MouseClick.
+   *
+   * @param model          the game model
+   * @param view           the view component
+   * @param startingPlayer the starting player
    */
   public MouseClick(ReadOnlyGameGridModel<C> model, Graphics2DView<C> view, Player startingPlayer) {
     this.model = model;
@@ -63,57 +69,61 @@ public class MouseClick<C extends Card> implements MouseListener {
 
       if (row >= 0 && row < numRows && col >= 0 && col < numCols) {
         placeCard(row, col);
-        System.out.println("The coordinates of the grid are " + x + "," + y);
+        System.out.println("These are the coordinates: " + row + ", " + col);
+      } else {
+        highlightPanel.setVisible(false);
       }
-    }
-
-    if (!cardSelected) {
-      view.repaint();
+    } else {
+      highlightPanel.setVisible(false);
     }
 
     view.repaint();
   }
 
-
   private void selectCard(int y, Player player) {
     List<C> hand = model.getHand(player);
     int numCards = hand.size();
-    int cardWidth = view.getWidth() / 5;
-    int cardHeight = view.getHeight() / numCards;
+
+    int cardHeight = view.getHeight() / Math.max(numCards, 1);
     int cardIndex = y / cardHeight;
 
     if (cardIndex >= 0 && cardIndex < numCards) {
-      if (cardIdx == cardIndex && cardSelected) {
-        cardIdx = -1;
-        cardSelected = false;
-        highlightPanel.setVisible(false);
+      cardIdx = cardIndex;
+      cardSelected = true;
+      C card = hand.get(cardIndex);
+      System.out.println("The card is " + card.toString());
+
+      int x;
+      if (player == Player.RED) {
+        x = 0;
       } else {
-        cardIdx = cardIndex;
-        cardSelected = true;
-        C selectedCard = hand.get(cardIndex);
-        System.out.println("The card is " + selectedCard.toString());
-
-        int x;
-        if (player == Player.RED) {
-          x = 0;
-        } else {
-          x = view.getWidth() - cardWidth;
-        }
-
-        int yPos = cardIndex * cardHeight;
-
-        highlightPanel.setBounds(x, yPos, cardWidth, cardHeight);
-        highlightPanel.setVisible(true);
+        x = view.getWidth() - (view.getWidth() / 5);
       }
+
+      int yPos = cardIndex * cardHeight;
+
+      highlightPanel.setBounds(x, yPos, view.getWidth() / 5, cardHeight);
+      highlightPanel.setVisible(true);
+    } else {
+      cardIdx = -1;
+      cardSelected = false;
+      highlightPanel.setVisible(false);
     }
   }
 
-
   private void placeCard(int row, int col) {
     Cell<C> cell = model.getBoard()[row][col];
+    List<C> hand = model.getHand(currentPlayer);
+
+    if (hand.size() == 1) {
+      throw new IllegalStateException("Can't place last card");
+    }
+
+    if (cell.getCellState() == null) {
+      throw new IllegalArgumentException("Invalid cell");
+    }
 
     if (cell.getCellState() == CellState.CARD_SPACE && cell.getCard() == null) {
-      List<C> hand = model.getHand(currentPlayer);
       C selectedCard = hand.get(cardIdx);
       cell.setCard(selectedCard, currentPlayer);
       hand.remove(cardIdx);
@@ -124,18 +134,28 @@ public class MouseClick<C extends Card> implements MouseListener {
       } else {
         currentPlayer = Player.BLUE;
       }
-
-      System.out.println("It is now " + currentPlayer + "'s turn");
     }
+
+    System.out.println("It is now " + currentPlayer + "'s turn");
   }
 
+  @Override
+  public void mousePressed(MouseEvent e) {
+    // empty comment
+  }
 
   @Override
-  public void mousePressed(MouseEvent e) {}
+  public void mouseReleased(MouseEvent e) {
+    //empty comment
+  }
+
   @Override
-  public void mouseReleased(MouseEvent e) {}
+  public void mouseEntered(MouseEvent e) {
+    //empty comment
+  }
+
   @Override
-  public void mouseEntered(MouseEvent e) {}
-  @Override
-  public void mouseExited(MouseEvent e) {}
+  public void mouseExited(MouseEvent e) {
+    //empty comment
+  }
 }
