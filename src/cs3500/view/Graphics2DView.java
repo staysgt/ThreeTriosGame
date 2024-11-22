@@ -7,6 +7,7 @@ import cs3500.model.ReadOnlyGameGridModel;
 
 
 import java.awt.Font;
+import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Graphics;
@@ -14,6 +15,7 @@ import java.awt.geom.Path2D;
 import java.util.List;
 
 import javax.swing.JLabel;
+import javax.swing.JFrame;
 
 /**
  * Creates the 2D graphics.
@@ -187,8 +189,8 @@ public class Graphics2DView<C extends Card> extends FunGraphics implements Graph
    */
   public class CardPlacement extends Path2D.Double {
 
-    private double width;
-    private double height;
+    private final double width;
+    private final double height;
     private int cardIndex;
 
     /**
@@ -224,6 +226,24 @@ public class Graphics2DView<C extends Card> extends FunGraphics implements Graph
     public int getCardIndex() {
       return cardIndex;
     }
+
+  }
+
+
+  @Override
+  public void setVisible(boolean b) {
+    MouseClick mouseClickListener = new MouseClick(model, this, model.getTurn());
+    this.addMouseListener(mouseClickListener);
+
+    JFrame frame = new JFrame("Three Trios");
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setLocation(0, 0);
+    frame.setPreferredSize(new Dimension(1200, 1200));
+
+    frame.add(this);
+
+    frame.pack();
+    frame.setVisible(true);
 
   }
 

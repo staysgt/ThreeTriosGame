@@ -77,7 +77,11 @@ Current classes within the controller:
 
 ## View Explanation
 
-- Currently, the view renders a textual view of the grid.
+For the view, we created a GUI. This GUI uses a 2D graphics class we created as the view.
+This makes it so that the grid is able to be visualized. We also used the java MouseListener
+interface and implemented it into a mouseClick class. With this, either player is able to
+highlight the card they want to place and put it on the grid. This is changes from the original
+view that renders a textual view of the grid.
 
 ## Invariances in the code
 

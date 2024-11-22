@@ -7,5 +7,9 @@ import cs3500.model.Card;
  * @param <C> card.
  */
 public interface TextView<C extends Card> {
-  public void render();
+
+  /**
+   * This renders the text view.
+   */
+  void render();
 }
