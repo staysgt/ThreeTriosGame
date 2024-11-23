@@ -414,6 +414,13 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     return statuses;
   }
 
+  @Override
+  public void selectCell(int row, int col) {
+    checkGameStarted();
+    Cell selectedCell = grid[row][col];
+
+  }
+
 
 }
 

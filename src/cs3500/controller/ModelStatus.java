@@ -1,14 +1,12 @@
 package cs3500.controller;
 
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.util.EventListener;
 
 public interface ModelStatus {
 
-  void keyTyped(KeyEvent e);
+  void addEventListener(EventListener listener);
 
-  void keyListener(KeyListener listener);
-
+  void removeEventListener(EventListener listener);
 
 }

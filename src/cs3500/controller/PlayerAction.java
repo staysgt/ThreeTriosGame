@@ -1,15 +1,23 @@
 package cs3500.controller;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
+import cs3500.model.Player;
 
 public interface PlayerAction {
 
-  void setListener(ActionListener e);
+  /**
+   * This selects a card from the user's hand.
+   *
+   * @param cardIndex the index of the card in the user's hand
+   */
+  void selectCard(Player player, int cardIndex);
 
-  void actionPerformed(ActionEvent e);
+  /**
+   * This selects a cell on the game board.
+   *
+   * @param row the row of the selected cell
+   * @param col the column of the selected cell
+   */
+  void selectCell(int row, int col);
 
 }

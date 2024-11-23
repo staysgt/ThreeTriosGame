@@ -1,43 +1,81 @@
 package cs3500.controller;
 
-import cs3500.model.GameGridModel;
+import java.util.Objects;
+
+import cs3500.model.Card;
+import cs3500.model.GameGrid;
+import cs3500.view.Features;
 import cs3500.view.Graphics2DView;
 
+/**
+ * Class for a three trios controller.
+ *
+ * @param <C>
+ */
+public class ThreeTriosController<C extends Card> implements Features {
 
-public class ThreeTriosController {
+  private final GameGrid<C> model;
+  private IPlayer<C> player;
+  private Graphics2DView<C> view;
 
-  private GameGridModel gameGridModel;
-  private Graphics2DView graphicsView;
-  // takes in the player implementation
-  private RedController redController;
-  private BlueController blueController;
+  private int cardIdx;
+  private int col;
+  private int row;
 
-  private double width;
-  private double height;
 
-  public ThreeTriosController(GameGridModel gameGridModel,) {
-    this.gameGridModel;
-
+  /**
+   * Constructor for a three trioes controller.
+   *
+   * @param model  model the game is being played on.
+   * @param player player who is making hte moves.
+   * @param view   view for the specified player.
+   * @throws NullPointerException if given arguments are null
+   */
+  public ThreeTriosController(GameGrid<C> model, IPlayer<C> player,
+                              Graphics2DView<C> view) {
+    this.model = Objects.requireNonNull(model);
+    this.view = Objects.requireNonNull(view);
+    this.player = Objects.requireNonNull(player);
   }
 
 
-  // controller can only take action when it is the players turn
-  private void playersTurn() {
-
-    if (gameGridModel == redController) {
-//            return Graphics2DView.CardPlacement(, , height, width);
-    }
+  /**
+   * This selects a cell on the game board.
+   * <p>
+   * //   * @param row the row of the selected cell
+   * //   * @param col the column of the selected cell
+   *
+   * @throws IllegalArgumentException if it is an invalid card index
+   */
+//  @Override
+//  public void selectCell(int row, int col) {
+//
+//    model.selectCell(row, col);
+//
+//    if (model.isCellHole(row, col) == false) {
+//      throw new IllegalArgumentException("Invalid cell.");
+//    }
+//
+//    if (model.isCellPlayable(row, col) == false) {
+//      throw new IllegalArgumentException("Invalid cell.");
+//    }
+//
+//  }
+  @Override
+  public void cardSelected(int cardIdx) {
+    this.cardIdx = cardIdx;
   }
 
-  // The controller must prevent a player from selecting cards in their opponent’s hand at all times.
+  @Override
+  public void cellSelected(int row, int col) {
+    this.row = row;
+    this.col = col;
+  }
 
-  // The controller must ensure that the player has selected a card from their hand to play before they choose a
-  // cell to play to. Once both have occurred and both are valid, then the player can make the move and pass over/switch
-  // over to the other player.
+  player.makeMove();
 
+  view.setVisible(true);
 
-  // The controller should ensure that its view stays up to date, even if the player is a machine and doesn’t interact
-  // with the view directly. (use the toggleColor)
 
 
   // need to display the winning score

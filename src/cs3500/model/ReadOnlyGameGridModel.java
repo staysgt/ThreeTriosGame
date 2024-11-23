@@ -114,5 +114,8 @@ public interface ReadOnlyGameGridModel<C extends Card> {
    */
   List<GameGrid<C>> getGameStatuses();
 
+  void selectCell(int row, int col);
+
+
 }
 

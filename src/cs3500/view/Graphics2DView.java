@@ -14,8 +14,7 @@ import java.awt.Graphics;
 import java.awt.geom.Path2D;
 import java.util.List;
 
-import javax.swing.JLabel;
-import javax.swing.JFrame;
+import javax.swing.*;
 
 /**
  * Creates the 2D graphics.
@@ -221,6 +220,7 @@ public class Graphics2DView<C extends Card> extends FunGraphics implements Graph
 
     /**
      * This gets the card index.
+     *
      * @return the card index
      */
     public int getCardIndex() {
@@ -244,7 +244,28 @@ public class Graphics2DView<C extends Card> extends FunGraphics implements Graph
 
     frame.pack();
     frame.setVisible(true);
+  }
+
+  //MouseClick<C> cellSelected;
+  //MouseClick<C> cardSelected;
+
+  //public void addFeatures(Features features) {
+  //for (int row = 0; row < model.getBoard().length; row++) {
+  //for (int col = 0; col < model.getBoard()[0].length; col++) {
+  //  model.getBoard()[row][col].addMouseListener(new MouseClick<>(model, this, model.getTurn()));
+  // }
+
+  //}
+
+  public void addFeature(Features features, int row, int col, int cardIdx) {
+
+    JButton cellSelectedButton = new JButton("Click Me (Cell)");
+    JButton cardSelectedButton = new JButton("Click Me (Card)");
+
+    cellSelectedButton.addMouseListener(evt -> features.cellSelected(row, col));
+    cardSelectedButton.addMouseListener(evt -> features.cardSelected(cardIdx));
 
   }
 
 }
+

@@ -22,11 +22,14 @@ import java.util.List;
  */
 public class MouseClick<C extends Card> implements MouseListener {
 
+  private int selectedRow;
+  private int selectedCol;
+  private int selectedIdx;
+
   private final Graphics2DView<C> view;
   private final ReadOnlyGameGridModel<C> model;
   private Player currentPlayer;
   private int cardIdx = -1;
-  private boolean cardSelected = false;
   private final JPanel highlightPanel;
 
   /**
@@ -68,6 +71,8 @@ public class MouseClick<C extends Card> implements MouseListener {
       int row = y / cellHeight;
 
       if (row >= 0 && row < numRows && col >= 0 && col < numCols) {
+        selectedCol = col;
+        selectedRow = row;
         placeCard(row, col);
         System.out.println("These are the coordinates: " + row + ", " + col);
       } else {
@@ -89,8 +94,8 @@ public class MouseClick<C extends Card> implements MouseListener {
 
     if (cardIndex >= 0 && cardIndex < numCards) {
       cardIdx = cardIndex;
-      cardSelected = true;
       C card = hand.get(cardIndex);
+      selectedIdx = cardIndex;
       System.out.println("The card is " + card.toString());
 
       int x;
@@ -106,7 +111,6 @@ public class MouseClick<C extends Card> implements MouseListener {
       highlightPanel.setVisible(true);
     } else {
       cardIdx = -1;
-      cardSelected = false;
       highlightPanel.setVisible(false);
     }
   }
@@ -139,6 +143,7 @@ public class MouseClick<C extends Card> implements MouseListener {
     System.out.println("It is now " + currentPlayer + "'s turn");
   }
 
+
   @Override
   public void mousePressed(MouseEvent e) {
     // empty comment
@@ -158,4 +163,34 @@ public class MouseClick<C extends Card> implements MouseListener {
   public void mouseExited(MouseEvent e) {
     //empty comment
   }
+
+  /**
+   * Gets current column selected.
+   *
+   * @return current column selected.
+   */
+  public int getCol() {
+    return selectedCol;
+  }
+
+  /**
+   * Gets current row selected.
+   *
+   * @return current row selected.
+   */
+
+  public int getRow() {
+    return selectedRow;
+  }
+
+  /**
+   * Gets current card selected.
+   *
+   * @return current card selected.
+   */
+  public int getIdx() {
+    return selectedIdx;
+  }
+
+
 }
