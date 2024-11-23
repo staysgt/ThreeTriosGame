@@ -101,7 +101,7 @@ public class FlipMostStrategyTests<C extends Card> {
 
     ThreeTriosStrategy<C> flipMost = new FlipMostStrategy<>();
     Assert.assertEquals(Arrays.toString(new int[]{0, 0, 0}),
-            Arrays.toString(flipMost.choosePosition(mockModel, Player.RED).getFirst()));
+            Arrays.toString(flipMost.choosePosition(mockModel, Player.RED).get(0)));
     Assert.assertEquals(1, flipMost.choosePosition(mockModel, Player.RED).size());
     // should check this many spaces based on the number of spaces available/ cards left in game
     Assert.assertEquals(110, mockModel.getTranscript().split("\n").length);

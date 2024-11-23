@@ -142,7 +142,7 @@ public class CardLessLikelyTests<C extends Card> {
       System.out.println(Arrays.toString(bestMoves.get(i)));
     }
     // 0, 0, 0 is best move
-    Assert.assertEquals(Arrays.toString(bestMoves.getFirst()), Arrays.toString(new int[]{0, 0, 0}));
+    Assert.assertEquals(Arrays.toString(bestMoves.get(0)), Arrays.toString(new int[]{0, 0, 0}));
 
   }
 

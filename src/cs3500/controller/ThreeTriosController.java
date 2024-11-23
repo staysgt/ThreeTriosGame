@@ -15,8 +15,8 @@ import cs3500.view.Graphics2DView;
 public class ThreeTriosController<C extends Card> implements Features {
 
   private final GameGrid<C> model;
-  private IPlayer<C> player;
-  private Graphics2DView<C> view;
+  private final IPlayer<C> player;
+  private final Graphics2DView<C> view;
 
   private int cardIdx;
   private int col;
@@ -36,31 +36,9 @@ public class ThreeTriosController<C extends Card> implements Features {
     this.model = Objects.requireNonNull(model);
     this.view = Objects.requireNonNull(view);
     this.player = Objects.requireNonNull(player);
+    view.setVisible(true);
   }
 
-
-  /**
-   * This selects a cell on the game board.
-   * <p>
-   * //   * @param row the row of the selected cell
-   * //   * @param col the column of the selected cell
-   *
-   * @throws IllegalArgumentException if it is an invalid card index
-   */
-//  @Override
-//  public void selectCell(int row, int col) {
-//
-//    model.selectCell(row, col);
-//
-//    if (model.isCellHole(row, col) == false) {
-//      throw new IllegalArgumentException("Invalid cell.");
-//    }
-//
-//    if (model.isCellPlayable(row, col) == false) {
-//      throw new IllegalArgumentException("Invalid cell.");
-//    }
-//
-//  }
   @Override
   public void cardSelected(int cardIdx) {
     this.cardIdx = cardIdx;
@@ -70,11 +48,9 @@ public class ThreeTriosController<C extends Card> implements Features {
   public void cellSelected(int row, int col) {
     this.row = row;
     this.col = col;
+    player.makeMove(row, col, cardIdx);
   }
 
-  player.makeMove();
-
-  view.setVisible(true);
 
 
 

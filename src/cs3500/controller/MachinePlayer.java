@@ -18,8 +18,8 @@ public class MachinePlayer<C extends Card> implements IPlayer<C> {
   }
 
   @Override
-  public void makeMove() {
-    int[] move = strategy.choosePosition(model, color).getFirst();
+  public void makeMove(int row, int col, int handIdx) {
+    int[] move = strategy.choosePosition(model, color).get(0);
     model.playToGrid(move[0], move[1], move[2]);
   }
 

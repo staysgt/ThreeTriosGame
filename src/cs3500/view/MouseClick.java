@@ -7,8 +7,7 @@ import cs3500.model.Cell;
 import cs3500.model.CellState;
 
 
-import javax.swing.JPanel;
-import javax.swing.BorderFactory;
+import javax.swing.*;
 
 import java.awt.Color;
 import java.awt.event.MouseEvent;
@@ -31,6 +30,7 @@ public class MouseClick<C extends Card> implements MouseListener {
   private Player currentPlayer;
   private int cardIdx = -1;
   private final JPanel highlightPanel;
+
 
   /**
    * Constructor for MouseClick.
@@ -71,20 +71,25 @@ public class MouseClick<C extends Card> implements MouseListener {
       int row = y / cellHeight;
 
       if (row >= 0 && row < numRows && col >= 0 && col < numCols) {
-        selectedCol = col;
-        selectedRow = row;
-        placeCard(row, col);
-        System.out.println("These are the coordinates: " + row + ", " + col);
+        if (!model.isCellPlayable(row, col)) {
+          new PopUpWindow(currentPlayer, "This cell is already occupied!").setVisible(true);
+        } else {
+          selectedCol = col;
+          selectedRow = row;
+          placeCard(row, col);
+          System.out.println("These are the coordinates: " + row + ", " + col);
+        }
       } else {
         highlightPanel.setVisible(false);
+        new PopUpWindow(currentPlayer, "Please select a card before placing it!").setVisible(true);
       }
-    } else {
-      highlightPanel.setVisible(false);
+      if (model.isGameOver()) {
+        new PopUpWindow(currentPlayer, "Game is over!").setVisible(true);
+      }
+
+      view.repaint();
     }
-
-    view.repaint();
   }
-
   private void selectCard(int y, Player player) {
     List<C> hand = model.getHand(player);
     int numCards = hand.size();

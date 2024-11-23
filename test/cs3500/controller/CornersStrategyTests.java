@@ -49,7 +49,7 @@ public class CornersStrategyTests<C extends Card> {
 
     Assert.assertEquals(1, corners.choosePosition(modelNH, Player.RED).size());
     Assert.assertEquals(Arrays.toString(new int[]{0, 0, 4}),
-            Arrays.toString(corners.choosePosition(modelNH, Player.RED).getFirst()));
+            Arrays.toString(corners.choosePosition(modelNH, Player.RED).get(0)));
 
   }
 
@@ -83,7 +83,7 @@ public class CornersStrategyTests<C extends Card> {
 
     CornersStrategy<C> corners = new CornersStrategy<>();
     Assert.assertEquals(Arrays.toString(new int[]{0, 4, 2}),
-            Arrays.toString(corners.choosePosition(modelNH, Player.BLUE).getFirst()));
+            Arrays.toString(corners.choosePosition(modelNH, Player.BLUE).get(0)));
 
   }
 

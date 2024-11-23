@@ -22,7 +22,9 @@ import javax.swing.*;
 public class Graphics2DView<C extends Card> extends FunGraphics implements Graphics2DInf {
 
   ReadOnlyGameGridModel<C> model;
-
+  private Features features;
+  private MouseClick<C> cardSelected;
+  private MouseClick<C> cellSelected;
   /**
    * Constructor for Graphics2DView.
    *
@@ -232,7 +234,7 @@ public class Graphics2DView<C extends Card> extends FunGraphics implements Graph
 
   @Override
   public void setVisible(boolean b) {
-    MouseClick mouseClickListener = new MouseClick(model, this, model.getTurn());
+    MouseClick<C> mouseClickListener = new MouseClick<>(model, this, model.getTurn());
     this.addMouseListener(mouseClickListener);
 
     JFrame frame = new JFrame("Three Trios");
@@ -246,24 +248,20 @@ public class Graphics2DView<C extends Card> extends FunGraphics implements Graph
     frame.setVisible(true);
   }
 
-  //MouseClick<C> cellSelected;
-  //MouseClick<C> cardSelected;
 
-  //public void addFeatures(Features features) {
-  //for (int row = 0; row < model.getBoard().length; row++) {
-  //for (int col = 0; col < model.getBoard()[0].length; col++) {
-  //  model.getBoard()[row][col].addMouseListener(new MouseClick<>(model, this, model.getTurn()));
-  // }
-
-  //}
-
-  public void addFeature(Features features, int row, int col, int cardIdx) {
-
+  /**
+   * This incorporates the features interface and uses action listeners for it.
+   *
+   * @param features features class variable
+   */
+  public void addFeature(Features features) {
     JButton cellSelectedButton = new JButton("Click Me (Cell)");
     JButton cardSelectedButton = new JButton("Click Me (Card)");
 
-    cellSelectedButton.addMouseListener(evt -> features.cellSelected(row, col));
-    cardSelectedButton.addMouseListener(evt -> features.cardSelected(cardIdx));
+
+    cellSelectedButton.addActionListener(e -> features.cellSelected(cellSelected.getRow(), cellSelected.getCol()));
+
+    cardSelectedButton.addActionListener(e -> features.cardSelected(cardSelected.getIdx()));
 
   }
 

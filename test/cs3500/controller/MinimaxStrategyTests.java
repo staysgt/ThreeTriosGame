@@ -63,12 +63,12 @@ public class MinimaxStrategyTests<C extends Card> {
     modelNH.playToGrid(0, 1, 0);
 
     // R
-    int[] flip2 = flipMostStrategy.choosePosition(modelNH, Player.RED).getFirst();
+    int[] flip2 = flipMostStrategy.choosePosition(modelNH, Player.RED).get(0);
     modelNH.playToGrid(flip2[0], flip2[1], flip2[2]);
     modelNH.playToGrid(1, 0, 0);
 
     // R
-    int[] flip3 = flipMostStrategy.choosePosition(modelNH, Player.RED).getFirst();
+    int[] flip3 = flipMostStrategy.choosePosition(modelNH, Player.RED).get(0);
     modelNH.playToGrid(flip3[0], flip3[1], flip3[2]);
     MiniMaxStrategy<C> minimax = new MiniMaxStrategy<>();
     minimax.choosePosition(modelNH, Player.BLUE);
