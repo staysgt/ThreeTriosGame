@@ -7,7 +7,9 @@ import cs3500.model.Cell;
 import cs3500.model.CellState;
 
 
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.BorderFactory;
+
 
 import java.awt.Color;
 import java.awt.event.MouseEvent;
@@ -71,7 +73,7 @@ public class MouseClick<C extends Card> implements MouseListener {
       int row = y / cellHeight;
 
       if (row >= 0 && row < numRows && col >= 0 && col < numCols) {
-        if (!model.isCellPlayable(row, col)) {
+        if (!model.legalPlay(row, col)) {
           new PopUpWindow(currentPlayer, "This cell is already occupied!").setVisible(true);
         } else {
           selectedCol = col;
@@ -90,7 +92,9 @@ public class MouseClick<C extends Card> implements MouseListener {
       view.repaint();
     }
   }
+
   private void selectCard(int y, Player player) {
+
     List<C> hand = model.getHand(player);
     int numCards = hand.size();
 

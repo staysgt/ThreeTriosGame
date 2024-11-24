@@ -29,16 +29,6 @@ public interface ReadOnlyGameGridModel<C extends Card> {
 
 
   /**
-   * This is used to see if the cell on the grid is empty or not.
-   * @param row coordinate of grid
-   * @param col coordinate of grid
-   * @return true if cell is empty and false if cell isn't empty
-   * @throws IllegalStateException if game has not started or game is over
-   * @throws IllegalArgumentException if x or y < 0, or x > num of col, y > num of rows
-   */
-  boolean isCellPlayable(int row, int col);
-
-  /**
    * This is used to see if the cell is a hole or not.
    * @param row coordinate of grid
    * @param col coordinate of grid

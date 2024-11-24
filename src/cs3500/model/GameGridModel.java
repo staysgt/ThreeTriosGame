@@ -291,16 +291,6 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   }
 
   @Override
-  public boolean isCellPlayable(int row, int col) {
-    checkGameStarted();
-    if (row < 0 || col < 0 || row > grid.length || col > grid[0].length) {
-      throw new IllegalArgumentException("Invalid row or y.");
-    }
-
-    return grid[row][col].getCellState().equals(CellState.EMPTY);
-  }
-
-  @Override
   public boolean isCellHole(int row, int col) {
     checkGameStarted();
     if (row < 0 || col < 0 || row > grid.length || col > grid[0].length) {

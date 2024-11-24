@@ -127,3 +127,36 @@ create more complex
 versions of the strategies. The usage of these strategies and their implementations can be found in
 the test/cs3500/controller
 package.
+
+## Changes for part 3:
+
+In our model we realized that there was an uneccsary method we had called isCellPlayable, so we
+got rid of this (we already had legalPlay method which had the same functinoality). We updated the
+MouseClicked method to be able to include a pop-up window. This window will let the player know if
+they are making mistakes such as placing a card in a non-empty cell or a hole cell. It also lets the
+player know if they clicked on a cell without selecting a card.
+
+## New classes in the controller
+
+In the controller we added a few new packages. First we created the IPlayer interface that contains
+methods containing the actions that a player can do (ie makeMove). This has two subclasses for the
+two different types of players, human and machine. Based on the type of player that is making the
+moves, they will behave differently, and these subclasses describe those differences. We also made
+test classes for both of these classes in the controller subpackage in the test directory. And then
+we also added the ThreeTriosController, which is the overall controller for the game. This class
+implements the features interface from the view class in attempts to be able to keep up in real time
+when the player makes a click on the board. However, we had some issues when trying to actually do
+this, so currently, our controller does not support human players. But, we were able to get it to
+work using the AI strategies, and had the view update accordingly to this. Because our controller is
+not fully working as intended, we did not make the proper tests for the human aspects in the actual
+controller. Had we gotten this far, we would've created mocks of the controller for ease of testing.
+
+## New classes in the view
+
+In the view we created a popUpWindow class which creates a new JPanel that will be called into the
+MouseClick class. This includes a small panel with a close statement at the bottom so the user can
+exit out of it. Overall, this helps the game function more thoroughly because the player is informed
+when they make a mistake. We also created a features interface which helps the controller. This
+interface is used for the board. In the GameGridFrameView we incoorporated this interface and used
+action listeners to help the board respond to specific event such as the user placing a card onto a
+cell.

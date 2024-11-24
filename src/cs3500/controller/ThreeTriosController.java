@@ -10,17 +10,17 @@ import cs3500.view.Graphics2DView;
 /**
  * Class for a three trios controller.
  *
- * @param <C>
+ * @param <C> generic type for a card.
  */
 public class ThreeTriosController<C extends Card> implements Features {
 
-  private final GameGrid<C> model;
+  //  private final GameGrid<C> model;
   private final IPlayer<C> player;
-  private final Graphics2DView<C> view;
+  //  private final Graphics2DView<C> view;
 
   private int cardIdx;
-  private int col;
-  private int row;
+  //  private int col;
+  //  private int row;
 
 
   /**
@@ -33,10 +33,18 @@ public class ThreeTriosController<C extends Card> implements Features {
    */
   public ThreeTriosController(GameGrid<C> model, IPlayer<C> player,
                               Graphics2DView<C> view) {
-    this.model = Objects.requireNonNull(model);
-    this.view = Objects.requireNonNull(view);
+    // this.model = Objects.requireNonNull(model);
+    // this.view = Objects.requireNonNull(view);
     this.player = Objects.requireNonNull(player);
     view.setVisible(true);
+  }
+
+
+  /**
+   * Makes the move for the AI player.
+   */
+  public void listen() {
+    player.makeMove();
   }
 
   @Override
@@ -46,12 +54,10 @@ public class ThreeTriosController<C extends Card> implements Features {
 
   @Override
   public void cellSelected(int row, int col) {
-    this.row = row;
-    this.col = col;
+    //    this.row = row;
+    //    this.col = col;
     player.makeMove(row, col, cardIdx);
   }
-
-
 
 
   // need to display the winning score

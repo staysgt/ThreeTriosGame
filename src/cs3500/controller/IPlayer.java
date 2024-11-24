@@ -13,4 +13,10 @@ public interface IPlayer<C extends Card> {
    */
   void makeMove(int row, int col, int handIdx);
 
+  /**
+   * Makes a move for a mahcine player.
+   */
+
+  void makeMove();
+
 }

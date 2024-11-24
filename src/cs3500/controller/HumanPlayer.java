@@ -3,7 +3,6 @@ package cs3500.controller;
 import java.util.Objects;
 
 import cs3500.model.GameGrid;
-import cs3500.model.Player;
 import cs3500.model.Card;
 
 /**
@@ -19,6 +18,11 @@ public class HumanPlayer<C extends Card> implements IPlayer<C> {
   @Override
   public void makeMove(int row, int col, int handIdx) {
     model.playToGrid(row, col, handIdx);
+  }
+
+  @Override
+  public void makeMove() {
+    // does not use this -> no action performed
   }
 
 }

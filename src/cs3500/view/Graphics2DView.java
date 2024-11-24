@@ -14,7 +14,11 @@ import java.awt.Graphics;
 import java.awt.geom.Path2D;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+
+
 
 /**
  * Creates the 2D graphics.
@@ -30,8 +34,11 @@ public class Graphics2DView<C extends Card> extends FunGraphics implements Graph
    *
    * @param model model that the view is based off of.
    */
+
   public Graphics2DView(ReadOnlyGameGridModel<C> model) {
+
     this.model = model;
+
   }
 
   @Override
@@ -93,8 +100,8 @@ public class Graphics2DView<C extends Card> extends FunGraphics implements Graph
         g2d.setColor(new Color(59, 59, 58));
       } else {
         if (model.getBoard()[row][col - 1].getCard() != null) {
-          Color c = model.getBoard()[row][col - 1].getOwner() == Player.BLUE ?
-                  new Color(119, 170, 252) : new Color(252, 119, 119);
+          Color c = model.getBoard()[row][col - 1].getOwner() == Player.BLUE
+                  ? new Color(119, 170, 252) : new Color(252, 119, 119);
           g2d.setColor(c);
         } else {
           g2d.setColor(new Color(250, 234, 90));
@@ -255,13 +262,16 @@ public class Graphics2DView<C extends Card> extends FunGraphics implements Graph
    * @param features features class variable
    */
   public void addFeature(Features features) {
-    JButton cellSelectedButton = new JButton("Click Me (Cell)");
-    JButton cardSelectedButton = new JButton("Click Me (Card)");
+    JButton cellSelectedButton = new JButton("Click Me");
+    JButton cardSelectedButton = new JButton("Click Me");
 
 
-    cellSelectedButton.addActionListener(e -> features.cellSelected(cellSelected.getRow(), cellSelected.getCol()));
+    cellSelectedButton.addActionListener(e ->
+            features.cellSelected(cellSelected.getRow(),
+                    cellSelected.getCol()));
 
-    cardSelectedButton.addActionListener(e -> features.cardSelected(cardSelected.getIdx()));
+    cardSelectedButton.addActionListener(e ->
+            features.cardSelected(cardSelected.getIdx()));
 
   }
 
