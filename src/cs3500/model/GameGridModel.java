@@ -30,7 +30,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   private Cell<C>[][] grid;
   private List<C> blueHand = new ArrayList<>();
   private List<C> redHand = new ArrayList<>();
-  private boolean gameStarted = false;
+  protected boolean gameStarted = false;
   private final Random r;
 
   private final List<GameGridModel<C>> statuses = new ArrayList<>();
