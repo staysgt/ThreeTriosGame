@@ -1,22 +1,24 @@
 package cs3500.model;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cs3500.controller.ConfigurationFileReader;
+import cs3500.controller.NESWCardFileReader;
 import cs3500.threetrios.provider.model.CellType;
 import cs3500.threetrios.provider.model.PlayerColor;
 import cs3500.threetrios.provider.model.ThreeTriosModel;
 import cs3500.threetrios.provider.view.ModelFeatures;
 
-public class OurModelToProviderAdapter<C extends Card> extends GameGridModel<C> implements ThreeTriosModel<C> {
+public class OurModelToProviderAdapter<C extends Card & cs3500.threetrios.provider.model.Card> extends GameGridModel<C> implements ThreeTriosModel<C> {
   @Override
   public void playToCell(int row, int col, int cardInHandIdx) {
     playToGrid(row, col, cardInHandIdx);
   }
 
-  // same as our start game method...
   @Override
-  public void startGame(List<C> deck, int width, int height, List<List<CellType>> cellTypes) {
+  public void providedStartGame(List<C> deck, int width, int height, List<List<CellType>> cellTypes) {
     List<String> cellTypeToString = new ArrayList<>();
     for (int row = 0; row < cellTypes.size(); row++) {
       StringBuilder sb = new StringBuilder();
@@ -33,8 +35,21 @@ public class OurModelToProviderAdapter<C extends Card> extends GameGridModel<C> 
   }
 
   @Override
-  public void startGame(String gridFilePath, String deckFilePath) {
+  public void providedStartGame(String gridFilePath, String deckFilePath) {
+    // start game using gridfilepath and deckfilepath -> should not be in the modle
+    ConfigurationFileReader conFigFile;
+    NESWCardFileReader<C> cardFile;
 
+    try {
+      conFigFile = new ConfigurationFileReader(gridFilePath);
+      cardFile = new NESWCardFileReader<>(deckFilePath);
+
+    } catch (FileNotFoundException e) {
+      throw new RuntimeException(e);
+    }
+
+    startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(),
+            conFigFile.getRowConfig());
   }
 
   @Override
@@ -137,5 +152,19 @@ public class OurModelToProviderAdapter<C extends Card> extends GameGridModel<C> 
       }
     }
     return score;
+  }
+
+  @Override
+  public PlayerColor providedGetWinner() {
+    if (!gameStarted) {
+      throw new IllegalStateException("Game has not started");
+    } else if (!isGameOver()) {
+      throw new IllegalStateException("Game has not ended");
+    }
+    if (getPlayerScore(PlayerColor.RED) > getPlayerScore(PlayerColor.BLUE)) {
+      return PlayerColor.RED;
+    } else {
+      return PlayerColor.BLUE;
+    }
   }
 }

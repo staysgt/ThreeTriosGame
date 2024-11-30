@@ -69,14 +69,14 @@ public interface ReadonlyThreeTriosModel<C extends Card> {
    * @return the player that won the game
    * @throws IllegalStateException if the game has not over or the game is not won
    */
-  PlayerColor getWinner();
+  PlayerColor providedGetWinner();
 
   /**
    * Returns a copy of the current player's hand in the game. This means modifying
    * the returned list or the cards in the list has no effect on the game.
    *
    * @return a new list containing the cards in the player's hand in the same order
-   * as in the current state of the game.
+   *         as in the current state of the game.
    * @throws IllegalStateException if the game has not started
    */
   List<C> getHand(PlayerColor player);

@@ -1,7 +1,6 @@
 package cs3500.threetrios.provider.view;
 
-import cs3500.threetrios.model.PlayerColor;
-
+import cs3500.threetrios.provider.model.PlayerColor;
 /**
  * Interface for the GUI view of the Three Trios game.
  */
@@ -31,7 +30,6 @@ public interface ThreeTriosGraphicalView {
 
   /**
    * Displays a message to the user.
-   *
    * @param str the message to be displayed
    */
   void showMessage(String str);

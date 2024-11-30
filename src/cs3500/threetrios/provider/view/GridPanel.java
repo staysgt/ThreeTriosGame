@@ -6,10 +6,11 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.*;
 
-import cs3500.threetrios.model.Card;
-import cs3500.threetrios.model.CellType;
-import cs3500.threetrios.model.PlayerColor;
-import cs3500.threetrios.model.ReadonlyThreeTriosModel;
+import cs3500.threetrios.provider.model.Card;
+import cs3500.threetrios.provider.model.CellType;
+import cs3500.threetrios.provider.model.PlayerColor;
+import cs3500.threetrios.provider.model.ReadonlyThreeTriosModel;
+
 
 class GridPanel extends JPanel {
 

@@ -7,9 +7,9 @@ import java.util.List;
 
 import javax.swing.*;
 
-import cs3500.threetrios.model.Card;
-import cs3500.threetrios.model.PlayerColor;
-import cs3500.threetrios.model.ReadonlyThreeTriosModel;
+import cs3500.threetrios.provider.model.Card;
+import cs3500.threetrios.provider.model.PlayerColor;
+import cs3500.threetrios.provider.model.ReadonlyThreeTriosModel;
 
 class HandPanel extends JPanel {
 

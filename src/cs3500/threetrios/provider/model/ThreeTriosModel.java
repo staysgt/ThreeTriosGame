@@ -25,8 +25,8 @@ public interface ThreeTriosModel<C extends Card> extends ReadonlyThreeTriosModel
    * This is called the combo step, and continues until no cards are flipped.
    * After the battle phase, the turn changes over to the other player.
    *
-   * @param row           a 0-index number representing the row of the cell to be played to
-   * @param col           a 0-index number representing the column of the cell to be played to
+   * @param row             a 0-index number representing the row of the cell to be played to
+   * @param col             a 0-index number representing the column of the cell to be played to
    * @param cardInHandIdx a 0-index number representing the index of the card to play from the hand
    * @throws IllegalStateException    if the game has not started or the game is over
    * @throws IllegalArgumentException if the given cell is out of bounds,
@@ -55,7 +55,7 @@ public interface ThreeTriosModel<C extends Card> extends ReadonlyThreeTriosModel
    * @throws IllegalArgumentException if the dimensions of cellTypes does not match the dimensions
    *                                  of the game grid
    */
-  void startGame(List<C> deck, int width, int height, List<List<CellType>> cellTypes);
+  void providedStartGame(List<C> deck, int width, int height, List<List<CellType>> cellTypes);
 
 
   /**
@@ -73,7 +73,7 @@ public interface ThreeTriosModel<C extends Card> extends ReadonlyThreeTriosModel
    * @throws IllegalArgumentException if either of the given files cannot be found or is in the
    *                                  wrong format
    */
-  void startGame(String gridFilePath, String deckFilePath);
+  void providedStartGame(String gridFilePath, String deckFilePath);
 
   /**
    * Adds the feature callbacks (controller) to handle user actions.
