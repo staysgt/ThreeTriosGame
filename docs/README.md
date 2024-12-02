@@ -160,3 +160,12 @@ when they make a mistake. We also created a features interface which helps the c
 interface is used for the board. In the GameGridFrameView we incoorporated this interface and used
 action listeners to help the board respond to specific event such as the user placing a card onto a
 cell.
+
+## Command Line Arguments
+
+When running the program, the first entered string will be associated with the first player, and the
+second entered string will be associated with teh second player. If a human player is desired, enter
+'human', otherwise, enter the desired strategy for the machine player ('flipmost', 'corners',
+'minimax', or 'cardlesslikely'). Example of running the jar file with two machine players using
+flipmost and corner strategy respectively:
+java -jar src/ThreeTriosGame2.jar flipmost corners
