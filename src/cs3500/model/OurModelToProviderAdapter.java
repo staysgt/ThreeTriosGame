@@ -11,14 +11,16 @@ import cs3500.threetrios.provider.model.PlayerColor;
 import cs3500.threetrios.provider.model.ThreeTriosModel;
 import cs3500.threetrios.provider.view.ModelFeatures;
 
-public class OurModelToProviderAdapter<C extends Card & cs3500.threetrios.provider.model.Card> extends GameGridModel<C> implements ThreeTriosModel<C> {
+public class OurModelToProviderAdapter<C extends Card & cs3500.threetrios.provider.model.Card>
+        extends GameGridModel<C> implements ThreeTriosModel<C> {
   @Override
   public void playToCell(int row, int col, int cardInHandIdx) {
     playToGrid(row, col, cardInHandIdx);
   }
 
   @Override
-  public void providedStartGame(List<C> deck, int width, int height, List<List<CellType>> cellTypes) {
+  public void providedStartGame(List<C> deck, int width, int height,
+                                List<List<CellType>> cellTypes) {
     List<String> cellTypeToString = new ArrayList<>();
     for (int row = 0; row < cellTypes.size(); row++) {
       StringBuilder sb = new StringBuilder();

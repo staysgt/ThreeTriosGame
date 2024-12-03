@@ -27,7 +27,7 @@ public class MouseClick<C extends Card> implements MouseListener {
   private int selectedCol;
   private int selectedIdx;
 
-  private final Graphics2DView<C> view;
+  private final Graphics2DInf view;
   private final ReadOnlyGameGridModel<C> model;
   private Player currentPlayer;
   private int cardIdx = -1;
@@ -41,16 +41,23 @@ public class MouseClick<C extends Card> implements MouseListener {
    * @param view           the view component
    * @param startingPlayer the starting player
    */
-  public MouseClick(ReadOnlyGameGridModel<C> model, Graphics2DView<C> view, Player startingPlayer) {
+  public MouseClick(ReadOnlyGameGridModel<C> model, Graphics2DInf view, Player startingPlayer) {
     this.model = model;
     this.view = view;
     this.currentPlayer = startingPlayer;
 
+    highlightPanel = getJPanel(view);
+  }
+
+
+  private JPanel getJPanel(Graphics2DInf view) {
+    final JPanel highlightPanel;
     highlightPanel = new JPanel();
     highlightPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
     highlightPanel.setOpaque(false);
     view.add(highlightPanel);
     highlightPanel.setVisible(false);
+    return highlightPanel;
   }
 
   @Override

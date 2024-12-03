@@ -15,6 +15,7 @@ import java.awt.geom.Path2D;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
@@ -23,7 +24,7 @@ import javax.swing.JLabel;
 /**
  * Creates the 2D graphics.
  */
-public class Graphics2DView<C extends Card> extends FunGraphics implements Graphics2DInf {
+public class Graphics2DView<C extends Card> extends JPanel implements Graphics2DInf {
 
   ReadOnlyGameGridModel<C> model;
   private Features features;
@@ -86,10 +87,10 @@ public class Graphics2DView<C extends Card> extends FunGraphics implements Graph
   }
 
 
-  @Override
-  public Graphics create() {
-    return super.create(0, 0, getWidth(), getHeight());
+  protected Graphics create(int x, int y, int width, int height) {
+    return create(x, y, width, height);
   }
+
 
   @Override
   public void fillRect(Graphics2D g2d, int x, int y, int width, int height, int row, int col,
@@ -187,6 +188,16 @@ public class Graphics2DView<C extends Card> extends FunGraphics implements Graph
     }
   }
 
+  @Override
+  public Graphics create() {
+    return create(getX(), getY(), getWidth(), getHeight());
+  }
+
+  @Override
+  public void add(JPanel highlightPanel) {
+    super.add(highlightPanel);
+  }
+
   protected void setFont(JLabel label, String name, int style, int size) {
     label.setFont(new Font(name, style, size));
   }
@@ -273,6 +284,11 @@ public class Graphics2DView<C extends Card> extends FunGraphics implements Graph
     cardSelectedButton.addActionListener(e ->
             features.cardSelected(cardSelected.getIdx()));
 
+  }
+
+  @Override
+  public void repaint() {
+    super.repaint();
   }
 
 }

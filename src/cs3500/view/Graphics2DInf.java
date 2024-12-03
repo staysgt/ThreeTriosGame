@@ -3,6 +3,8 @@ package cs3500.view;
 import java.awt.Graphics2D;
 import java.awt.Graphics;
 
+import javax.swing.*;
+
 /**
  * This is the interface for the 2D graphics class.
  */
@@ -35,7 +37,37 @@ public interface Graphics2DInf {
 
   /**
    * This is the graphics.
-   * @return the create
+   * @return the created graphics.
    */
   Graphics create();
+
+  /**
+   * Gets the height of the grid.
+   *
+   * @return height of the grid
+   */
+
+  int getHeight();
+
+
+  /**
+   * Gets the width of the grid
+   *
+   * @return width of the grid.
+   */
+  int getWidth();
+
+  /**
+   * Add method for highlighting a panel.
+   *
+   * @param highlightPanel the panel being highlighted
+   */
+  void add(JPanel highlightPanel);
+
+
+  /**
+   * Repaints the grid.
+   */
+  void repaint();
+
 }
