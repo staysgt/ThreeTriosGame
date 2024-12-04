@@ -31,6 +31,38 @@ public interface Card {
    * Overrides hashCode method to ensure two equal cards have same hashcode value.
    * @return hashcode of given card.
    */
-  public int hashCode();
+  int hashCode();
+
+
+  /**
+   * Gets the east value on a card.
+   *
+   * @return east value of a card.
+   */
+  AttVal getEastOurs();
+
+  /**
+   * Gets the west value on a card.
+   *
+   * @return west value of a card.
+   */
+
+  AttVal getWestOurs();
+
+  /**
+   * Gets the north value on a card.
+   *
+   * @return north value of a card.
+   */
+  AttVal getNorthOurs();
+
+
+  /**
+   * Gets the south value on a card.
+   *
+   * @return south value of a card.
+   */
+  AttVal getSouthOurs();
+
 
 }

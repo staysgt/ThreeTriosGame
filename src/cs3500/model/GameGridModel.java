@@ -117,7 +117,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   }
 
   // Performs the battle stage.
-  private void battle(Cell[][] grid, int rowIdx, int colIdx, boolean battleN, boolean battleE,
+  private void battle(Cell<C>[][] grid, int rowIdx, int colIdx, boolean battleN, boolean battleE,
                       boolean battleS,
                       boolean battleW, Player player) {
 
@@ -131,13 +131,13 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     battleWest(grid, rowIdx, colIdx, battleW, player);
   }
 
-  private void battleWest(Cell[][] grid, int rowIdx, int colIdx, boolean battleW, Player player) {
+  private void battleWest(Cell<C>[][] grid, int rowIdx, int colIdx, boolean battleW, Player player) {
     if (battleW && colIdx - 1 >= 0 && colIdx < grid[0].length
             && grid[rowIdx][colIdx - 1].getCard() != null) {
       NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();
       NESWCard adjCard = (NESWCard) grid[rowIdx][colIdx - 1].getCard();
       if (adjCard != null && currCard != null && grid[rowIdx][colIdx - 1].getOwner() != player
-              && currCard.getWest().getValue() > adjCard.getEast().getValue()) {
+              && currCard.getWestOurs().getValue() > adjCard.getEastOurs().getValue()) {
         grid[rowIdx][colIdx - 1].setOwner(player);
         battle(grid, rowIdx, colIdx - 1, true, false, true,
                 true, player);
@@ -145,12 +145,12 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     }
   }
 
-  private void battleEast(Cell[][] grid, int rowIdx, int colIdx, boolean battleE, Player player) {
+  private void battleEast(Cell<C>[][] grid, int rowIdx, int colIdx, boolean battleE, Player player) {
     if (battleE && colIdx + 1 < grid[0].length && grid[rowIdx][colIdx + 1].getCard() != null) {
       NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();
       NESWCard adjCard = (NESWCard) grid[rowIdx][colIdx + 1].getCard();
       if (adjCard != null && currCard != null && grid[rowIdx][colIdx + 1].getOwner() != player
-              && currCard.getEast().getValue() > adjCard.getWest().getValue()) {
+              && currCard.getEastOurs().getValue() > adjCard.getWestOurs().getValue()) {
         grid[rowIdx][colIdx + 1].setOwner(player);
         battle(grid, rowIdx, colIdx + 1, true, true, true,
                 false, player);
@@ -158,14 +158,14 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     }
   }
 
-  private void battleSouth(Cell[][] grid, int rowIdx, int colIdx, boolean battleS, Player player) {
+  private void battleSouth(Cell<C>[][] grid, int rowIdx, int colIdx, boolean battleS, Player player) {
     if (battleS && rowIdx - 1 >= 0 && colIdx < grid[0].length
             && grid[rowIdx - 1][colIdx].getCard() != null) {
       NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();
       NESWCard adjCard = (NESWCard) grid[rowIdx - 1][colIdx].getCard();
       if (adjCard != null && currCard != null
               && grid[rowIdx - 1][colIdx].getOwner() != player
-              && currCard.getSouth().getValue() > adjCard.getNorth().getValue()) {
+              && currCard.getSouthOurs().getValue() > adjCard.getNorthOurs().getValue()) {
         grid[rowIdx - 1][colIdx].setOwner(player);
         battle(grid, rowIdx - 1, colIdx, false, true, true,
                 true, player);
@@ -173,13 +173,13 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     }
   }
 
-  private void battleNorth(Cell[][] grid, int rowIdx, int colIdx, boolean battleN, Player player) {
+  private void battleNorth(Cell<C>[][] grid, int rowIdx, int colIdx, boolean battleN, Player player) {
     if (battleN && rowIdx + 1 < grid.length && colIdx < grid[0].length
             && grid[rowIdx + 1][colIdx].getCard() != null) {
       NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();
       NESWCard adjCard = (NESWCard) grid[rowIdx + 1][colIdx].getCard();
       if (adjCard != null && currCard != null && grid[rowIdx + 1][colIdx].getOwner() != player
-              && currCard.getNorth().getValue() > adjCard.getSouth().getValue()) {
+              && currCard.getNorthOurs().getValue() > adjCard.getSouthOurs().getValue()) {
         grid[rowIdx + 1][colIdx].setOwner(player);
         battle(grid, rowIdx + 1, colIdx, true, true, false,
                 true, player);
@@ -253,9 +253,9 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < cols; col++) {
         if (rowConf.get(row).charAt(col) == 'X') {
-          grid[row][col] = new Cell<>(CellState.HOLE);
+          grid[row][col] = new Cell(CellState.HOLE);
         } else {
-          grid[row][col] = new Cell<>(CellState.CARD_SPACE);
+          grid[row][col] = new Cell(CellState.CARD_SPACE);
         }
       }
     }
@@ -335,12 +335,12 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   }
 
   @Override
-  public Cell<C>[][] getBoard() {
+  public Cell[][] getBoard() {
     checkGameStarted();
-    Cell<C>[][] copy = new Cell[grid.length][grid[0].length];
+    Cell[][] copy = new Cell[grid.length][grid[0].length];
     for (int row = 0; row < grid.length; row++) {
       for (int col = 0; col < grid[row].length; col++) {
-        copy[row][col] = new Cell<>(grid[row][col].getCellState(), grid[row][col].getCard(),
+        copy[row][col] = new Cell<Card>(grid[row][col].getCellState(), grid[row][col].getCard(),
                 grid[row][col].getOwner());
       }
     }
@@ -354,7 +354,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     return count;
   }
 
-  private int getCount(Cell[][] grid, Player player) {
+  private int getCount(Cell<C>[][] grid, Player player) {
     checkGameStarted();
     int count = 0;
     for (int row = 0; row < grid.length; row++) {
@@ -381,7 +381,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     if (grid[row][col].getCard() != null) {
       throw new IllegalArgumentException("Spot is already taken up");
     }
-    Cell[][] copy = getBoard();
+    Cell<C>[][] copy = getBoard();
     copy[row][col].setCard(getHand(player).get(handIdx), player);
     int before = getCount(copy, player);
 

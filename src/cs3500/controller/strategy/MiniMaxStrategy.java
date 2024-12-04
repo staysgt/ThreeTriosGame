@@ -70,8 +70,8 @@ public class MiniMaxStrategy<C extends Card> implements ThreeTriosStrategy<C> {
       GameGrid<C> alteredModel = (GameGrid<C>) model.getGameStatuses().get(numMoves);
 
 
-      Cell<C>[][] grid = currModel.getBoard();
-      Cell<C>[][] alteredGrid = alteredModel.getBoard();
+      Cell<Card>[][] grid = currModel.getBoard();
+      Cell<Card>[][] alteredGrid = alteredModel.getBoard();
       List<C> currHand = currModel.getHand(opposingPlayer);
       int[] mostRecentMove = getMostRecentMove(grid, alteredGrid, currHand);
 
@@ -144,7 +144,7 @@ public class MiniMaxStrategy<C extends Card> implements ThreeTriosStrategy<C> {
 
 
   // gets the most recent move performed and returns the hand idx,
-  private int[] getMostRecentMove(Cell<C>[][] grid, Cell<C>[][] alteredGrid, List<C> playersHand) {
+  private int[] getMostRecentMove(Cell<Card>[][] grid, Cell<Card>[][] alteredGrid, List<C> playersHand) {
     int changedRow = -1;
     int changedCol = -1;
     int handIdx = -1;

@@ -11,7 +11,7 @@ import cs3500.threetrios.provider.model.PlayerColor;
 import cs3500.threetrios.provider.model.ThreeTriosModel;
 import cs3500.threetrios.provider.view.ModelFeatures;
 
-public class OurModelToProviderAdapter<C extends Card & cs3500.threetrios.provider.model.Card>
+public class OurModelToProviderAdapter<C extends OTPCardAdapter>
         extends GameGridModel<C> implements ThreeTriosModel<C> {
   @Override
   public void playToCell(int row, int col, int cardInHandIdx) {
@@ -86,7 +86,8 @@ public class OurModelToProviderAdapter<C extends Card & cs3500.threetrios.provid
 
   @Override
   public C getCardAt(int row, int col) {
-    return getBoard()[row][col].getCard();
+    C card = new OTPCardAdapter(getBoard()[row][col].getCard());
+    return card;
   }
 
   @Override

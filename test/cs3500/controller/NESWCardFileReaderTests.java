@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.io.FileNotFoundException;
 
+import cs3500.model.AttVal;
 import cs3500.model.NESWCard;
 
 /**
@@ -45,8 +46,8 @@ public class NESWCardFileReaderTests {
   }
 
 
-  private NESWCard.AttVal intToAV(int num) {
-    for (NESWCard.AttVal attackValue : NESWCard.AttVal.values()) {
+  private AttVal intToAV(int num) {
+    for (AttVal attackValue : AttVal.values()) {
       if (num == attackValue.getValue()) {
         return attackValue;
       }

@@ -11,7 +11,7 @@ import cs3500.threetrios.provider.model.Card;
 import cs3500.threetrios.provider.model.PlayerColor;
 import cs3500.threetrios.provider.model.ReadonlyThreeTriosModel;
 
-class HandPanel extends JPanel {
+public class HandPanel extends JPanel {
 
   private final ReadonlyThreeTriosModel model;
   private final String playerColor;

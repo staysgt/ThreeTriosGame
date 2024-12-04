@@ -1,9 +1,9 @@
 package cs3500.view;
 
 import cs3500.model.Card;
+import cs3500.model.CellInterface;
 import cs3500.model.ReadOnlyGameGridModel;
 import cs3500.model.Player;
-import cs3500.model.Cell;
 import cs3500.model.CellState;
 
 
@@ -132,10 +132,10 @@ public class MouseClick<C extends Card> implements MouseListener {
   }
 
   private void placeCard(int row, int col) {
-    Cell<C> cell = model.getBoard()[row][col];
+    CellInterface cell = model.getBoard()[row][col];
     List<C> hand = model.getHand(currentPlayer);
 
-    if (hand.size() == 1) {
+    if (model.getHand(Player.BLUE).size() == 1 && model.getHand(Player.RED).size() == 0) {
       throw new IllegalStateException("Can't place last card");
     }
 

@@ -33,45 +33,6 @@ public class NESWCard implements Card {
     this.south = south;
   }
 
-  /**
-   * Enum values that represent the possible attack values for a card.
-   */
-  public enum AttVal {
-    ONE(1),
-    TWO(2),
-    THREE(3),
-    FOUR(4),
-    FIVE(5),
-    SIX(6),
-    SEVEN(7),
-    EIGHT(8),
-    NINE(9),
-    A(10);
-
-    private final int value;
-
-    AttVal(int i) {
-      this.value = i;
-    }
-
-    public int getValue() {
-      return this.value;
-    }
-
-    /**
-     * Creates a string version of an attack value.
-     *
-     * @return string version of the attack value.
-     */
-    public String toString() {
-      if (this.getValue() != 10) {
-        return String.valueOf(this.getValue());
-      } else {
-        return "A";
-      }
-    }
-  }
-
   @Override
   public String getName() {
     return this.cardName;
@@ -88,19 +49,24 @@ public class NESWCard implements Card {
     return sb.toString();
   }
 
-  public AttVal getEast() {
+
+  @Override
+  public AttVal getEastOurs() {
     return east;
   }
 
-  public AttVal getNorth() {
+  @Override
+  public AttVal getNorthOurs() {
     return north;
   }
 
-  public AttVal getWest() {
+  @Override
+  public AttVal getWestOurs() {
     return west;
   }
 
-  public AttVal getSouth() {
+  @Override
+  public AttVal getSouthOurs() {
     return south;
   }
 

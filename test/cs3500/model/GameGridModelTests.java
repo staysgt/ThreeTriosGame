@@ -48,8 +48,8 @@ public class GameGridModelTests<C extends Card> {
     Assert.assertTrue(model.getHand(Player.RED).contains(card));
   }
 
-  private NESWCard.AttVal intToAV(int num) {
-    for (NESWCard.AttVal attackValue : NESWCard.AttVal.values()) {
+  private AttVal intToAV(int num) {
+    for (AttVal attackValue : AttVal.values()) {
       if (num == attackValue.getValue()) {
         return attackValue;
       }
@@ -258,7 +258,7 @@ public class GameGridModelTests<C extends Card> {
     GameGridModel model = new GameGridModel();
     model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(),
             conFigFile.getRowConfig());
-    Cell[][] cells = model.getBoard();
+    Cell<Card>[][] cells = model.getBoard();
     assertNull(cells[0][0].getCard());
   }
 
@@ -379,10 +379,10 @@ public class GameGridModelTests<C extends Card> {
     model.playToGrid(0, 1, 0);
 
     GameGridModel<C> modelMidGame = (GameGridModel<C>) model.getGameStatuses().get(2);
-    NESWCard horse = new NESWCard("horse", NESWCard.AttVal.TWO, NESWCard.AttVal.SEVEN,
-            NESWCard.AttVal.EIGHT, NESWCard.AttVal.TWO);
-    NESWCard bear = new NESWCard("bear", NESWCard.AttVal.THREE, NESWCard.AttVal.FIVE,
-            NESWCard.AttVal.SEVEN, NESWCard.AttVal.EIGHT);
+    NESWCard horse = new NESWCard("horse", AttVal.TWO, AttVal.SEVEN,
+            AttVal.EIGHT, AttVal.TWO);
+    NESWCard bear = new NESWCard("bear", AttVal.THREE, AttVal.FIVE,
+            AttVal.SEVEN, AttVal.EIGHT);
 
 
     Assert.assertEquals(bear, modelMidGame.getBoard()[0][0].getCard());

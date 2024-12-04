@@ -2,25 +2,26 @@ package cs3500.view;
 
 import java.awt.*;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
 
 import cs3500.model.Card;
 import cs3500.model.Player;
 import cs3500.model.ReadOnlyGameGridModel;
 import cs3500.threetrios.provider.model.PlayerColor;
 import cs3500.threetrios.provider.model.ReadonlyThreeTriosModel;
-import cs3500.threetrios.provider.view.Features;
+import cs3500.threetrios.provider.view.HandPanel;
 import cs3500.threetrios.provider.view.ThreeTriosGraphicalViewImplementation;
 
 public class ProviderViewToOurViewAdapter<C extends Card & cs3500.threetrios.provider.model.Card>
-        extends ThreeTriosGraphicalViewImplementation
-        implements Graphics2DInf {
+        extends ThreeTriosGraphicalViewImplementation implements Graphics2DInf {
+
 
 
   ReadOnlyGameGridModel<C> model;
-  private cs3500.view.Features features;
-  private MouseClick<C> cardSelected;
-  private MouseClick<C> cellSelected;
+  private HandPanel redHandPanel;
+  private HandPanel blueHandPanel;
 
   /**
    * Constructs a new ThreeTriosGraphicalView.
@@ -28,12 +29,15 @@ public class ProviderViewToOurViewAdapter<C extends Card & cs3500.threetrios.pro
    * @param model     the model being displayed by the view
    * @param playColor
    */
-  public ProviderViewToOurViewAdapter(ReadonlyThreeTriosModel<?> model, PlayerColor playColor) {
+  public ProviderViewToOurViewAdapter(ReadonlyThreeTriosModel<?> model, PlayerColor playColor, HandPanel redHandPanel, HandPanel blueHandPanel) {
     super(model, playColor);
+    this.redHandPanel = redHandPanel;
+    this.blueHandPanel = blueHandPanel;
+
   }
 
   @Override
-  public void makeVisible() {
+  public final void makeVisible() {
     MouseClick<C> mouseClickListener = new MouseClick<>(this.model, this, this.model.getTurn());
     this.addMouseListener(mouseClickListener);
 
@@ -50,7 +54,7 @@ public class ProviderViewToOurViewAdapter<C extends Card & cs3500.threetrios.pro
   }
 
   @Override
-  public void fillRect(Graphics2D g2d, int x, int y, int width, int height, int row, int col, boolean isHand) {
+  public final void fillRect(Graphics2D g2d, int x, int y, int width, int height, int row, int col, boolean isHand) {
     if (!isHand) {
       if (model.isCellHole(row, col - 1)) {
         g2d.setColor(new Color(59, 59, 58));
@@ -81,7 +85,7 @@ public class ProviderViewToOurViewAdapter<C extends Card & cs3500.threetrios.pro
   }
 
   @Override
-  public void drawLines(Graphics2D g2d, int x, int y, int width, int height) {
+  public final void drawLines(Graphics2D g2d, int x, int y, int width, int height) {
     x = model.getBoard().length;
     y = model.getBoard()[0].length;
 
@@ -104,11 +108,21 @@ public class ProviderViewToOurViewAdapter<C extends Card & cs3500.threetrios.pro
 
   protected Graphics create(int x, int y, int width, int height) {
     return create(x, y, width, height);
+
   }
 
   @Override
-  public void add(JPanel highlightPanel) {
+  public final void add(JPanel highlightPanel) {
     super.add(highlightPanel);
   }
 
+
+  @Override
+  public final void resetSelection(PlayerColor player) {
+    if (player.equals(PlayerColor.RED)) {
+      redHandPanel.resetSelection();
+    } else {
+      blueHandPanel.resetSelection();
+    }
+  }
 }

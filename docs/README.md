@@ -174,3 +174,8 @@ java -jar src/ThreeTriosGame2.jar flipmost corners
 
 We made some changes from our HW7 view model, because we felt that the way that we had our view was
 not well organized. We
+
+## Changes made to view in HW8
+
+Our view used the concrete implementation of a card (NESWCard) rather than the interface. We updated
+it to make sure that it was reliant on our interface rather than a class.

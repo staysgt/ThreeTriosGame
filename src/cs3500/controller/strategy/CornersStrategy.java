@@ -41,14 +41,14 @@ public class CornersStrategy<C extends Card> implements ThreeTriosStrategy<C> {
             NESWCard currCard = (NESWCard) model.getHand(player).get(handIdx);
             int power = 0;
             if (currRow == 0) {
-              power += currCard.getSouth().getValue();
+              power += currCard.getSouthOurs().getValue();
             } else {
-              power += currCard.getNorth().getValue();
+              power += currCard.getNorthOurs().getValue();
             }
             if (currCol == 0) {
-              power += currCard.getEast().getValue();
+              power += currCard.getEastOurs().getValue();
             } else {
-              power += currCard.getWest().getValue();
+              power += currCard.getWestOurs().getValue();
             }
             if (power > maxPower) {
               transcript.append("New best move: row: " + currRow + " col: " + currCol + " hand: " +

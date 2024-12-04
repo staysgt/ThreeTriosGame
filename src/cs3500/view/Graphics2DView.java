@@ -1,7 +1,6 @@
 package cs3500.view;
 
 import cs3500.model.Card;
-import cs3500.model.NESWCard;
 import cs3500.model.Player;
 import cs3500.model.ReadOnlyGameGridModel;
 
@@ -68,10 +67,19 @@ public class Graphics2DView<C extends Card> extends JPanel implements Graphics2D
       // gets for the blue player since it will always be the larger hand
       for (int rowCard = 0; rowCard < model.getHand(Player.BLUE).size(); rowCard++) {
         int cellHeightHand;
-        if (col == 0 && model.getHand(Player.RED).size() < model.getHand(Player.BLUE).size()) {
-          cellHeightHand = getHeight() / (model.getHand(Player.RED).size());
+        if (col == 0 && model.getTurn() == Player.BLUE) {
+          if (!model.getHand(Player.RED).isEmpty()) {
+            cellHeightHand = getHeight() / (model.getHand(Player.RED).size());
+          } else {
+            cellHeightHand = getHeight();
+          }
+
         } else {
-          cellHeightHand = getHeight() / (model.getHand(Player.BLUE).size());
+          if (!model.getHand(Player.BLUE).isEmpty()) {
+            cellHeightHand = getHeight() / (model.getHand(Player.BLUE).size());
+          } else {
+            cellHeightHand = getHeight();
+          }
         }
         int xPos = handCols[col];
         int yPos = rowCard * cellHeightHand;
@@ -120,24 +128,28 @@ public class Graphics2DView<C extends Card> extends JPanel implements Graphics2D
 
 
     if (isHand) {
-      List<NESWCard> hand = (List<NESWCard>)
-              (col == 0 ? model.getHand(Player.RED) : model.getHand(Player.BLUE));
+      List<C> hand = (col == 0 ? model.getHand(Player.RED) : model.getHand(Player.BLUE));
       // row = the idx of the card in the hand
       if (col == 0 && row == model.getHand(Player.RED).size()) {
         // should not be added to the card
       } else {
-        NESWCard currCard = hand.get(row);
-        addCardNumbers(g2d, x, y, width, height, currCard);
+        // sets the current card to be the selected card values
+        C currCard = hand.get(row);
+        if (!model.getHand(model.getTurn()).isEmpty()) {
+          addCardNumbers(g2d, x, y, width, height, currCard);
+        }
       }
     } else {
+      // adds the card numbers to the board
       if (model.getBoard()[row][col - 1].getCard() != null) {
-        NESWCard currCard = (NESWCard) model.getBoard()[row][col - 1].getCard();
+        C currCard = (C) model.getBoard()[row][col - 1].getCard();
         addCardNumbers(g2d, x, y, width, height, currCard);
       }
     }
 
+    // adds the card to the board
     if (!isHand && model.getBoard()[row][col - 1].getCard() != null) {
-      NESWCard currCard = (NESWCard) model.getBoard()[row][col - 1].getCard();
+      C currCard = (C) model.getBoard()[row][col - 1].getCard();
       addCardNumbers(g2d, x, y, width, height, currCard);
     }
 
@@ -150,7 +162,7 @@ public class Graphics2DView<C extends Card> extends JPanel implements Graphics2D
   }
 
   private void addCardNumbers(Graphics2D g2d, int x, int y, int width, int height,
-                              NESWCard currCard) {
+                              C currCard) {
     int horizCenter = x + width / 2;
     int vertCenter = y + height / 2;
 
@@ -161,14 +173,18 @@ public class Graphics2DView<C extends Card> extends JPanel implements Graphics2D
 
     g2d.setFont(new Font("Arial", Font.BOLD, fontSize));
     g2d.setColor(Color.BLACK);
-    g2d.drawString(currCard.getNorth().toString(), horizCenter - offX / 2,
+    g2d.drawString(currCard.getNorthOurs().toString(), horizCenter - offX / 2,
             vertCenter - offY / 2);
-    g2d.drawString(currCard.getSouth().toString(), horizCenter - offX / 2,
+    g2d.drawString(currCard.getSouthOurs().toString(), horizCenter - offX / 2,
             vertCenter + offY);
-    g2d.drawString(currCard.getWest().toString(), horizCenter - (offX * 4),
+    g2d.drawString(currCard.getWestOurs().toString(), horizCenter - (offX * 4),
             vertCenter + offY / 2);
-    g2d.drawString(currCard.getEast().toString(), horizCenter + (offX * 3),
+    g2d.drawString(currCard.getEastOurs().toString(), horizCenter + (offX * 3),
             vertCenter + offY / 2);
+  }
+
+  private void addCardNumbersEmptyCard() {
+
   }
 
   @Override
