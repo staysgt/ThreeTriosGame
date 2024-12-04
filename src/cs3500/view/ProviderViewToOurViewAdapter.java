@@ -82,17 +82,33 @@ public class ProviderViewToOurViewAdapter<C extends Card & cs3500.threetrios.pro
 
   @Override
   public void drawLines(Graphics2D g2d, int x, int y, int width, int height) {
+    x = model.getBoard().length;
+    y = model.getBoard()[0].length;
 
+    g2d.setColor(Color.BLACK);
+    for (int row = 0; row < x; row++) {
+      int lineY = row * height;
+      g2d.drawLine(0, lineY, x * width, lineY);
+    }
+
+    for (int col = 0; col < y; col++) {
+      int lineX = col * width;
+      g2d.drawLine(lineX, 0, lineX, y * height);
+    }
   }
 
   @Override
   public Graphics create() {
-    return null;
+    return create(getX(), getY(), getWidth(), getHeight());
+  }
+
+  protected Graphics create(int x, int y, int width, int height) {
+    return create(x, y, width, height);
   }
 
   @Override
   public void add(JPanel highlightPanel) {
-
+    super.add(highlightPanel);
   }
 
 }

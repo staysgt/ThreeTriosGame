@@ -169,3 +169,8 @@ second entered string will be associated with teh second player. If a human play
 'minimax', or 'cardlesslikely'). Example of running the jar file with two machine players using
 flipmost and corner strategy respectively:
 java -jar src/ThreeTriosGame2.jar flipmost corners
+
+## Changes from HW7
+
+We made some changes from our HW7 view model, because we felt that the way that we had our view was
+not well organized. We
