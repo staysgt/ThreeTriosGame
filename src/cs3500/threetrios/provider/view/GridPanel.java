@@ -1,22 +1,34 @@
 package cs3500.threetrios.provider.view;
 
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Color;
+import java.awt.BasicStroke;
+import java.awt.RenderingHints;
+import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.*;
+import javax.swing.JPanel;
 
 import cs3500.threetrios.provider.model.Card;
 import cs3500.threetrios.provider.model.CellType;
 import cs3500.threetrios.provider.model.PlayerColor;
 import cs3500.threetrios.provider.model.ReadonlyThreeTriosModel;
 
-
-class GridPanel extends JPanel {
+/**
+ * This gets the grid of the board.
+ */
+public class GridPanel extends JPanel {
 
   private final ReadonlyThreeTriosModel<?> model;
   private Features features;
 
+  /**
+   * This is the constructor for the grid of the board class.
+   *
+   * @param model this is the games model
+   */
   public GridPanel(ReadonlyThreeTriosModel<?> model) {
     this.model = model;
 

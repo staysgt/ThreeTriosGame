@@ -5,7 +5,7 @@ import java.util.Objects;
 import cs3500.model.Card;
 import cs3500.model.GameGrid;
 import cs3500.view.Features;
-import cs3500.view.Graphics2DView;
+import cs3500.view.Graphics2DInf;
 
 /**
  * Class for a three trios controller.
@@ -32,7 +32,7 @@ public class ThreeTriosController<C extends Card> implements Features {
    * @throws NullPointerException if given arguments are null
    */
   public ThreeTriosController(GameGrid<C> model, IPlayer<C> player,
-                              Graphics2DView<C> view) {
+                              Graphics2DInf view) {
     // this.model = Objects.requireNonNull(model);
     // this.view = Objects.requireNonNull(view);
     this.player = Objects.requireNonNull(player);

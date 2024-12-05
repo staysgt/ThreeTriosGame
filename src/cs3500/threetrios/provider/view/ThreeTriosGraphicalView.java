@@ -1,6 +1,7 @@
 package cs3500.threetrios.provider.view;
 
 import cs3500.threetrios.provider.model.PlayerColor;
+
 /**
  * Interface for the GUI view of the Three Trios game.
  */

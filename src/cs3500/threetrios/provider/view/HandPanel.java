@@ -1,6 +1,12 @@
 package cs3500.threetrios.provider.view;
 
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Dimension;
+import java.awt.RenderingHints;
+import java.awt.Color;
+import java.awt.BasicStroke;
+import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -11,6 +17,9 @@ import cs3500.threetrios.provider.model.Card;
 import cs3500.threetrios.provider.model.PlayerColor;
 import cs3500.threetrios.provider.model.ReadonlyThreeTriosModel;
 
+/**
+ * This gets a hand on the deck and places it onto the board.
+ */
 public class HandPanel extends JPanel {
 
   private final ReadonlyThreeTriosModel model;
@@ -18,6 +27,12 @@ public class HandPanel extends JPanel {
   private int selectedCardIndex = -1;
   private Features features;
 
+  /**
+   * This is the constructor for the hand panel class.
+   *
+   * @param model       this is the model of the game
+   * @param playerColor this is the player of the game
+   */
   public HandPanel(ReadonlyThreeTriosModel<?> model, String playerColor) {
     this.model = model;
     this.playerColor = playerColor;

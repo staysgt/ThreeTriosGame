@@ -1,8 +1,9 @@
 package cs3500.threetrios.provider.view;
 
-import java.awt.*;
+import java.awt.BorderLayout;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import cs3500.threetrios.provider.model.PlayerColor;
 import cs3500.threetrios.provider.model.ReadonlyThreeTriosModel;

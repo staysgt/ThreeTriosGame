@@ -1,0 +1,37 @@
+How flexible are the interfaces you were given?
+How capable are the views?
+How convenient was it to reuse their code?
+How cleanly written and well-documented was their code?
+If you needed to request changes from them, what were they and why were they needed?
+
+
+Design critique, implementation critique, documentation critique, design/code limitations
+
+Design Critique
+
+Overall, their code was quite adaptable. There were a few things that were difficult
+to adapt with our code. In the view implementation they had created two separate classes,
+a grid panel and a hand panel. While these classes were both called into their view there
+was some difficulty adapting our view with theirs. In the model interface, they have an
+isGameOver and isGameWon method. These methods are both booleans.
+They also have a third method that provides the winner called providedGetWinner.
+With these three methods the isGameOver should implement the winner at the end of the game
+instead of adding another method in the interface. Their design would have been more efficient
+if they had a getBoard method instead of making a getGridWidth and getGridHeight method.
+
+
+Implementation Critique
+
+The grid panel and hand panel classes also do not have an access modifier. There is no public,
+private or protected access which makes it quite difficult to implement and adapt to our code.
+Making these classes both public would have made it significantly easier to access these classes.
+Their model handles errors quite well by throwing exceptions which would allow for better and more
+efficient testing for the methods.
+
+Documentation Critique
+
+For documentation most of their stuff is well documented. One thing I would suggest is to document
+the grid panel and hand panel class. The methods themselves do not need to be documented because
+they are either overridden or private. I suggest a javadoc at the beginning to let the reader know
+what the main purpose of these classes are. Other than this small thing, their code is clearly documented
+well with an extensive explanation for each method.

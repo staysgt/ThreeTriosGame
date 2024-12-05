@@ -144,7 +144,9 @@ public class MiniMaxStrategy<C extends Card> implements ThreeTriosStrategy<C> {
 
 
   // gets the most recent move performed and returns the hand idx,
-  private int[] getMostRecentMove(Cell<Card>[][] grid, Cell<Card>[][] alteredGrid, List<C> playersHand) {
+  private int[] getMostRecentMove(Cell<Card>[][] grid, Cell<Card>[][] alteredGrid,
+                                  List<C> playersHand) {
+
     int changedRow = -1;
     int changedCol = -1;
     int handIdx = -1;

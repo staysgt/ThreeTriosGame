@@ -64,7 +64,8 @@ public class MockMiniMaxModel<C extends Card> extends GameGridModel<C> {
     battleWest(grid, rowIdx, colIdx, battleW, player);
   }
 
-  private void battleWest(Cell<Card>[][] grid, int rowIdx, int colIdx, boolean battleW, Player player) {
+  private void battleWest(Cell<Card>[][] grid, int rowIdx, int colIdx, boolean battleW,
+                          Player player) {
     if (battleW && colIdx - 1 >= 0 && colIdx < grid[0].length
             && grid[rowIdx][colIdx - 1].getCard() != null) {
       NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();
@@ -78,7 +79,8 @@ public class MockMiniMaxModel<C extends Card> extends GameGridModel<C> {
     }
   }
 
-  private void battleEast(Cell<Card>[][] grid, int rowIdx, int colIdx, boolean battleE, Player player) {
+  private void battleEast(Cell<Card>[][] grid, int rowIdx, int colIdx, boolean battleE,
+                          Player player) {
     if (battleE && colIdx + 1 < grid[0].length && grid[rowIdx][colIdx + 1].getCard() != null) {
       NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();
       NESWCard adjCard = (NESWCard) grid[rowIdx][colIdx + 1].getCard();
@@ -91,7 +93,8 @@ public class MockMiniMaxModel<C extends Card> extends GameGridModel<C> {
     }
   }
 
-  private void battleSouth(Cell<Card>[][] grid, int rowIdx, int colIdx, boolean battleS, Player player) {
+  private void battleSouth(Cell<Card>[][] grid, int rowIdx, int colIdx, boolean battleS,
+                           Player player) {
     if (battleS && rowIdx - 1 >= 0 && colIdx < grid[0].length
             && grid[rowIdx - 1][colIdx].getCard() != null) {
       NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();
@@ -106,7 +109,8 @@ public class MockMiniMaxModel<C extends Card> extends GameGridModel<C> {
     }
   }
 
-  private void battleNorth(Cell<Card>[][] grid, int rowIdx, int colIdx, boolean battleN, Player player) {
+  private void battleNorth(Cell<Card>[][] grid, int rowIdx, int colIdx, boolean battleN,
+                           Player player) {
     if (battleN && rowIdx + 1 < grid.length && colIdx < grid[0].length
             && grid[rowIdx + 1][colIdx].getCard() != null) {
       NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();

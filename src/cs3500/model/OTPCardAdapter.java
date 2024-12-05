@@ -22,10 +22,6 @@ public class OTPCardAdapter extends NESWCard implements cs3500.threetrios.provid
     super(cardName, north, south, east, west);
   }
 
-  public OTPCardAdapter(Card card) {
-    super(card.getName(), card.getNorthOurs(), card.getSouthOurs(), card.getEastOurs(),
-            card.getWestOurs());
-  }
 
   @Override
   public String getName() {

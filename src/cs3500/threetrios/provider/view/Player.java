@@ -2,10 +2,12 @@ package cs3500.threetrios.provider.view;
 
 import cs3500.threetrios.provider.model.PlayerColor;
 import cs3500.threetrios.provider.model.ReadonlyThreeTriosModel;
+
 /**
  * Player interface for Three Trios.
  */
 public interface Player {
+
   /**
    * Gets a move from the player.
    *

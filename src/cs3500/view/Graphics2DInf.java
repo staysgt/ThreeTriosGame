@@ -3,7 +3,7 @@ package cs3500.view;
 import java.awt.Graphics2D;
 import java.awt.Graphics;
 
-import javax.swing.*;
+import javax.swing.JPanel;
 
 /**
  * This is the interface for the 2D graphics class.
@@ -51,7 +51,7 @@ public interface Graphics2DInf {
 
 
   /**
-   * Gets the width of the grid
+   * Gets the width of the grid.
    *
    * @return width of the grid.
    */
@@ -70,4 +70,10 @@ public interface Graphics2DInf {
    */
   void repaint();
 
+  /**
+   * Sets the view to be visible based on the provided boolean value.
+   *
+   * @param b whether the view should be set to be visible.
+   */
+  void setVisible(boolean b);
 }

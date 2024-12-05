@@ -36,9 +36,7 @@ public class Graphics2DView<C extends Card> extends JPanel implements Graphics2D
    */
 
   public Graphics2DView(ReadOnlyGameGridModel<C> model) {
-
     this.model = model;
-
   }
 
   @Override
@@ -60,6 +58,7 @@ public class Graphics2DView<C extends Card> extends JPanel implements Graphics2D
         fillRect(g2d, xPos, yPos, cellWidth, cellHeight, row, col, false);
       }
     }
+
     int[] handCols = new int[]{0, getWidth() - cellWidth};
 
     for (int col = 0; col < handCols.length; col++) {
@@ -95,9 +94,6 @@ public class Graphics2DView<C extends Card> extends JPanel implements Graphics2D
   }
 
 
-  protected Graphics create(int x, int y, int width, int height) {
-    return create(x, y, width, height);
-  }
 
 
   @Override
@@ -184,7 +180,7 @@ public class Graphics2DView<C extends Card> extends JPanel implements Graphics2D
   }
 
   private void addCardNumbersEmptyCard() {
-
+    // empty
   }
 
   @Override
@@ -206,7 +202,16 @@ public class Graphics2DView<C extends Card> extends JPanel implements Graphics2D
 
   @Override
   public Graphics create() {
-    return create(getX(), getY(), getWidth(), getHeight());
+    return this.getGraphics().create();
+  }
+
+  protected Graphics create(int x, int y, int width, int height) {
+    Graphics graphics = this.getGraphics();
+    if (graphics != null) {
+      return graphics.create(x, y, width, height);
+    } else {
+      return null;
+    }
   }
 
   @Override
@@ -273,9 +278,9 @@ public class Graphics2DView<C extends Card> extends JPanel implements Graphics2D
 
     JFrame frame = new JFrame("Three Trios");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setLocation(0, 0);
-    frame.setPreferredSize(new Dimension(1200, 1200));
+    frame.setPreferredSize(new Dimension(800, 600));
 
+    frame.setLocationRelativeTo(null);
     frame.add(this);
 
     frame.pack();

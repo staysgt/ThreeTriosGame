@@ -11,8 +11,17 @@ import cs3500.threetrios.provider.model.PlayerColor;
 import cs3500.threetrios.provider.model.ThreeTriosModel;
 import cs3500.threetrios.provider.view.ModelFeatures;
 
+/**
+ * This is the adapter for our model, it adapts out providers model
+ * and our model.
+ *
+ * @param <C> Card
+ */
 public class OurModelToProviderAdapter<C extends OTPCardAdapter>
         extends GameGridModel<C> implements ThreeTriosModel<C> {
+
+
+
   @Override
   public void playToCell(int row, int col, int cardInHandIdx) {
     playToGrid(row, col, cardInHandIdx);
@@ -56,7 +65,7 @@ public class OurModelToProviderAdapter<C extends OTPCardAdapter>
 
   @Override
   public void addFeatures(ModelFeatures features) {
-
+    // empty
   }
 
   @Override
@@ -66,12 +75,12 @@ public class OurModelToProviderAdapter<C extends OTPCardAdapter>
 
   @Override
   public int getGridWidth() {
-    return getBoard().length;
+    return getBoard()[0].length;
   }
 
   @Override
   public int getGridHeight() {
-    return getBoard()[0].length;
+    return getBoard().length;
   }
 
   @Override
@@ -81,13 +90,24 @@ public class OurModelToProviderAdapter<C extends OTPCardAdapter>
 
   @Override
   public List<C> getHand(PlayerColor player) {
-    return List.of();
+
+    Player currPlayer = player == PlayerColor.RED ? Player.RED : Player.BLUE;
+
+    return super.getHand(currPlayer);
   }
 
   @Override
   public C getCardAt(int row, int col) {
-    C card = new OTPCardAdapter(getBoard()[row][col].getCard());
-    return card;
+    // chekc if there evne is a card there
+    Card c = getBoard()[row][col].getCard();
+
+    if (c == null) {
+      return null;
+    } else {
+      C card = (C) new OTPCardAdapter(c.getName(), c.getNorthOurs(), c.getSouthOurs(),
+              c.getEastOurs(), c.getWestOurs());
+      return card;
+    }
   }
 
   @Override

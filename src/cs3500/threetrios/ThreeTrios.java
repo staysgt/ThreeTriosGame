@@ -2,7 +2,6 @@ package cs3500.threetrios;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
 
 import cs3500.controller.ConfigurationFileReader;
 import cs3500.controller.HumanPlayer;
@@ -14,17 +13,14 @@ import cs3500.controller.strategy.CardLessLikelyFlippedStrategy;
 import cs3500.controller.strategy.CornersStrategy;
 import cs3500.controller.strategy.FlipMostStrategy;
 import cs3500.controller.strategy.MiniMaxStrategy;
-import cs3500.controller.strategy.Strategies;
-import cs3500.controller.strategy.ThreeTriosStrategy;
 import cs3500.model.Card;
 import cs3500.model.GameGrid;
-import cs3500.model.GameGridModel;
 import cs3500.model.OurModelToProviderAdapter;
 import cs3500.model.Player;
 import cs3500.threetrios.provider.model.PlayerColor;
-import cs3500.threetrios.provider.view.ThreeTriosGraphicalView;
-import cs3500.threetrios.provider.view.ThreeTriosGraphicalViewImplementation;
+import cs3500.view.Graphics2DInf;
 import cs3500.view.Graphics2DView;
+import cs3500.view.ProviderViewToOurViewAdapter;
 
 /**
  * Class for running the game.
@@ -38,24 +34,41 @@ public final class ThreeTrios {
    */
   public static void main(String[] args) throws FileNotFoundException {
 
-    GameGrid<Card> model = new GameGridModel<>();
     OurModelToProviderAdapter model1 = new OurModelToProviderAdapter<>();
 
     ConfigurationFileReader conFigFile = new ConfigurationFileReader("src" + File.separator
             + "walkableholes");
     NESWCardFileReader<Card> cardFile = new NESWCardFileReader<>("src/cardsexample");
 
-
-    model.startGame(cardFile.getCards(), conFigFile.getCols(),
+    model1.startGame(cardFile.getCards(), conFigFile.getCols(),
             conFigFile.getRows(), conFigFile.getRowConfig());
 
-
-//    model1.startGame(cardFile.getCards(), conFigFile.getCols(),
-//            conFigFile.getRows(), conFigFile.getRowConfig());
 
     IPlayer<Card> player1 = null;
     IPlayer<Card> player2 = null;
 
+    ArgsReader result = readArgs(args, player1, model1, player2);
+
+
+    Graphics2DInf viewP1 = new Graphics2DView<>(model1);
+    Graphics2DInf viewP2 = new ProviderViewToOurViewAdapter<>(model1, PlayerColor.BLUE);
+
+
+    ThreeTriosController<Card> controller1 = new ThreeTriosController<>(model1, result.player1, viewP1);
+    ThreeTriosController<Card> controller2 = new ThreeTriosController<>(model1, result.player2, viewP2);
+
+    // this code would cause the game to be played if it was two machine players
+    for (int turn = 0; turn < 5; turn++) {
+      controller1.listen();
+      controller2.listen();
+    }
+
+
+  }
+
+
+  // helper to read in the arguments from the method
+  private static ArgsReader readArgs(String[] args, IPlayer<Card> player1, GameGrid<Card> model, IPlayer<Card> player2) {
     int i = 0;
     while (i < args.length) {
       // for each
@@ -83,31 +96,18 @@ public final class ThreeTrios {
       }
       i++;
     }
+    ArgsReader result = new ArgsReader(player1, player2);
+    return result;
+  }
 
+  // helper class for the readArgs method
+  private static class ArgsReader {
+    public final IPlayer<Card> player1;
+    public final IPlayer<Card> player2;
 
-    Graphics2DView viewP1 = new Graphics2DView(model);
-    Graphics2DView viewP2 = new Graphics2DView(model);
-
-//    ThreeTriosGraphicalView viewP2 = new ThreeTriosGraphicalViewImplementation(model1, PlayerColor.BLUE);
-
-    ThreeTriosStrategy<Card> flipMost1 = new FlipMostStrategy<>();
-    ThreeTriosStrategy<Card> flipMost2 = new FlipMostStrategy<>();
-
-//    player1 = new MachinePlayer<>(model, flipMost1, Player.RED);
-//    player2 = new MachinePlayer<>(model, flipMost2, Player.BLUE);
-
-//    IPlayer<Card> player1 = new HumanPlayer<>(model);
-//    IPlayer<Card> player2 = new HumanPlayer<>(model);
-
-    ThreeTriosController<Card> controller1 = new ThreeTriosController<>(model1, player1, viewP1);
-    ThreeTriosController<Card> controller2 = new ThreeTriosController<>(model1, player2, viewP2);
-
-    // this code would cause the game to be played if it was two machine players
-    for (int turn = 0; turn < 5; turn++) {
-      controller1.listen();
-      controller2.listen();
+    public ArgsReader(IPlayer<Card> player1, IPlayer<Card> player2) {
+      this.player1 = player1;
+      this.player2 = player2;
     }
-
-
   }
 }

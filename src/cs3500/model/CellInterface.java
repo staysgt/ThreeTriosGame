@@ -1,5 +1,9 @@
 package cs3500.model;
 
+
+/**
+ * This interface is used for the cells on the grid.
+ */
 public interface CellInterface {
 
   /**
