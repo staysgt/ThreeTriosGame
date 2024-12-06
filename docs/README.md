@@ -172,10 +172,16 @@ java -jar src/ThreeTriosGame2.jar flipmost corners
 
 ## Changes from HW7
 
-We made some changes from our HW7 view model, because we felt that the way that we had our view was
-not well organized. We
+When working on this assignment, we made some changes to our HW7 view, in order to make it more
+organized. Our view used the concrete implementation of a card (NESWCard) rather than the interface.
+We updated it to make sure that it was reliant on our interface rather than a class. We also added
+in command line arguments, because we realized this was missing from the last assignment that we had
+turned in.
 
-## Changes made to view in HW8
+## What we were able to get working:
 
-Our view used the concrete implementation of a card (NESWCard) rather than the interface. We updated
-it to make sure that it was reliant on our interface rather than a class.
+We were able to get everything working between our code and our providers code. However, we were
+never able to get our model to work for human players from the last homework assignment, so this
+still does not work, but our views work with handling clicks, just not representing a card played
+to the grid. But, our controller does work between two machine players, and we were able to get the
+views to represent this, in the main method.

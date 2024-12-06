@@ -7,7 +7,7 @@ import cs3500.controller.ConfigurationFileReader;
 import cs3500.controller.HumanPlayer;
 import cs3500.controller.IPlayer;
 import cs3500.controller.MachinePlayer;
-import cs3500.controller.NESWCardFileReader;
+import cs3500.controller.OTPCardReader;
 import cs3500.controller.ThreeTriosController;
 import cs3500.controller.strategy.CardLessLikelyFlippedStrategy;
 import cs3500.controller.strategy.CornersStrategy;
@@ -38,7 +38,7 @@ public final class ThreeTrios {
 
     ConfigurationFileReader conFigFile = new ConfigurationFileReader("src" + File.separator
             + "walkableholes");
-    NESWCardFileReader<Card> cardFile = new NESWCardFileReader<>("src/cardsexample");
+    OTPCardReader<Card> cardFile = new OTPCardReader<>("src/cardsexample");
 
     model1.startGame(cardFile.getCards(), conFigFile.getCols(),
             conFigFile.getRows(), conFigFile.getRowConfig());
@@ -54,8 +54,10 @@ public final class ThreeTrios {
     Graphics2DInf viewP2 = new ProviderViewToOurViewAdapter<>(model1, PlayerColor.BLUE);
 
 
-    ThreeTriosController<Card> controller1 = new ThreeTriosController<>(model1, result.player1, viewP1);
-    ThreeTriosController<Card> controller2 = new ThreeTriosController<>(model1, result.player2, viewP2);
+    ThreeTriosController<Card> controller1 = new ThreeTriosController<>(model1,
+            result.player1, viewP1);
+    ThreeTriosController<Card> controller2 = new ThreeTriosController<>(model1,
+            result.player2, viewP2);
 
     // this code would cause the game to be played if it was two machine players
     for (int turn = 0; turn < 5; turn++) {
@@ -68,7 +70,8 @@ public final class ThreeTrios {
 
 
   // helper to read in the arguments from the method
-  private static ArgsReader readArgs(String[] args, IPlayer<Card> player1, GameGrid<Card> model, IPlayer<Card> player2) {
+  private static ArgsReader readArgs(String[] args, IPlayer<Card> player1, GameGrid<Card> model,
+                                     IPlayer<Card> player2) {
     int i = 0;
     while (i < args.length) {
       // for each
@@ -78,21 +81,33 @@ public final class ThreeTrios {
           player2 = i == 1 ? new HumanPlayer<>(model) : player2;
           break;
         case "flipmost":
-          player1 = i == 0 ? new MachinePlayer<>(model, new FlipMostStrategy<>(), Player.RED) : player1;
-          player2 = i == 1 ? new MachinePlayer<>(model, new FlipMostStrategy<>(), Player.BLUE) : player2;
+          player1 = i == 0 ? new MachinePlayer<>(model, new FlipMostStrategy<>(),
+                  Player.RED) : player1;
+          player2 = i == 1 ? new MachinePlayer<>(model, new FlipMostStrategy<>(),
+                  Player.BLUE) : player2;
           break;
         case "corners":
-          player1 = i == 0 ? new MachinePlayer<>(model, new CornersStrategy<>(), Player.RED) : player1;
-          player2 = i == 1 ? new MachinePlayer<>(model, new CornersStrategy<>(), Player.BLUE) : player2;
+          player1 = i == 0 ? new MachinePlayer<>(model, new CornersStrategy<>(),
+                  Player.RED) : player1;
+          player2 = i == 1 ? new MachinePlayer<>(model, new CornersStrategy<>(),
+                  Player.BLUE) : player2;
           break;
         case "minimax":
-          player1 = i == 0 ? new MachinePlayer<>(model, new MiniMaxStrategy<>(), Player.RED) : player1;
-          player2 = i == 1 ? new MachinePlayer<>(model, new MiniMaxStrategy<>(), Player.BLUE) : player2;
+          player1 = i == 0 ? new MachinePlayer<>(model, new MiniMaxStrategy<>(),
+                  Player.RED) : player1;
+          player2 = i == 1 ? new MachinePlayer<>(model, new MiniMaxStrategy<>(),
+                  Player.BLUE) : player2;
           break;
         case "cardlesslikely":
-          player1 = i == 0 ? new MachinePlayer<>(model, new CardLessLikelyFlippedStrategy<>(), Player.RED) : player1;
-          player2 = i == 1 ? new MachinePlayer<>(model, new CardLessLikelyFlippedStrategy<>(), Player.BLUE) : player2;
+          player1 = i == 0 ? new MachinePlayer<>(model, new CardLessLikelyFlippedStrategy<>(),
+                  Player.RED) : player1;
+          player2 = i == 1 ? new MachinePlayer<>(model, new CardLessLikelyFlippedStrategy<>(),
+                  Player.BLUE) : player2;
           break;
+        default:
+          // defaults players to being human
+          player1 = i == 0 ? new HumanPlayer<>(model) : player1;
+          player2 = i == 1 ? new HumanPlayer<>(model) : player2;
       }
       i++;
     }

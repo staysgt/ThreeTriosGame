@@ -34,7 +34,6 @@ public class ProviderViewToOurViewAdapter<C extends OTPCardAdapter>
   public ProviderViewToOurViewAdapter(ReadonlyThreeTriosModel<C> model, PlayerColor playColor) {
     super(model, playColor);
     this.model = model;
-    System.out.println(model.getHand(PlayerColor.RED));
 
   }
 

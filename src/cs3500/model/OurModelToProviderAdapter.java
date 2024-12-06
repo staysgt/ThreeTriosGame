@@ -59,7 +59,7 @@ public class OurModelToProviderAdapter<C extends OTPCardAdapter>
       throw new RuntimeException(e);
     }
 
-    startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(),
+    startGame((List<C>) cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(),
             conFigFile.getRowConfig());
   }
 

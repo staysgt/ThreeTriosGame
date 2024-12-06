@@ -1,5 +1,3 @@
-Self Review
-
 There were a few things that I wish we had done differently. Our model was mostly reliant on
 concrete classes, which made it difficult for our providers to adapt, so we ended up having to make
 interfaces for one of our concrete classes. We also had an issue where we did not put enough in our
@@ -8,9 +6,11 @@ access to the concrete class, so we had to edit the Card interface to include th
 had in our concrete class. As well, I think that our view was a bit messy and unorganized, and
 despite having cleaned it up a bit in this homework, it would have been nice if we had taken this
 into consideration sooner in order to make the future homeworks that stemmed from it easier. It was
-also interesting to see the way that our providers had organized their code, as it was cleaner than
-the way that we had done it.
+also interesting to see the way that our providers had organized their code for the view, as it was
+cleaner than the way that we had done it.
 
-We did not need to communicate much with our providers, since their code was straight forward and
-easy to adapt. When they sent the code, they kindly told us to not hesitate to reach out, but we
-ended up not having any reasons to contact them.
+We had minimal communication with our providers. The only things that we needed to reach out about
+were missing access modifiers on the Grid/HandPanel classes, and a few things that were impacting
+our style grade. When we reached out about this, they responded quickly and were open to helping fix
+the problems. Overall though, since their code was pretty straight-forward and readable, we did not
+need to reach out to them that much.
