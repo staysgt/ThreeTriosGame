@@ -166,9 +166,9 @@ cell.
 When running the program, the first entered string will be associated with the first player, and the
 second entered string will be associated with teh second player. If a human player is desired, enter
 'human', otherwise, enter the desired strategy for the machine player ('flipmost', 'corners',
-'minimax', or 'cardlesslikely'). Example of running the jar file with two machine players using
-flipmost and corner strategy respectively:
-java -jar src/ThreeTriosGame2.jar flipmost corners
+'minimax', or 'cardlesslikely'). Example of running the jar file with two human players:
+
+java -jar ThreeTriosGame.jar human human
 
 ## Changes from HW7
 

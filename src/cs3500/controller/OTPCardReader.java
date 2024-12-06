@@ -18,7 +18,7 @@ public class OTPCardReader<C extends Card> implements CardFileReader {
   private final List<OTPCardAdapter> cards = new ArrayList<>();
 
   /**
-   * Constrcutor for a NESWCardFileReader.
+   * Constrcutor for an OTPCardReader.
    *
    * @param path the path to the card file.
    * @throws FileNotFoundException if a file does not exist at the given path.

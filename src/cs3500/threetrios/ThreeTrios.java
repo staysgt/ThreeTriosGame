@@ -3,6 +3,7 @@ package cs3500.threetrios;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+
 import cs3500.controller.ConfigurationFileReader;
 import cs3500.controller.HumanPlayer;
 import cs3500.controller.IPlayer;
@@ -22,6 +23,7 @@ import cs3500.view.Graphics2DInf;
 import cs3500.view.Graphics2DView;
 import cs3500.view.ProviderViewToOurViewAdapter;
 
+
 /**
  * Class for running the game.
  */
@@ -33,12 +35,15 @@ public final class ThreeTrios {
    * @param args arguments taken in to start the game.
    */
   public static void main(String[] args) throws FileNotFoundException {
-
     OurModelToProviderAdapter model1 = new OurModelToProviderAdapter<>();
 
     ConfigurationFileReader conFigFile = new ConfigurationFileReader("src" + File.separator
             + "walkableholes");
-    OTPCardReader<Card> cardFile = new OTPCardReader<>("src/cardsexample");
+    OTPCardReader<Card> cardFile = new OTPCardReader<>(
+            "src" + File.separator + "cardsexample");
+
+
+
 
     model1.startGame(cardFile.getCards(), conFigFile.getCols(),
             conFigFile.getRows(), conFigFile.getRowConfig());
@@ -125,4 +130,6 @@ public final class ThreeTrios {
       this.player2 = player2;
     }
   }
+
+
 }
