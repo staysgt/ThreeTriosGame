@@ -1,16 +1,27 @@
 package cs3500.view;
 
-import java.awt.*;
+
+import java.awt.Graphics;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+
+import java.awt.Graphics2D;
 
 
 import cs3500.model.Card;
 import cs3500.model.Player;
 import cs3500.model.ReadOnlyGameGridModel;
 
+/**
+ * This is the class that shows the hints of the cards for the rules.
+ *
+ * @param <C> card
+ */
 public class ShowHintsView<C extends Card> extends MouseClick<C> implements Graphics2DInf {
 
   private final ReadOnlyGameGridModel<C> model;
@@ -19,6 +30,12 @@ public class ShowHintsView<C extends Card> extends MouseClick<C> implements Grap
   private int cardIdx = -1;
   private Graphics graphics;
 
+  /**
+   * This is the constructor for the show hints class.
+   * @param view view
+   * @param model model
+   * @param player player
+   */
   public ShowHintsView(Graphics2DInf view, ReadOnlyGameGridModel<C> model, Player player) {
     super(model, view, model.getTurn());
     this.view = view;

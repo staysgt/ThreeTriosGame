@@ -3,7 +3,6 @@ package cs3500.model.extracredit.leveltwo;
 import java.util.ArrayList;
 import java.util.List;
 
-import cs3500.model.GameGrid;
 import cs3500.model.GameGridModel;
 
 import cs3500.model.Card;
@@ -12,6 +11,12 @@ import cs3500.model.NESWCard;
 public class Plus<C extends Card> extends GameGridModel<C> {
 
 
+  /**
+   * This makes the cards adjacent when in opposite directions.
+   * @param cardA card
+   * @param adjacentCard list
+   * @return flip
+   */
   public List<NESWCard> cardAdjacentToA(NESWCard cardA, List<NESWCard> adjacentCard) {
     List<NESWCard> flip = new ArrayList<>();
 

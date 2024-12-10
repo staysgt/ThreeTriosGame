@@ -8,6 +8,11 @@ import cs3500.model.CellInterface;
 import cs3500.model.GameGrid;
 import cs3500.model.Player;
 
+/**
+ * This is the second rule class.
+ *
+ * @param <C> card
+ */
 public class VariantRuleSetTwo<C extends Card> implements GameGrid<C> {
 
   private GameGrid<C> model;
@@ -24,7 +29,7 @@ public class VariantRuleSetTwo<C extends Card> implements GameGrid<C> {
 
   @Override
   public void playToGrid(int row, int col, int handIdx) {
-
+    model.playToGrid(row, col, handIdx);
   }
 
   @Override
@@ -62,7 +67,7 @@ public class VariantRuleSetTwo<C extends Card> implements GameGrid<C> {
 
   @Override
   public Cell<C>[][] getBoard() {
-    return model.getBoard();
+    return null;
   }
 
 

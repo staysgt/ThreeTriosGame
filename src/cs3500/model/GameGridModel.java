@@ -1,15 +1,12 @@
 package cs3500.model;
 
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import cs3500.controller.ConfigurationFileReader;
-import cs3500.controller.NESWCardFileReader;
 
 
 /**
@@ -27,31 +24,29 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
    * - blueHand/redHand is not null:
    * this is ensured in the constructor, preserved by the methods, and instantaneous.
    */
-  private Cell<C>[][] grid;
+  private CellInterface[][] grid;
   private List<C> blueHand = new ArrayList<>();
   private List<C> redHand = new ArrayList<>();
   protected boolean gameStarted = false;
   private final Random r;
-  private final List<C> cards;
 
   private final List<GameGridModel<C>> statuses = new ArrayList<>();
 
-  private final HashMap<Integer, HashMap<Cell<C>[][], List<C>[]>> gameStatuses = new HashMap<>();
+  private final HashMap<Integer, HashMap<CellInterface[][], List<C>[]>> gameStatuses =
+          new HashMap<>();
   private int numPlays = 0;
 
   /**
    * Constructor for a model.GameGridModel.
    */
-  public GameGridModel(List<C> cards) {
-    this.cards = cards;
+  public GameGridModel() {
     this.r = new Random();
   }
 
   /**
    * Constructor for a GameGridModel that takes in a random variable for controlled shuffling.
    */
-  public GameGridModel(List<C> cards, Random r) {
-    this.cards = cards;
+  public GameGridModel(Random r) {
     this.r = r;
   }
 
@@ -63,32 +58,12 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
    * @param redHand  red players hand.
    * @param blueHand blue players hand.
    */
-  public GameGridModel(Cell<C>[][] grid, List<C> redHand, List<C> blueHand) {
-    this.cards = null;
+  public GameGridModel(CellInterface[][] grid, List<C> redHand, List<C> blueHand) {
     this.r = new Random();
     this.grid = grid;
     gameStarted = true;
     this.redHand = redHand;
     this.blueHand = blueHand;
-  }
-
-
-  /**
-   * Constructor that starts the game.
-   *
-   * @param configFilePath configuration file.
-   * @param cardFilePath   card file to start game.
-   */
-  public GameGridModel(String configFilePath, String cardFilePath, Random r)
-          throws FileNotFoundException {
-    NESWCardFileReader<C> cardFile = new NESWCardFileReader<>(cardFilePath);
-    this.cards = cardFile.getCards();
-
-    this.r = r;
-    gameStarted = true;
-    ConfigurationFileReader configFile = new ConfigurationFileReader(configFilePath);
-    startGame(configFile.getCols(), configFile.getRows(),
-            configFile.getRowConfig());
   }
 
 
@@ -123,7 +98,8 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   }
 
   // Performs the battle stage.
-  private void battle(Cell<C>[][] grid, int rowIdx, int colIdx, boolean battleN, boolean battleE,
+  private void battle(CellInterface[][] grid, int rowIdx, int colIdx, boolean battleN,
+                      boolean battleE,
                       boolean battleS,
                       boolean battleW, Player player) {
 
@@ -137,7 +113,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     battleWest(grid, rowIdx, colIdx, battleW, player);
   }
 
-  private void battleWest(Cell<C>[][] grid, int rowIdx, int colIdx, boolean battleW,
+  private void battleWest(CellInterface[][] grid, int rowIdx, int colIdx, boolean battleW,
                           Player player) {
     if (battleW && colIdx - 1 >= 0 && colIdx < grid[0].length
             && grid[rowIdx][colIdx - 1].getCard() != null) {
@@ -152,7 +128,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     }
   }
 
-  private void battleEast(Cell<C>[][] grid, int rowIdx, int colIdx, boolean battleE,
+  private void battleEast(CellInterface[][] grid, int rowIdx, int colIdx, boolean battleE,
                           Player player) {
     if (battleE && colIdx + 1 < grid[0].length && grid[rowIdx][colIdx + 1].getCard() != null) {
       NESWCard currCard = (NESWCard) grid[rowIdx][colIdx].getCard();
@@ -166,7 +142,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     }
   }
 
-  private void battleSouth(Cell<C>[][] grid, int rowIdx, int colIdx, boolean battleS,
+  private void battleSouth(CellInterface[][] grid, int rowIdx, int colIdx, boolean battleS,
                            Player player) {
     if (battleS && rowIdx - 1 >= 0 && colIdx < grid[0].length
             && grid[rowIdx - 1][colIdx].getCard() != null) {
@@ -182,7 +158,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     }
   }
 
-  private void battleNorth(Cell<C>[][] grid, int rowIdx, int colIdx, boolean battleN,
+  private void battleNorth(CellInterface[][] grid, int rowIdx, int colIdx, boolean battleN,
                            Player player) {
     if (battleN && rowIdx + 1 < grid.length && colIdx < grid[0].length
             && grid[rowIdx + 1][colIdx].getCard() != null) {
@@ -204,7 +180,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   }
 
   @Override
-  public void startGame(int cols, int rows, List<String> rowConf) {
+  public void startGame(List<C> cards, int cols, int rows, List<String> rowConf) {
     if (gameStarted) {
       throw new IllegalStateException("Game has already been started.");
     }
@@ -345,9 +321,9 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   }
 
   @Override
-  public Cell[][] getBoard() {
+  public CellInterface[][] getBoard() {
     checkGameStarted();
-    Cell[][] copy = new Cell[grid.length][grid[0].length];
+    CellInterface[][] copy = new Cell[grid.length][grid[0].length];
     for (int row = 0; row < grid.length; row++) {
       for (int col = 0; col < grid[row].length; col++) {
         copy[row][col] = new Cell<Card>(grid[row][col].getCellState(), grid[row][col].getCard(),
@@ -364,7 +340,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     return count;
   }
 
-  private int getCount(Cell<C>[][] grid, Player player) {
+  private int getCount(CellInterface[][] grid, Player player) {
     checkGameStarted();
     int count = 0;
     for (int row = 0; row < grid.length; row++) {
@@ -391,7 +367,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
     if (grid[row][col].getCard() != null) {
       throw new IllegalArgumentException("Spot is already taken up");
     }
-    Cell<C>[][] copy = getBoard();
+    CellInterface[][] copy = getBoard();
     copy[row][col].setCard(getHand(player).get(handIdx), player);
     int before = getCount(copy, player);
 
@@ -403,7 +379,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   @Override
   public boolean legalPlay(int row, int col) {
     checkGameStarted();
-    Cell<C> currCell = grid[row][col];
+    CellInterface currCell = grid[row][col];
     return currCell.getCellState() == CellState.CARD_SPACE && currCell.getCard() == null;
   }
 

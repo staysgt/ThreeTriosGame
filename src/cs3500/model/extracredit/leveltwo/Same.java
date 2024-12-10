@@ -3,16 +3,20 @@ package cs3500.model.extracredit.leveltwo;
 import java.util.List;
 import java.util.ArrayList;
 
-import cs3500.model.CellInterface;
-import cs3500.model.GameGrid;
+
 import cs3500.model.NESWCard;
-import cs3500.model.Player;
 import cs3500.model.Card;
 import cs3500.model.GameGridModel;
 
 
 public class Same<C extends Card> extends GameGridModel<C> {
 
+  /**
+   * This is the adjacent card and is used to make the cards same.
+   * @param cardA card
+   * @param adjacentCard card
+   * @return flip
+   */
   public List<NESWCard> cardAdjacentToA(NESWCard cardA, List<NESWCard> adjacentCard) {
     List<NESWCard> flip = new ArrayList<>();
 

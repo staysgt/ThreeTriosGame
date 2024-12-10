@@ -4,8 +4,12 @@ import java.util.List;
 
 import cs3500.model.Card;
 import cs3500.model.GameGrid;
-import cs3500.model.NESWCard;
 
+/**
+ * This is an interface that is used to update the cards.
+ *
+ * @param <C> card
+ */
 public interface LevelOneInf<C extends Card> extends GameGrid<C> {
 
   /**
@@ -13,5 +17,5 @@ public interface LevelOneInf<C extends Card> extends GameGrid<C> {
    *
    * @return a list of updated cards.
    */
-  List<C> updateCards();
+  List<C> updateCards(List<C> cards);
 }

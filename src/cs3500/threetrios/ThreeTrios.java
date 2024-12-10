@@ -3,7 +3,6 @@ package cs3500.threetrios;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -16,7 +15,7 @@ import cs3500.controller.ThreeTriosController;
 import cs3500.controller.strategy.CardLessLikelyFlippedStrategy;
 import cs3500.controller.strategy.CornersStrategy;
 import cs3500.controller.strategy.FlipMostStrategy;
-import cs3500.controller.strategy.MiniMaxStrategy;
+//import cs3500.controller.strategy.MiniMaxStrategy;
 import cs3500.model.Card;
 import cs3500.model.GameGrid;
 import cs3500.model.OurModelToProviderAdapter;
@@ -87,12 +86,6 @@ public final class ThreeTrios {
     ThreeTriosController<Card> controller2 = new ThreeTriosController<>(model1,
             result.player2, viewP2);
 
-    // this code would cause the game to be played if it was two machine players
-//    for (int turn = 0; turn < 5; turn++) {
-//      controller1.listen();
-//      controller2.listen();
-//    }
-
 
   }
 
@@ -121,10 +114,6 @@ public final class ThreeTrios {
                   Player.BLUE) : player2;
           break;
         case "minimax":
-          player1 = i == 0 ? new MachinePlayer<>(model, new MiniMaxStrategy<>(),
-                  Player.RED) : player1;
-          player2 = i == 1 ? new MachinePlayer<>(model, new MiniMaxStrategy<>(),
-                  Player.BLUE) : player2;
           break;
         case "cardlesslikely":
           player1 = i == 0 ? new MachinePlayer<>(model, new CardLessLikelyFlippedStrategy<>(),

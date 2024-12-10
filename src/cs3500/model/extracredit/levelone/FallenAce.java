@@ -16,17 +16,15 @@ import cs3500.model.NESWCard;
  * @param <C> card.
  */
 public class FallenAce<C extends Card> extends AbstractLevelOne<C> {
-  List<C> cards;
 
-  public FallenAce(GameGrid<C> model, List<C> cards) {
-    super(model, cards);
-    this.cards = cards;
-    updateCards();
+  public FallenAce(GameGrid<C> model) {
+    super(model);
   }
 
   @Override
-  public List<C> updateCards() {
+  public List<C> updateCards(List<C> cards) {
     List<C> newCards = new ArrayList<>();
+
     for (C card : cards) {
       // if equal to 10 (meaning ace, sets it equal to 1
       int north = card.getNorthOurs().getValue() == 10 ? 1 : card.getNorthOurs().getValue();
