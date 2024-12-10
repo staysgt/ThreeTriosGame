@@ -25,7 +25,6 @@ public interface GameGrid<C extends Card> extends ReadOnlyGameGridModel {
 
   /**
    * Starts a game with the given number of columns and rows.
-   * @param cards desired cards if
    * @param cols desired number of columns in the game.
    * @param rows desired number of rows in the game.
    * @param rowConf configuration of the rows.
@@ -35,7 +34,7 @@ public interface GameGrid<C extends Card> extends ReadOnlyGameGridModel {
    * @throws IllegalArgumentException if given cards is less than (num of spaces + 1)/2
    * @throws IllegalArgumentException if any provided values are null
    */
-  void startGame(List<C> cards, int cols, int rows, List<String> rowConf);
+  void startGame(int cols, int rows, List<String> rowConf);
 
 
 }

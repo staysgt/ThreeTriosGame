@@ -32,6 +32,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   private List<C> redHand = new ArrayList<>();
   protected boolean gameStarted = false;
   private final Random r;
+  private final List<C> cards;
 
   private final List<GameGridModel<C>> statuses = new ArrayList<>();
 
@@ -41,14 +42,16 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   /**
    * Constructor for a model.GameGridModel.
    */
-  public GameGridModel() {
+  public GameGridModel(List<C> cards) {
+    this.cards = cards;
     this.r = new Random();
   }
 
   /**
    * Constructor for a GameGridModel that takes in a random variable for controlled shuffling.
    */
-  public GameGridModel(Random r) {
+  public GameGridModel(List<C> cards, Random r) {
+    this.cards = cards;
     this.r = r;
   }
 
@@ -61,6 +64,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
    * @param blueHand blue players hand.
    */
   public GameGridModel(Cell<C>[][] grid, List<C> redHand, List<C> blueHand) {
+    this.cards = null;
     this.r = new Random();
     this.grid = grid;
     gameStarted = true;
@@ -77,11 +81,13 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
    */
   public GameGridModel(String configFilePath, String cardFilePath, Random r)
           throws FileNotFoundException {
+    NESWCardFileReader<C> cardFile = new NESWCardFileReader<>(cardFilePath);
+    this.cards = cardFile.getCards();
+
     this.r = r;
     gameStarted = true;
     ConfigurationFileReader configFile = new ConfigurationFileReader(configFilePath);
-    NESWCardFileReader cardFile = new NESWCardFileReader(cardFilePath);
-    startGame(cardFile.getCards(), configFile.getCols(), configFile.getRows(),
+    startGame(configFile.getCols(), configFile.getRows(),
             configFile.getRowConfig());
   }
 
@@ -198,7 +204,7 @@ public class GameGridModel<C extends Card> implements GameGrid<C> {
   }
 
   @Override
-  public void startGame(List<C> cards, int cols, int rows, List<String> rowConf) {
+  public void startGame(int cols, int rows, List<String> rowConf) {
     if (gameStarted) {
       throw new IllegalStateException("Game has already been started.");
     }

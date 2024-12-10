@@ -9,16 +9,17 @@ import cs3500.model.CellInterface;
 import cs3500.model.GameGrid;
 import cs3500.model.Player;
 
-public abstract class AbstractLevelOne<C extends Card> implements GameGrid<C> {
-  protected final GameGrid<C> model;
-  protected List<C> blueHand = new ArrayList<>();
-  protected List<C> redHand = new ArrayList<>();
-  protected final Map<Variant, Boolean> variants;
-  protected CellInterface[][] grid;
+public abstract class AbstractLevelOne<C extends Card> implements LevelOneInf<C> {
+  private final GameGrid<C> model;
+  private List<C> blueHand = new ArrayList<>();
+  private List<C> redHand = new ArrayList<>();
+  //  private final Map<Variant, Boolean> variants;
+  private CellInterface[][] grid;
+  private List<C> cards;
 
-  public AbstractLevelOne(GameGrid<C> model, Map<Variant, Boolean> variants) {
+  public AbstractLevelOne(GameGrid<C> model, List<C> cards) {
     this.model = model;
-    this.variants = variants;
+    this.cards = cards;
   }
 
   @Override
@@ -28,8 +29,8 @@ public abstract class AbstractLevelOne<C extends Card> implements GameGrid<C> {
 
 
   @Override
-  public void startGame(List<C> cards, int cols, int rows, List<String> rowConf) {
-    model.startGame(cards, cols, rows, rowConf);
+  public void startGame(int cols, int rows, List<String> rowConf) {
+    model.startGame(cols, rows, rowConf);
     this.grid = model.getBoard();
     this.blueHand = model.getHand(Player.BLUE);
     this.redHand = model.getHand(Player.RED);

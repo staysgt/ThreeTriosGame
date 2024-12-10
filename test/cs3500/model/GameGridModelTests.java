@@ -21,7 +21,6 @@ import static org.junit.Assert.assertNull;
  * Tests for the GameGridModel.
  */
 public class GameGridModelTests<C extends Card> {
-  private GameGrid model = new GameGridModel(new Random(3));
   private ConfigurationFileReader conFigFile;
   private ConfigurationFileReader noHoles;
   private NESWCardFileReader cardFile;
@@ -38,10 +37,12 @@ public class GameGridModelTests<C extends Card> {
     }
   }
 
+  private GameGrid model = new GameGridModel(cardFile.getCards(), new Random(3));
+
 
   @Test
   public void testValidStartGame() {
-    model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(),
+    model.startGame(conFigFile.getCols(), conFigFile.getRows(),
             conFigFile.getRowConfig());
     NESWCard card = new NESWCard("dog", intToAV(5), intToAV(9),
             intToAV(10), intToAV(2));
@@ -59,44 +60,44 @@ public class GameGridModelTests<C extends Card> {
 
   @Test(expected = IllegalArgumentException.class)
   public void testStartGameThrowsInvalidCols() {
-    model.startGame(cardFile.getCards(), -3, conFigFile.getRows(), conFigFile.getRowConfig());
+    model.startGame(-3, conFigFile.getRows(), conFigFile.getRowConfig());
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testStartGameThrowsInvalidRows() {
-    model.startGame(cardFile.getCards(), conFigFile.getCols(), 0, conFigFile.getRowConfig());
+    model.startGame(conFigFile.getCols(), 0, conFigFile.getRowConfig());
   }
 
   @Test(expected = IllegalStateException.class)
   public void testStartGameTwice() {
-    model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(),
+    model.startGame(conFigFile.getCols(), conFigFile.getRows(),
             conFigFile.getRowConfig());
-    model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(),
+    model.startGame(conFigFile.getCols(), conFigFile.getRows(),
             conFigFile.getRowConfig());
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testStartGameGivenNulls() {
-    model.startGame(null, conFigFile.getCols(), conFigFile.getRows(),
-            conFigFile.getRowConfig());
+    model.startGame(conFigFile.getCols(), conFigFile.getRows(),
+            null);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testStartGameCardsContainsNull() {
     List<NESWCard> cards1 = new ArrayList<>();
     cards1.add(null);
-    model.startGame(cards1, conFigFile.getCols(), conFigFile.getRows(), conFigFile.getRowConfig());
+    model.startGame(conFigFile.getCols(), conFigFile.getRows(), conFigFile.getRowConfig());
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testStartGameNotEnoughCards() {
-    model.startGame(badCardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(),
+    model.startGame(conFigFile.getCols(), conFigFile.getRows(),
             conFigFile.getRowConfig());
   }
 
   @Test
   public void testValidPlayToGrid() {
-    model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(),
+    model.startGame(conFigFile.getCols(), conFigFile.getRows(),
             conFigFile.getRowConfig());
     model.playToGrid(0, 0, 0);
     Assert.assertEquals(new NESWCard("horse", intToAV(2), intToAV(7),
@@ -105,28 +106,28 @@ public class GameGridModelTests<C extends Card> {
 
   @Test(expected = IllegalArgumentException.class)
   public void testPlayToGridInvalidHandIdx() {
-    model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(),
+    model.startGame(conFigFile.getCols(), conFigFile.getRows(),
             conFigFile.getRowConfig());
     model.playToGrid(0, 0, -1);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testPlayToGridInvalidRow() {
-    model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(),
+    model.startGame(conFigFile.getCols(), conFigFile.getRows(),
             conFigFile.getRowConfig());
     model.playToGrid(10, 0, 0);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testPlayToGridInvalidCol() {
-    model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(),
+    model.startGame(conFigFile.getCols(), conFigFile.getRows(),
             conFigFile.getRowConfig());
     model.playToGrid(0, -1, 0);
   }
 
   @Test
   public void testPlayToGridChangesOwner() {
-    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
+    model.startGame(noHoles.getCols(), noHoles.getRows(),
             noHoles.getRowConfig());
     System.out.println(model.getHand(Player.BLUE));
     System.out.println(model.getHand(Player.RED));
@@ -138,7 +139,7 @@ public class GameGridModelTests<C extends Card> {
 
   @Test
   public void testGameOverTrue() {
-    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
+    model.startGame(noHoles.getCols(), noHoles.getRows(),
             noHoles.getRowConfig());
     model.playToGrid(0, 0, 0);
     model.playToGrid(1, 0, 0);
@@ -163,7 +164,7 @@ public class GameGridModelTests<C extends Card> {
 
   @Test
   public void testGameOverFalse() {
-    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
+    model.startGame(noHoles.getCols(), noHoles.getRows(),
             noHoles.getRowConfig());
     Assert.assertFalse(model.isGameOver());
   }
@@ -175,7 +176,7 @@ public class GameGridModelTests<C extends Card> {
 
   @Test
   public void testGameWinner() {
-    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
+    model.startGame(noHoles.getCols(), noHoles.getRows(),
             noHoles.getRowConfig());
     model.playToGrid(0, 0, 0);
     model.playToGrid(1, 0, 0);
@@ -197,7 +198,7 @@ public class GameGridModelTests<C extends Card> {
 
   @Test(expected = IllegalStateException.class)
   public void testGetWinnerGameNotOver() {
-    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
+    model.startGame(noHoles.getCols(), noHoles.getRows(),
             noHoles.getRowConfig());
     model.playToGrid(0, 0, 0);
     model.playToGrid(0, 1, 0);
@@ -211,14 +212,14 @@ public class GameGridModelTests<C extends Card> {
 
   @Test
   public void testGetTurnRedStart() {
-    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
+    model.startGame(noHoles.getCols(), noHoles.getRows(),
             noHoles.getRowConfig());
     Assert.assertEquals(Player.RED, model.getTurn());
   }
 
   @Test
   public void testGetTurnAfterOnePlay() {
-    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
+    model.startGame(noHoles.getCols(), noHoles.getRows(),
             noHoles.getRowConfig());
     model.playToGrid(0, 0, 0);
     Assert.assertEquals(Player.BLUE, model.getTurn());
@@ -237,7 +238,7 @@ public class GameGridModelTests<C extends Card> {
 
   @Test
   public void testValidGetBoardDims() {
-    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
+    model.startGame(noHoles.getCols(), noHoles.getRows(),
             noHoles.getRowConfig());
     Assert.assertEquals(noHoles.getCols(), model.getBoard()[0].length);
     Assert.assertEquals(noHoles.getRows(), model.getBoard().length);
@@ -245,7 +246,7 @@ public class GameGridModelTests<C extends Card> {
 
   @Test
   public void testValidGetBoardAfterMove() {
-    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
+    model.startGame(noHoles.getCols(), noHoles.getRows(),
             noHoles.getRowConfig());
     System.out.println(model.getHand(model.getTurn()));
     model.playToGrid(0, 0, 0);
@@ -255,8 +256,8 @@ public class GameGridModelTests<C extends Card> {
 
   @Test
   public void testGetBoardStartGameEmpty() {
-    GameGridModel model = new GameGridModel();
-    model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(),
+    GameGridModel model = new GameGridModel(List.of());
+    model.startGame(conFigFile.getCols(), conFigFile.getRows(),
             conFigFile.getRowConfig());
     Cell<Card>[][] cells = model.getBoard();
     assertNull(cells[0][0].getCard());
@@ -264,7 +265,7 @@ public class GameGridModelTests<C extends Card> {
 
   @Test(expected = IllegalStateException.class)
   public void testIsCellHoleGameNotStarted() {
-    GameGridModel model = new GameGridModel();
+    GameGridModel model = new GameGridModel(List.of());
     model.isCellHole(0, 0);
     assertEquals(model, 0);
   }
@@ -272,8 +273,8 @@ public class GameGridModelTests<C extends Card> {
 
   @Test
   public void testIsCellHoleStartGameEmpty() {
-    GameGridModel model = new GameGridModel();
-    model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(),
+    GameGridModel model = new GameGridModel(List.of());
+    model.startGame(conFigFile.getCols(), conFigFile.getRows(),
             conFigFile.getRowConfig());
     boolean cells = model.isCellHole(0, 0);
     Assert.assertNotEquals(model, cells);
@@ -281,8 +282,8 @@ public class GameGridModelTests<C extends Card> {
 
   @Test(expected = IllegalArgumentException.class)
   public void testIsCellHoleStartGameNotInBounds() {
-    GameGridModel model = new GameGridModel();
-    model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(),
+    GameGridModel model = new GameGridModel(List.of());
+    model.startGame(conFigFile.getCols(), conFigFile.getRows(),
             conFigFile.getRowConfig());
     boolean cells = model.isCellHole(5, 10);
     assertEquals(model, cells);
@@ -290,7 +291,7 @@ public class GameGridModelTests<C extends Card> {
 
   @Test
   public void testCardsFlipped() {
-    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
+    model.startGame(noHoles.getCols(), noHoles.getRows(),
             noHoles.getRowConfig());
 
     model.playToGrid(0, 0, 0);
@@ -307,7 +308,7 @@ public class GameGridModelTests<C extends Card> {
 
   @Test
   public void testGetScore() {
-    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
+    model.startGame(noHoles.getCols(), noHoles.getRows(),
             noHoles.getRowConfig());
 
     model.playToGrid(0, 0, 0);
@@ -326,14 +327,14 @@ public class GameGridModelTests<C extends Card> {
 
   @Test
   public void testLegalCardTrue() {
-    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
+    model.startGame(noHoles.getCols(), noHoles.getRows(),
             noHoles.getRowConfig());
     Assert.assertTrue(model.legalPlay(0, 0));
   }
 
   @Test
   public void testLegalCardFalseCardAlreadyPlayed() {
-    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
+    model.startGame(noHoles.getCols(), noHoles.getRows(),
             noHoles.getRowConfig());
     model.playToGrid(0, 0, 0);
     Assert.assertFalse(model.legalPlay(0, 0));
@@ -341,7 +342,7 @@ public class GameGridModelTests<C extends Card> {
 
   @Test
   public void testLegalCardFalseHole() {
-    model.startGame(cardFile.getCards(), conFigFile.getCols(), conFigFile.getRows(),
+    model.startGame(conFigFile.getCols(), conFigFile.getRows(),
             conFigFile.getRowConfig());
     Assert.assertFalse(model.legalPlay(1, 0));
   }
@@ -354,7 +355,7 @@ public class GameGridModelTests<C extends Card> {
 
   @Test
   public void testGetGameStatusesEmpty() {
-    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
+    model.startGame(noHoles.getCols(), noHoles.getRows(),
             noHoles.getRowConfig());
 
     model.playToGrid(1, 0, 0);
@@ -370,7 +371,7 @@ public class GameGridModelTests<C extends Card> {
 
   @Test
   public void testGetGameStatusesNotEmpty() {
-    model.startGame(cardFile.getCards(), noHoles.getCols(), noHoles.getRows(),
+    model.startGame(noHoles.getCols(), noHoles.getRows(),
             noHoles.getRowConfig());
 
     model.playToGrid(1, 0, 0);
