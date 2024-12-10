@@ -1,33 +1,49 @@
-package cs3500.model.extracredit;
+package cs3500.model.extracredit.levelone;
 
 import java.util.List;
 
 import cs3500.model.Card;
-import cs3500.model.Cell;
 import cs3500.model.CellInterface;
 import cs3500.model.GameGrid;
 import cs3500.model.NESWCard;
 import cs3500.model.Player;
 
+/**
+ * This is the variant rule set one class
+ *
+ * @param <C> card
+ */
 public class VariantRuleSetOne<C extends Card> implements GameGrid<C> {
 
-  private GameGrid<C> model;
-  private CellInterface cell;
-  private List<RuleOneInf> rules;
+  private final GameGrid<C> model;
+  private final CellInterface cell;
+  private final List<RuleOneInf<C>> rules;
 
 
-  public VariantRuleSetOne(GameGrid<C> model, CellInterface cell, List<RuleOneInf> rules) {
+  public VariantRuleSetOne(GameGrid<C> model, CellInterface cell, List<RuleOneInf<C>> rules) {
     this.model = model;
     this.cell = cell;
     this.rules = rules;
   }
 
+  /**
+   * This incoorporates the ruleOneInf and takes in the model
+   * @param cardA
+   * @param cardB
+   * @param currentPlayer
+   */
   public void battleRules(NESWCard cardA, NESWCard cardB, Player currentPlayer) {
-    for (RuleOneInf rule : rules) {
+    for (RuleOneInf<C> rule : rules) {
       rule.battle(cardA, cardB, currentPlayer, model, cell);
     }
   }
 
+  /**
+   * This gets CardA and CardB to b
+   * @param row x coordinate of grid.
+   * @param col y coordinate of grid.
+   * @param handIdx index of the card in the grid.
+   */
   @Override
   public void playToGrid(int row, int col, int handIdx) {
     NESWCard cardA = (NESWCard) model.getBoard()[row][col].getCard();
@@ -56,25 +72,20 @@ public class VariantRuleSetOne<C extends Card> implements GameGrid<C> {
     return model.isCellHole(row, col);
   }
 
-
-
   @Override
   public Player getTurn() {
     return model.getTurn();
   }
-
 
   @Override
   public Player getWinner() {
     return model.getWinner();
   }
 
-
   @Override
-  public Cell<C>[][] getBoard() {
+  public CellInterface[][] getBoard() {
     return model.getBoard();
   }
-
 
   @Override
   public int getScore(Player player) {

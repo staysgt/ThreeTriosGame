@@ -185,3 +185,9 @@ never able to get our model to work for human players from the last homework ass
 still does not work, but our views work with handling clicks, just not representing a card played
 to the grid. But, our controller does work between two machine players, and we were able to get the
 views to represent this, in the main method.
+
+## Extra Credit Command Line
+
+As previously enter in the two strategies you want to use or enter human for no strategy.
+NEW: following these type in either 'reverse' or 'fallenace' or both to play these game modes.
+Order does not matter.

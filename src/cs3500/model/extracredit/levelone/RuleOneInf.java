@@ -1,4 +1,4 @@
-package cs3500.model.extracredit;
+package cs3500.model.extracredit.levelone;
 
 import cs3500.model.Card;
 import cs3500.model.CellInterface;

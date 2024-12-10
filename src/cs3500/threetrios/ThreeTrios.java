@@ -2,6 +2,9 @@ package cs3500.threetrios;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 import cs3500.controller.ConfigurationFileReader;
@@ -18,10 +21,10 @@ import cs3500.model.Card;
 import cs3500.model.GameGrid;
 import cs3500.model.OurModelToProviderAdapter;
 import cs3500.model.Player;
-import cs3500.threetrios.provider.model.PlayerColor;
+import cs3500.model.extracredit.levelone.Variant;
 import cs3500.view.Graphics2DInf;
 import cs3500.view.Graphics2DView;
-import cs3500.view.ProviderViewToOurViewAdapter;
+import cs3500.view.ShowHintsView;
 
 
 /**
@@ -52,31 +55,51 @@ public final class ThreeTrios {
     IPlayer<Card> player1 = null;
     IPlayer<Card> player2 = null;
 
-    ArgsReader result = readArgs(args, player1, model1, player2);
+    ArgsReader result = readMachineArgs(args, player1, model1, player2);
+
+    Map<Variant, Boolean> variantBooleanMap = new HashMap<>();
+    // automatically start as false
+    variantBooleanMap.put(Variant.FALLEN_ACE, false);
+    variantBooleanMap.put(Variant.REVERSE, false);
+    int i = 2;
+    while (i < args.length) {
+      switch (args[i]) {
+        case "reverse":
+          variantBooleanMap.put(Variant.REVERSE, true);
+          break;
+        case "fallenace":
+          variantBooleanMap.put(Variant.FALLEN_ACE, true);
+          break;
+        default:
+          break;
+      }
+      i++;
+    }
 
 
     Graphics2DInf viewP1 = new Graphics2DView<>(model1);
+    Graphics2DInf viewP1Hint = new ShowHintsView<>(viewP1, model1, Player.RED);
     Graphics2DInf viewP2 = new Graphics2DView<>(model1);
 
 
     ThreeTriosController<Card> controller1 = new ThreeTriosController<>(model1,
-            result.player1, viewP1);
+            result.player1, viewP1Hint);
     ThreeTriosController<Card> controller2 = new ThreeTriosController<>(model1,
             result.player2, viewP2);
 
     // this code would cause the game to be played if it was two machine players
-    for (int turn = 0; turn < 5; turn++) {
-      controller1.listen();
-      controller2.listen();
-    }
+//    for (int turn = 0; turn < 5; turn++) {
+//      controller1.listen();
+//      controller2.listen();
+//    }
 
 
   }
 
 
   // helper to read in the arguments from the method
-  private static ArgsReader readArgs(String[] args, IPlayer<Card> player1, GameGrid<Card> model,
-                                     IPlayer<Card> player2) {
+  private static ArgsReader readMachineArgs(String[] args, IPlayer<Card> player1,
+                                            GameGrid<Card> model, IPlayer<Card> player2) {
     int i = 0;
     while (i < args.length) {
       // for each

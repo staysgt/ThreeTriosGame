@@ -61,10 +61,11 @@ public interface ReadOnlyGameGridModel<C extends Card> {
 
   /**
    * Gets the current state of the board.
+   *
    * @return the current state of the board.
    * @throws IllegalStateException if game has not started or game is over
    */
-  Cell<C>[][] getBoard();
+  CellInterface[][] getBoard();
 
 
   /**
