@@ -25,7 +25,6 @@ public class MouseClick<C extends Card> implements MouseListener {
 
   private int selectedRow;
   private int selectedCol;
-  private int selectedIdx;
 
   private final Graphics2DInf view;
   private final ReadOnlyGameGridModel<C> model;
@@ -62,74 +61,125 @@ public class MouseClick<C extends Card> implements MouseListener {
 
   @Override
   public void mouseClicked(MouseEvent e) {
+    // the x and y area where the card was clicked
     int x = e.getX();
     int y = e.getY();
 
+    // the number of columns and rows in the board
     int numCols = model.getBoard()[0].length;
     int numRows = model.getBoard().length;
 
+    // the width and height of each cell
     int cellWidth = view.getWidth() / (numCols + 2);
     int cellHeight = view.getHeight() / numRows;
 
-    if (x < cellWidth && currentPlayer == Player.RED) {
-      selectCard(y, Player.RED);
-    } else if (x > view.getWidth() - cellWidth && currentPlayer == Player.BLUE) {
-      selectCard(y, Player.BLUE);
+
+    Player currPlayer = currentPlayer == Player.RED ? Player.RED : Player.BLUE;
+    // if the x is less than the cell width (meaning it is a card)
+    if (x < cellWidth || x > view.getWidth() - cellWidth) {
+      // runs the select card method.
+      currCard(y, currPlayer);
     } else if (cardIdx != -1) {
+
+      // if cardIdx is not equal to negative one, this means that a card has been selected.
+      // converts the column and row into our gamegrid measurements
       int col = (x - cellWidth) / cellWidth;
       int row = y / cellHeight;
 
+
+      // this means that the user clicked a cell that is on the grid
       if (row >= 0 && row < numRows && col >= 0 && col < numCols) {
+        // if the player selects a cell that is already occupied, it sends a message to the user
         if (!model.legalPlay(row, col)) {
-          new PopUpWindow(currentPlayer, "This cell is already occupied!").setVisible(true);
+          showPopup("This cell is already occupied!");
         } else {
+          // the selected column/row are updated to reflect the most recently selected col/row
           selectedCol = col;
           selectedRow = row;
+
+          // FIX THIS
+          // placeCard method is called on the row and column
           placeCard(row, col);
+
+          // the selected row and column are outputted
           System.out.println("These are the coordinates: " + row + ", " + col);
         }
       } else {
-        highlightPanel.setVisible(false);
-        new PopUpWindow(currentPlayer, "Please select a card before placing it!").setVisible(true);
-      }
-      if (model.isGameOver()) {
-        new PopUpWindow(currentPlayer, "Game is over!").setVisible(true);
+        // if the user did not select a card
+        showPopup("Please select a card before placing it!");
       }
 
+      // displays a popup if the move ended the game
+      if (model.isGameOver()) {
+        showPopup("Game is over!");
+      }
+
+      // un-highlights the previously selected card.
+      highlightPanel.setVisible(false);
+
+      // repaints the view to reflect these changes.
       view.repaint();
     }
   }
 
-  private void selectCard(int y, Player player) {
+  // private method for displaying a popup message
+  private void showPopup(String message) {
+    new PopUpWindow(currentPlayer, message).setVisible(true);
+  }
 
+  private void currCard(int y, Player player) {
+    // gets the hand of the player and the number of cards in the hand
     List<C> hand = model.getHand(player);
     int numCards = hand.size();
 
+    // gets the height of the card and divides it by either 1 or the number of cards
+    // will divide by 1 when the hand is empty, makes sure not dividing by 0
     int cardHeight = view.getHeight() / Math.max(numCards, 1);
+    // the index of the card in the players hand.
     int cardIndex = y / cardHeight;
 
+
     if (cardIndex >= 0 && cardIndex < numCards) {
+      // if the card index is greater than zero and less thna the number of cards in the hand
+      // cardIdx is updated to be the current index
       cardIdx = cardIndex;
+
+      // the card is updated to be the current card
       C card = hand.get(cardIndex);
-      selectedIdx = cardIndex;
+      // prints the current card to the console
       System.out.println("The card is " + card.toString());
 
-      int x;
-      if (player == Player.RED) {
-        x = 0;
-      } else {
-        x = view.getWidth() - (view.getWidth() / 5);
-      }
+      // variable for the x value of the card, if player is red 0
+      // why is it set to view.getWidth() - (view.getWidth() / 5);
+      int x = player == Player.RED ? 0 : view.getWidth() - (view.getWidth() / 5);
 
       int yPos = cardIndex * cardHeight;
 
       highlightPanel.setBounds(x, yPos, view.getWidth() / 5, cardHeight);
       highlightPanel.setVisible(true);
-    } else {
-      cardIdx = -1;
-      highlightPanel.setVisible(false);
     }
+    if (cardIndex >= 0 && cardIndex < numCards) {
+      // if the card index is greater than zero and less thna the number of cards in the hand
+      // cardIdx is updated to be the current index
+      cardIdx = cardIndex;
+
+      // the card is updated to be the current card
+      C card = hand.get(cardIndex);
+      // prints the current card to the console
+      System.out.println("The card is " + card.toString());
+
+      // variable for the x value of the card, if player is red 0
+      // why is it set to view.getWidth() - (view.getWidth() / 5);
+      int x = player == Player.RED ? 0 : view.getWidth() - (view.getWidth() / 5);
+
+      int yPos = cardIndex * cardHeight;
+
+      highlightPanel.setBounds(x, yPos, view.getWidth() / 5, cardHeight);
+      highlightPanel.setVisible(true);
+    }
+
   }
+
 
   private void placeCard(int row, int col) {
     CellInterface cell = model.getBoard()[row][col];
@@ -205,7 +255,7 @@ public class MouseClick<C extends Card> implements MouseListener {
    * @return current card selected.
    */
   public int getIdx() {
-    return selectedIdx;
+    return cardIdx;
   }
 
 

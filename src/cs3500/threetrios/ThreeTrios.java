@@ -56,7 +56,7 @@ public final class ThreeTrios {
 
 
     Graphics2DInf viewP1 = new Graphics2DView<>(model1);
-    Graphics2DInf viewP2 = new ProviderViewToOurViewAdapter<>(model1, PlayerColor.BLUE);
+    Graphics2DInf viewP2 = new Graphics2DView<>(model1);
 
 
     ThreeTriosController<Card> controller1 = new ThreeTriosController<>(model1,
